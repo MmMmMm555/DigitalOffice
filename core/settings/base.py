@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+
 from datetime import timedelta
 from pathlib import Path
 
@@ -47,8 +48,8 @@ DJANGO_APPS = [
 ]
 
 CUSTOM_APPS = [
-    'apps.common',
     'apps.users',
+    'apps.common',
 ]
 
 THIRD_PARTY_APPS = [
@@ -83,7 +84,7 @@ REST_FRAMEWORK = {
     },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
-    "EXCEPTION_HANDLER": "apps.common.execptionhandler.custom_exception_handler",
+    # "EXCEPTION_HANDLER": "apps.common.execptionhandler.custom_exception_handler",
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.JSONParser",
@@ -92,7 +93,7 @@ REST_FRAMEWORK = {
     "DATE_FORMAT": "%Y-%m-%d",
 }
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -160,6 +161,8 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -247,3 +250,5 @@ LOCATION_FIELD = {
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
+
+from core.settings.develop import *  # noqa

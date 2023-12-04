@@ -1,4 +1,4 @@
-from .base import *  # noqa
+from core.settings.base import *  # noqa
 
 DEBUG = True
 
@@ -9,3 +9,11 @@ DEBUG = True
 EMAIL_HOST_USER = 'itstoolongname@yandex.ru'
 EMAIL_HOST_PASSWORD = 'flrooeiqhdfmyakd'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
