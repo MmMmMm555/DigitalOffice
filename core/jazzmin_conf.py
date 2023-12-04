@@ -1,14 +1,14 @@
 JAZZMIN_SETTINGS: dict = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Uzchess Admin",
+    "site_title": "Digital Office",
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Uzchess Admin",
+    "site_header": "Digital Office",
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "Uzchess Admin",
+    "site_brand": "Digital Office",
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "img/king.png",
+    "site_logo": None,
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": "img/chess.png",
+    "login_logo": None,
     # Logo to use for login form in dark themes (defaults to login_logo)
     "login_logo_dark": None,
     # CSS classes that are applied to the logo above
@@ -16,9 +16,9 @@ JAZZMIN_SETTINGS: dict = {
     # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
     "site_icon": None,
     # Welcome text on the login screen
-    "welcome_sign": "Uzchess Admin",
+    "welcome_sign": "Digital Office",
     # Copyright on the footer
-    "copyright": "Uzchess",
+    "copyright": "Digital_Office",
     # The model admin to search from the search bar, search bar omitted if excluded
     "search_model": "",
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
@@ -61,18 +61,6 @@ JAZZMIN_SETTINGS: dict = {
         "auth": "fas fa-users-cog",
         "auth.User": "fas fa-duotone fa-user-tie",
         "auth.Group": "fas fa-image-full-white",
-        # auditlog app
-        "auditlog.LogEntry": "fas fa-image-full-white",
-        "auditlog": "fas fa-duotone fa-folder-open",
-        "application.Application": "fas fa-image-full-white",
-        "django_celery_beat.Crontab": "fas fa-image-full-white",
-        # apps icons
-        "book": "fas fa-book",
-        "chesscom": "fas fa-duotone fa-chess-king",
-        "common": "fas fa-duotone fa-folder",
-        "course": "fas fa-duotone fa-suitcase",
-        "news": "fas fa-duotone fa-newspaper",
-        "payments": "fas fa-duotone fa-money-bill",
         "users": "fas fa-duotone fa-user",
     },
     # Icons that are used when one is not manually specified
