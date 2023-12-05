@@ -49,6 +49,8 @@ DJANGO_APPS = [
 
 CUSTOM_APPS = [
     'apps.users',
+    'apps.mosque',
+    'apps.attribute',
     'apps.common',
 ]
 
