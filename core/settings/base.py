@@ -152,7 +152,7 @@ DATABASES = {
     }
 }
 
-# AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "users.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -232,7 +232,7 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": f"{env.str('REDIS_URL', 'redis://localhost:6379/0')}",
-        "KEY_PREFIX": "uz_chess",
+        "KEY_PREFIX": "digitaloffice",
     }
 }
 
@@ -260,5 +260,3 @@ LOCATION_FIELD = {
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
-
-from core.settings.develop import *  # noqa

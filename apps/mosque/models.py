@@ -3,6 +3,7 @@ from location_field.models.plain import PlainLocationField
 
 from apps.common.models import BaseModel
 from apps.attribute.models import Attribute, AttributeOption
+
 # Create your models here.
 
 
@@ -12,7 +13,7 @@ class MosqueTypeChoices(models.Choices):
 
 
 class MosqueStatusChoices(models.Choices):
-    GOOD = 'yaxshi'
+    GOOD = 'Yaxshi'
     REPAIR = 'Tamir talab'
     RECONSTRUCTION = 'Qayta qurish'
 
