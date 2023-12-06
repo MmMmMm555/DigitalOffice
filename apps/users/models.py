@@ -10,10 +10,13 @@ class Role(models.TextChoices):
     REGION_ADMIN = 'REGION_ADMIN'
     DISTRICT_ADMIN = 'DISTRICT_ADMIN'
     IMAM = 'IMAM'
-    DEPUTY = 'SUB_IMAM'
+    SUB_IMAM = 'SUB_IMAM'
+
 
 
 class User(AbstractUser):
     first_name = None
     last_name = None
-    role = models.CharField( max_length=18, choices=Role.choices, default=Role.IMAM, blank=True, null=True)
+    role = models.CharField(
+        max_length=18, choices=Role.choices, default=Role.IMAM, blank=True, null=True
+    )
