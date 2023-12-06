@@ -1,17 +1,17 @@
 from django.contrib import admin
 
 # Register your models here.
-from apps.mosque.models import Mosque, MosqueAttributeOptionValue, MosqueAttributeValue
+from apps.mosque.models import Mosque
 
 
-class MosqueAttributeValueStackedInline(admin.StackedInline):
-    model = MosqueAttributeValue
-    extra = 1
+# class MosqueAttributeValueStackedInline(admin.StackedInline):
+#     model = MosqueAttributeValue
+#     extra = 1
 
 
-class MosqueAttributeOptionValueStackedInline(admin.StackedInline):
-    model = MosqueAttributeOptionValue
-    extra = 1
+# class MosqueAttributeOptionValueStackedInline(admin.StackedInline):
+#     model = MosqueAttributeOptionValue
+#     extra = 1
 
 
 @admin.register(Mosque)
@@ -21,10 +21,10 @@ class MosqueAdmin(admin.ModelAdmin):
     #     'address',
     #     'location',
     # ]
-    inlines = [
-        MosqueAttributeValueStackedInline,
-        MosqueAttributeOptionValueStackedInline
-    ]
+    # inlines = [
+    #     MosqueAttributeValueStackedInline,
+    #     MosqueAttributeOptionValueStackedInline
+    # ]
     list_display = [
         'title',
         'address',
