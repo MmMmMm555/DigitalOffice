@@ -34,6 +34,12 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -63,6 +69,7 @@ THIRD_PARTY_APPS = [
     # "captcha",
     "django_celery_beat",
     "django_filters",
+    'debug_toolbar',
 ]
 
 REST_FRAMEWORK = {
@@ -107,6 +114,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "apps.common.middlewares.FingerPrintMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
