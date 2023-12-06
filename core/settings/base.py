@@ -52,6 +52,7 @@ CUSTOM_APPS = [
     'apps.mosque',
     'apps.attribute',
     'apps.common',
+    'apps.employee',
 ]
 
 THIRD_PARTY_APPS = [
