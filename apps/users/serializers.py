@@ -38,12 +38,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password',
             'password2',
         )
+        extra_kwargs = {
+        'role': {"required": True},
+        }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."})
-
         return attrs
 
     def create(self, validated_data):

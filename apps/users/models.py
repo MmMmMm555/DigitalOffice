@@ -10,7 +10,7 @@ class Role(models.TextChoices):
     REGION_ADMIN = 'REGION_ADMIN'
     DISTRICT_ADMIN = 'DISTRICT_ADMIN'
     IMAM = 'IMAM'
-    DEPUTY = 'DEPUTY'
+    DEPUTY = 'SUB_IMAM'
 
 
 class User(AbstractUser):

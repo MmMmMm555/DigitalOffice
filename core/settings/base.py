@@ -224,7 +224,7 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": f"{env.str('REDIS_URL', 'redis://localhost:6379/0')}",
-        "KEY_PREFIX": "uz_chess",
+        "KEY_PREFIX": "digitaloffice",
     }
 }
 
@@ -252,5 +252,3 @@ LOCATION_FIELD = {
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
-
-from core.settings.develop import *  # noqa
