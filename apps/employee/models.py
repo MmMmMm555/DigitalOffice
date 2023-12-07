@@ -60,7 +60,7 @@ class Employee(models.Model):
     phone_number = PhoneNumberField(blank=False)
     address = PlainLocationField(based_fields=['city'], zoom=7)
     image = models.ImageField(upload_to='images/profil_images/', default="default/default_user.png")
-    bith_date = models.DateField()
+    birth_date = models.DateField()
     education = models.CharField(max_length=50, choices=Education.choices, default=Education.MEDIUM_SPECIAL, blank=True)
     graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, default=Graduation.TASHKENT_ISLAMIC_INSTITUTE, blank=True)
     graduated_year = models.DateField(blank=True)

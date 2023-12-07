@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/v1/common/', include('apps.common.urls')),
     path('api/v1/auth/', include('apps.users.urls')),
     path('api/v1/mosque/', include('apps.mosque.urls')),
+    path('api/v1/employee/', include('apps.employee.urls')),
 ]
 
 urlpatterns += swagger_urlpatterns
