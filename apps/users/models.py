@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from apps.common.models import BaseModel
+from django.utils.translation import gettext_lazy as _
+from apps.employee.models import Employee
 
 # Create your models here.
 
@@ -13,10 +14,8 @@ class Role(models.TextChoices):
     SUB_IMAM = 'SUB_IMAM'
 
 
-
 class User(AbstractUser):
     first_name = None
     last_name = None
-    role = models.CharField(
-        max_length=18, choices=Role.choices, default=Role.IMAM, blank=True, null=True
-    )
+    profil = models.OneToOneField(Employee, unique=True, verbose_name=_("Profil"), on_delete=models.CASCADE, related_name='profil', blank=True, null=True)
+    role = models.CharField(max_length=18, choices=Role.choices, default=Role.IMAM, blank=True, null=True)

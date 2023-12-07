@@ -2,7 +2,7 @@ from django.db import models
 from location_field.models.plain import PlainLocationField
 
 from apps.common.models import BaseModel
-from apps.attribute.models import Attribute, AttributeOption
+# from apps.attribute.models import Attribute, AttributeOption
 
 # Create your models here.
 
@@ -68,14 +68,14 @@ class Room(BaseModel):
 class FireSafe(BaseModel):
     mosque = models.ForeignKey(
         Mosque, on_delete=models.CASCADE, related_name='fire_safes')
-    image = models.ImageField(upload_to='firesafety/')
+    image = models.ImageField(upload_to='iimage/firesafety/')
 
 
 class EvacuationRoad(BaseModel):
     mosque = models.ForeignKey(
         Mosque, on_delete=models.CASCADE, related_name='evacuation_roads'
     )
-    image = models.ImageField(upload_to='evacuationroad/')
+    image = models.ImageField(upload_to='images/evacuationroad/')
 
 
 # class MosqueAttributeValue(BaseModel):
