@@ -2,55 +2,56 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from location_field.models.plain import PlainLocationField
 
+from apps.mosque.models import Mosque
 
 # Create your models here.
 
 class Education(models.TextChoices):
-    MEDIUM_SPECIAL = "O'RTA MAXSUS"
-    HIGH = "OLIY"
-    NONE = "MALUMOTSIZ"
+    MEDIUM_SPECIAL = 1
+    HIGH = 2
+    NONE = 3
 
 class Achievement(models.TextChoices):
-    STATE_AWARDS = "Davlat mukofotlari"
-    COMMEMORATIVE_BADGES = "Esdalik nishonlari"
-    SIGNS = "Belgilar"
-    GRATITUDE = "Minnatdorchilik"
-    COMPLIMENT = "Maqtov"
-    HONORARY_TITLES = "Faxriy unvonlar"
-    DIPLOMAS_OF_THE_WINNER_OF_THE_EXAM_COMPETITION = "imtihon tanlovi g'olibining diplomlari"
-    DIPLOMAS_OF_COMPETITION_WINNERS = "tanlov g‘oliblarining diplomlari"
-    INTERNATIONAL_AWARDS = "xalqaro mukofotlar"
+    STATE_AWARDS = 1
+    COMMEMORATIVE_BADGES = 2
+    SIGNS = 3
+    GRATITUDE = 4
+    COMPLIMENT = 5
+    HONORARY_TITLES = 6
+    DIPLOMAS_OF_THE_WINNER_OF_THE_EXAM_COMPETITION = 7
+    DIPLOMAS_OF_COMPETITION_WINNERS = 8
+    INTERNATIONAL_AWARDS = 9
 
 class AcademicDegree(models.TextChoices):
-    BACHELOR = "Bakalavr"
-    MASTER = "Magistr"
-    PhD = "Doktorant"
-    DsC = "Doktor"
+    BACHELOR = 1
+    MASTER = 2
+    PhD = 3
+    DsC = 4
 
 class Social(models.TextChoices):
-    TELEGRAM = "Telegram"
-    INSTAGRAM = "Instagram"
-    FACEBOOK = "Facebook"
-    TIK_TOK = "Tik Tok"
-    TWITTER = "Twitter"
-    YOUTUBE = "YouTube"
-    WHATSAPP = "WhatsApp"
+    TELEGRAM = 1
+    INSTAGRAM = 2
+    FACEBOOK = 3
+    TIK_TOK = 4
+    TWITTER = 5
+    YOUTUBE = 6
+    WHATSAPP = 7
 
 class Graduation(models.TextChoices):
-    TASHKENT_ISLAMIC_INSTITUTE = "Toshkent islom instituti"
-    SCHOOL_OF_HADITH_SCIENCE = "Hadis ilmi maktabi"
-    MIR_ARAB_HIGHER_MADRASAH = "Mir Arab Oliy Madrasasi"
-    KOKALDOSH = "Ko'kaldosh"
-    MIR_ARAB = "Mir Arab"
-    KHOJA_BUKHARI = "Xoja Buxoriy"
-    IMAM_TERMIZI = "Imom Termiziy"
-    FAKHRIDDIN_AR_RAZI = "Faxriddin ar-Roziy"
-    MUHAMMAD_AL_BERUNI = "Muhammad al-Beruniy"
-    SAYYID_MUHIDDIN_MAKHDUM = "Sayyid Muhiddin Maxdum"
-    HIDAYAH = "Hidoya"
-    KHADICHAI_KUBRO = "Xadichai Kubro"
-    JOYBORI_KALON = "Jo'ybori kalon"
-    ANOTHER = "Boshqa"    
+    TASHKENT_ISLAMIC_INSTITUTE = 1
+    SCHOOL_OF_HADITH_SCIENCE = 2
+    MIR_ARAB_HIGHER_MADRASAH = 3
+    KOKALDOSH = 4
+    MIR_ARAB = 5
+    KHOJA_BUKHARI = 6
+    IMAM_TERMIZI = 7
+    FAKHRIDDIN_AR_RAZI = 8
+    MUHAMMAD_AL_BERUNI = 9
+    SAYYID_MUHIDDIN_MAKHDUM = 10
+    HIDAYAH = 11
+    KHADICHAI_KUBRO = 12
+    JOYBORI_KALON = 13
+    ANOTHER = 14    
 
 
 class Employee(models.Model):
@@ -64,9 +65,10 @@ class Employee(models.Model):
     education = models.CharField(max_length=50, choices=Education.choices, default=Education.MEDIUM_SPECIAL, blank=True)
     graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, default=Graduation.TASHKENT_ISLAMIC_INSTITUTE, blank=True)
     graduated_year = models.DateField(blank=True)
-    diploma_number = models.IntegerField(blank=True)
+    diploma_number = models.CharField(max_length=20, blank=True)
     academic_degree = models.CharField(max_length=50, choices=AcademicDegree.choices, default=AcademicDegree.BACHELOR, blank=True)
     achievement = models.CharField(max_length=50, choices=Achievement.choices, default=Achievement.STATE_AWARDS, blank=True)
+    mosque = models.ForeignKey(Mosque, on_delete=models.CASCADE, related_name='employee')
 
     class Meta:
         verbose_name = 'Hodim '

@@ -56,9 +56,9 @@ DJANGO_APPS = [
 CUSTOM_APPS = [
     'apps.users',
     'apps.mosque',
-    'apps.attribute',
     'apps.common',
     'apps.employee',
+    'apps.friday_tesis',
 ]
 
 THIRD_PARTY_APPS = [

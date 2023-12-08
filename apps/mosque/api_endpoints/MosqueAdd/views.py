@@ -9,4 +9,3 @@ class MosqueCreateAPIView(generics.CreateAPIView):
     serializer_class = MosqueMainSerailizer
 
 
-# class MosqueAttributeValueCreateAPIView(generics.CreateAPIView):

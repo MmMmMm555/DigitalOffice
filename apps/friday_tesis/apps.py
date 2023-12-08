@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AttributeConfig(AppConfig):
+class FridayTesisConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.attribute'
+    name = 'apps.friday_tesis'

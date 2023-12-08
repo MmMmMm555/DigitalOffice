@@ -2,87 +2,104 @@ from django.db import models
 from location_field.models.plain import PlainLocationField
 
 from apps.common.models import BaseModel
-# from apps.attribute.models import Attribute, AttributeOption
+from apps.common.regions import Districts
 
 # Create your models here.
 
 
-class MosqueTypeChoices(models.Choices):
-    SIMPLE = 'oddiy'
-    JOME = 'jome'
+class MosqueTypeChoices(models.TextChoices):
+    NEIGHBORHOOD = '1'
+    JOME = '2'
 
+class MosqueStatusChoices(models.TextChoices):
+    GOOD = '1'
+    REPAIR = '2'
+    RECONSTRUCTION = '3'
 
-class MosqueStatusChoices(models.Choices):
-    GOOD = 'Yaxshi'
-    REPAIR = 'Tamir talab'
-    RECONSTRUCTION = 'Qayta qurish'
+class FireDefence(models.TextChoices):
+    EVACUATION_ROAD = '1', 'evacuation_road'
+    FIRE_SAFE = '2', 'fire_safe'
+    FIRE_CLOSET = '3', 'fire_closet'
+    FIRES_IGNAL = '4', 'fires_ignal'
+    AUTO_FIRE_EXTINGUISHER = '5', 'auto_fire_extinguisher'
 
-
-class Heritage(BaseModel):
-    title = models.CharField(max_length=255)
-
-
-class AutoFireClear(BaseModel):
-    image = models.ImageField(upload_to='autofireclear/')
-
-
-class FireCloset(BaseModel):
-    image = models.ImageField(upload_to='firecloset/')
-
-
-class FireSignal(BaseModel):
-    image = models.ImageField(upload_to='fire_signal/')
+class FireDefenceImages(BaseModel):
+    type = models.CharField(max_length=17, choices=FireDefence.choices, default=FireDefence.EVACUATION_ROAD)
+    image = models.ImageField(upload_to='images/firedefence/')
+    
+    def __str__(self):
+        return self.type
 
 
 class Mosque(BaseModel):
     # other fields
-    title = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=355)
+    district = models.ForeignKey(Districts, on_delete=models.CASCADE, related_name='mosque')
     location = PlainLocationField(based_fields=['city'], zoom=7)
 
     built_at = models.DateField()
     registered_at = models.DateField()
+    
+    parking = models.BooleanField(default=False)
     parking_capasity = models.IntegerField(blank=True, null=True)
-
+    
+    basement = models.BooleanField(default=False)
+    second_floor = models.BooleanField(default=False)
+    third_floor = models.BooleanField(default=False)
+    cultural_heritage = models.BooleanField(default=False)
+    fire_safety = models.BooleanField(default=False)
+    auto_fire_extinguisher = models.BooleanField(default=False)
+    fire_closet = models.BooleanField(default=False)
+    fire_signal = models.BooleanField(default=False)
+    
+    service_rooms_bool = models.BooleanField(default=False)
+    imam_room = models.BooleanField(default=False)
+    sub_imam_room = models.BooleanField(default=False)
+    casher_room = models.BooleanField(default=False)
+    guard_room = models.BooleanField(default=False)
+    other_room = models.BooleanField(default=False)
+    other_room_amount = models.IntegerField(default=0, blank=True)
+    
+    fire_images = models.ManyToManyField(FireDefenceImages, blank=True)
+    
     mosque_status = models.CharField(
-        max_length=255, choices=MosqueStatusChoices.choices
+        max_length=17, choices=MosqueStatusChoices.choices
     )
     mosque_type = models.CharField(
-        max_length=255, choices=MosqueTypeChoices.choices
+        max_length=17, choices=MosqueTypeChoices.choices
     )
-
-    heritage = models.ForeignKey(Heritage, on_delete=models.CASCADE)
-    auto_fire_clear = models.ForeignKey(AutoFireClear, on_delete=models.CASCADE)  # noqa
-    fire_closet = models.ForeignKey(FireCloset, on_delete=models.CASCADE)
-    fire_signal = models.ForeignKey(FireSignal, on_delete=models.CASCADE)
-
-
-class Room(BaseModel):
-    mosque = models.ForeignKey(
-        Mosque, on_delete=models.CASCADE, related_name='rooms')
-    title = models.CharField(max_length=255)
-    room_count = models.IntegerField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'Masjid'
+        verbose_name_plural = 'Masjidlar'
 
 
-class FireSafe(BaseModel):
-    mosque = models.ForeignKey(
-        Mosque, on_delete=models.CASCADE, related_name='fire_safes')
-    image = models.ImageField(upload_to='iimage/firesafety/')
+# class FireSafe(BaseModel):
+#     mosque = models.ForeignKey(
+#         Mosque, on_delete=models.CASCADE, related_name='fire_safes')
+#     image = models.ImageField(upload_to='image/firesafety/')
 
+# class FireCloset(BaseModel):
+#     mosque = models.ForeignKey(
+#         Mosque, on_delete=models.CASCADE, related_name='firecloset')
+#     image = models.ImageField(upload_to='image/firecloset/')
 
-class EvacuationRoad(BaseModel):
-    mosque = models.ForeignKey(
-        Mosque, on_delete=models.CASCADE, related_name='evacuation_roads'
-    )
-    image = models.ImageField(upload_to='images/evacuationroad/')
+# class FireSignal(BaseModel):
+#     mosque = models.ForeignKey(
+#         Mosque, on_delete=models.CASCADE, related_name='firesignal')
+#     image = models.ImageField(upload_to='image/firesignal/')
 
+# class AutoFireExtinguisher(BaseModel):
+#     mosque = models.ForeignKey(
+#         Mosque, on_delete=models.CASCADE, related_name='autofireextinguisher')
+#     image = models.ImageField(upload_to='image/autofireextinguisher/')
 
-# class MosqueAttributeValue(BaseModel):
-#     mosque = models.ForeignKey(Mosque, on_delete=models.CASCADE, related_name='attribute_values')
-#     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-#     value = models.CharField(max_length=255)
-
-# class MosqueAttributeOptionValue(BaseModel):
-#     mosque = models.ForeignKey(Mosque, on_delete=models.CASCADE, related_name='attribute_value_options')
-#     attribute = models.ForeignKey(AttributeOption, on_delete=models.CASCADE)
+# class EvacuationRoad(BaseModel):
+#     mosque = models.ForeignKey(
+#         Mosque, on_delete=models.CASCADE, related_name='evacuation_roads'
+#     )
+#     image = models.ImageField(upload_to='images/evacuationroad/')
