@@ -4,57 +4,60 @@ from location_field.models.plain import PlainLocationField
 
 from apps.mosque.models import Mosque
 
+import uuid
+
 # Create your models here.
 
 class Education(models.TextChoices):
-    MEDIUM_SPECIAL = 1
-    HIGH = 2
-    NONE = 3
+    MEDIUM_SPECIAL = '1'
+    HIGH = '2'
+    NONE = '3'
 
 class Achievement(models.TextChoices):
-    STATE_AWARDS = 1
-    COMMEMORATIVE_BADGES = 2
-    SIGNS = 3
-    GRATITUDE = 4
-    COMPLIMENT = 5
-    HONORARY_TITLES = 6
-    DIPLOMAS_OF_THE_WINNER_OF_THE_EXAM_COMPETITION = 7
-    DIPLOMAS_OF_COMPETITION_WINNERS = 8
-    INTERNATIONAL_AWARDS = 9
+    STATE_AWARDS = '1'
+    COMMEMORATIVE_BADGES = '2'
+    SIGNS = '3'
+    GRATITUDE = '4'
+    COMPLIMENT = '5'
+    HONORARY_TITLES = '6'
+    DIPLOMAS_OF_THE_WINNER_OF_THE_EXAM_COMPETITION = '7'
+    DIPLOMAS_OF_COMPETITION_WINNERS = '8'
+    INTERNATIONAL_AWARDS = '9'
 
 class AcademicDegree(models.TextChoices):
-    BACHELOR = 1
-    MASTER = 2
-    PhD = 3
-    DsC = 4
+    BACHELOR = '1'
+    MASTER = '2'
+    PhD = '3'
+    DsC = '4'
 
 class Social(models.TextChoices):
-    TELEGRAM = 1
-    INSTAGRAM = 2
-    FACEBOOK = 3
-    TIK_TOK = 4
-    TWITTER = 5
-    YOUTUBE = 6
-    WHATSAPP = 7
+    TELEGRAM = '1'
+    INSTAGRAM = '2'
+    FACEBOOK = '3'
+    TIK_TOK = '4'
+    TWITTER = '5'
+    YOUTUBE = '6'
+    WHATSAPP = '7'
 
 class Graduation(models.TextChoices):
-    TASHKENT_ISLAMIC_INSTITUTE = 1
-    SCHOOL_OF_HADITH_SCIENCE = 2
-    MIR_ARAB_HIGHER_MADRASAH = 3
-    KOKALDOSH = 4
-    MIR_ARAB = 5
-    KHOJA_BUKHARI = 6
-    IMAM_TERMIZI = 7
-    FAKHRIDDIN_AR_RAZI = 8
-    MUHAMMAD_AL_BERUNI = 9
-    SAYYID_MUHIDDIN_MAKHDUM = 10
-    HIDAYAH = 11
-    KHADICHAI_KUBRO = 12
-    JOYBORI_KALON = 13
-    ANOTHER = 14    
+    TASHKENT_ISLAMIC_INSTITUTE = '1'
+    SCHOOL_OF_HADITH_SCIENCE = '2'
+    MIR_ARAB_HIGHER_MADRASAH = '3'
+    KOKALDOSH = '4'
+    MIR_ARAB = '5'
+    KHOJA_BUKHARI = '6'
+    IMAM_TERMIZI = '7'
+    FAKHRIDDIN_AR_RAZI = '8'
+    MUHAMMAD_AL_BERUNI = '9'
+    SAYYID_MUHIDDIN_MAKHDUM = '10'
+    HIDAYAH = '11'
+    KHADICHAI_KUBRO = '12'
+    JOYBORI_KALON = '13'
+    ANOTHER = '14'
 
 
 class Employee(models.Model):
+    uuid = models.UUIDField(unique=True, max_length=10, default=uuid.uuid4)
     name = models.CharField(max_length=50, blank=False)
     surname = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)

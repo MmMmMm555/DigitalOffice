@@ -11,6 +11,16 @@ class MosqueTypeChoices(models.TextChoices):
     NEIGHBORHOOD = '1'
     JOME = '2'
 
+class MosqueHeatingTypeChoices(models.TextChoices):
+    CENTRAL = '1'
+    LOCAL = '2'
+
+class MosqueHeatingFuelChoices(models.TextChoices):
+    GAS = '1'
+    LIQUID_FUEL = '2'
+    SOLID_FUEL = '3'
+    NONE = '4'
+
 class MosqueStatusChoices(models.TextChoices):
     GOOD = '1'
     REPAIR = '2'
@@ -61,13 +71,25 @@ class Mosque(BaseModel):
     other_room = models.BooleanField(default=False)
     other_room_amount = models.IntegerField(default=0, blank=True)
     
+    mosque_library = models.BooleanField(default=False)
+
     fire_images = models.ManyToManyField(FireDefenceImages, blank=True)
     
     mosque_status = models.CharField(
-        max_length=17, choices=MosqueStatusChoices.choices
+        max_length=17, choices=MosqueStatusChoices.choices,
+        default=MosqueStatusChoices.GOOD,
     )
     mosque_type = models.CharField(
-        max_length=17, choices=MosqueTypeChoices.choices
+        max_length=17, choices=MosqueTypeChoices.choices,
+        default=MosqueTypeChoices.JOME,
+    )
+    mosque_heating_type = models.CharField(
+        max_length=17, choices=MosqueHeatingTypeChoices.choices,
+        default=MosqueHeatingTypeChoices.CENTRAL,
+    )
+    mosque_heating_fuel = models.CharField(
+        max_length=17, choices=MosqueHeatingFuelChoices.choices,
+        default=MosqueHeatingFuelChoices.NONE,
     )
     
     def __str__(self):
