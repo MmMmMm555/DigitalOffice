@@ -22,6 +22,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'role',
+            'region',
+            'district',
             'profil',
             'password',
             'password2',
@@ -39,6 +41,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email'],
             role=validated_data['role'],
+            region=validated_data['region'],
+            district=validated_data['district'],
             profil=validated_data['profil'],
         )
 

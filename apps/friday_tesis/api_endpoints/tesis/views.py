@@ -2,12 +2,10 @@ from rest_framework import views, response, generics, parsers, permissions, filt
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from drf_yasg.utils import swagger_auto_schema
 
 from apps.common.permissions import IsSuperAdmin
 from .serializers import FridayTesisSerializer
 from apps.friday_tesis import models
-from apps.common.openapi_params import region, district
 
 
 class FridayTesisCreateView(generics.CreateAPIView):

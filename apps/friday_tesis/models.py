@@ -17,6 +17,12 @@ class FridayTesis(BaseModel):
     to_imams = models.ManyToManyField(User, blank=True)
     date = models.DateField()
     
+    empty = models.BooleanField(default=False)
+    image = models.BooleanField(default=False)
+    video = models.BooleanField(default=False)
+    comment = models.BooleanField(default=False)
+    file_bool = models.BooleanField(default=False)
+    
     def __str__(self) -> str:
         return self.title
     
@@ -25,13 +31,10 @@ class FridayTesis(BaseModel):
         verbose_name_plural = 'Juma tezislari '
 
 
-class FridayTesisReqiredFields(models.Model):
-    tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='requiredfields')
-    to_region = models.ManyToManyField(Regions, blank=True)
-    to_district = models.ManyToManyField(Districts, blank=True)
-    to_imams = models.ManyToManyField(User, blank=True)
-    empty = models.BooleanField(default=False)
-    image = models.BooleanField(default=False)
-    video = models.BooleanField(default=False)
-    comment = models.BooleanField(default=False)
-    file = models.BooleanField(default=False)
+class FridayTesisImamRead(models.Model):
+    tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamread')
+    imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fridaytesisimamread')
+    seen = models.BooleanField(default=False)
+    
+    def __str__(self) -> str:
+        return self.imam.username
