@@ -10,8 +10,8 @@ from apps.common.regions import Regions, Districts
 
 class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
-    file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt'])])
-    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt'])], blank=True)
+    file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip'])])
+    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip'])], blank=True)
     to_region = models.ManyToManyField(Regions)
     to_district = models.ManyToManyField(Districts, blank=True)
     to_imams = models.ManyToManyField(User, blank=True)

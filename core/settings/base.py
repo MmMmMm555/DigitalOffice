@@ -59,6 +59,7 @@ CUSTOM_APPS = [
     'apps.common',
     'apps.employee',
     'apps.friday_tesis',
+    'apps.orders',
 ]
 
 THIRD_PARTY_APPS = [
