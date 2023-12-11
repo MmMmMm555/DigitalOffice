@@ -24,7 +24,7 @@ class FridayTesisSerializer(ModelSerializer):
                   )
 
     def create(self, validated_data):
-        try:
+        # try:
             tesis = models.FridayTesis.objects.create(
                 title = validated_data.get('title'),
                 file = validated_data.get('file'),
@@ -42,8 +42,10 @@ class FridayTesisSerializer(ModelSerializer):
             imams = imams.filter(region__in=region_list)
             if imam_list != []:
                 imams.filter(username__in=imam_list)
-            elif district_list != []:
+            if district_list != []:
                 imams.filter(district__in=district_list)
+            else:
+                district_list = Districts.objects.filter(region__in=region_list)
             for i in imams:
                 models.FridayTesisImamRead.objects.create(
                         tesis = tesis,
@@ -56,6 +58,8 @@ class FridayTesisSerializer(ModelSerializer):
             for i in district_list:
                 tesis.to_district.add(Districts.objects.get(name=i))
             tesis.save()
-        except:
-            raise ValidationError('Something went wrong')
-        return tesis
+            return tesis
+            
+        # except:
+        #     raise ValidationError('Something went wrong')
+        # return tesis
