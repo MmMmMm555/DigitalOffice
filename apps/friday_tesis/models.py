@@ -16,15 +16,15 @@ class FridayTesis(BaseModel):
     to_district = models.ManyToManyField(Districts, blank=True)
     to_imams = models.ManyToManyField(User, blank=True)
     date = models.DateField()
-    
+
     image = models.BooleanField(default=False)
     video = models.BooleanField(default=False)
     comment = models.BooleanField(default=False)
     file_bool = models.BooleanField(default=False)
-    
+
     def __str__(self) -> str:
-        return self.title
-    
+        return f"{self.id}-{self.title}"
+
     class Meta:
         verbose_name = 'Juma tezisi '
         verbose_name_plural = 'Juma tezislari '
@@ -34,10 +34,10 @@ class FridayTesisImamRead(BaseModel):
     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamread')
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fridaytesisimamread')
     seen = models.BooleanField(default=False)
-    
+
     def __str__(self) -> str:
-        return self.imam.username
-    
+        return f"{self.id}-{self.imam.username} {self.seen}"
+
     class Meta:
         verbose_name = 'Juma tezisi imom oqigan '
         verbose_name_plural = 'Juma tezislari imom oqiganlar '
@@ -50,10 +50,10 @@ class FridayTesisImamResult(BaseModel):
     video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['mp4',])], blank=True)
     comment = models.TextField(blank=True)
     file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip'])], blank=True)
-    
+
     def __str__(self) -> str:
         return self.imam.username
-    
+
     class Meta:
         verbose_name = 'Juma tezisi imom natija '
         verbose_name_plural = 'Juma tezislari imom natijalar '
