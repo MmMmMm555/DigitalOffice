@@ -30,5 +30,4 @@ class DirectionEmployeeReadListSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation =super().to_representation(instance)
         representation['profile'] = instance.employee.profil
-        return representation 
-    error
+        return representation

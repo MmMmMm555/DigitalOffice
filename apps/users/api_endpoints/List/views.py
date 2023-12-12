@@ -13,4 +13,4 @@ class UsersListView(generics.ListAPIView):
     parser_classes = (parsers.FormParser,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)
     filterset_fields = ('id', 'role', 'region', 'district',)
-    search_fields = ('email', 'profile__name', 'profile__surname',)
+    search_fields = ('email', 'profil__name', 'profil__surname',)
