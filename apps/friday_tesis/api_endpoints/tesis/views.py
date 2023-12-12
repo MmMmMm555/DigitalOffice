@@ -1,4 +1,4 @@
-from rest_framework import generics, parsers, permissions, filters, pagination, viewsets
+from rest_framework import generics, parsers, permissions, filters
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -18,7 +18,6 @@ class FridayTesisCreateView(generics.CreateAPIView):
 class FridayTesisListView(generics.ListAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisSerializer
-    pagination_class = pagination.PageNumberPagination
     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('title',)

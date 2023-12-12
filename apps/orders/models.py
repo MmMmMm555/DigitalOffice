@@ -22,7 +22,7 @@ class DirectionTypes(models.TextChoices):
 class Directions(BaseModel):
     title = models.CharField(max_length=1000)
     direction_type = models.CharField(max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
-    file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip'])])
+    file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip', 'ppt'])])
     type = models.CharField(max_length=12, choices=Types.choices, default=Types.INFORMATION)
     to_role = models.CharField(max_length=18, choices=Role.choices, default=Role.IMAM)
     to_region = models.ManyToManyField(Regions, related_name='direction')

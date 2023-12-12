@@ -42,7 +42,6 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   'to_imams',
                   'date',
                   'created_at',
-                  'updated_at',
                   'image',
                   'video',
                   'comment',
