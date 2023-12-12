@@ -10,6 +10,7 @@ from apps.common.regions import Regions, Districts
 
 class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
+    # title_slug = models.SlugField(max_length=1000)
     file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip'])])
     attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx', 'xls', 'txt', 'zip'])], blank=True)
     to_region = models.ManyToManyField(Regions)

@@ -34,6 +34,7 @@ class EmployeeSerializer(ModelSerializer):
                  'graduated_year',
                  'diploma_number',
                  'academic_degree',
+                 'mosque',
                  'achievement',
                  'workactivity',
                  'activity',

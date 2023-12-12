@@ -5,8 +5,15 @@ from apps.users.models import User
 from rest_framework.permissions import IsAuthenticated
 from apps.common.permissions import IsSuperAdmin
 
+
 class RegisterView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated, IsSuperAdmin)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser)
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+
+
+class RegisterView(generics.ListAPIView):
+    permission_classes = (IsSuperAdmin,)
     queryset = User.objects.all()
     serializer_class = RegisterSerializer

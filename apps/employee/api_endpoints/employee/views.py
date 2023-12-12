@@ -18,7 +18,7 @@ class EmployeeListView(generics.ListAPIView):
 class EmployeeCreateView(generics.CreateAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeSerializer
-    parser_classes = (parsers.FormParser,)
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser)
     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
     
 class EmployeeUpdateView(generics.UpdateAPIView):

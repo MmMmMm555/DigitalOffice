@@ -22,9 +22,35 @@ class FridayTesisSerializer(ModelSerializer):
                   'comment',
                   'file_bool',
                   )
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['seen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, seen=True).count()
+        representation['unseen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, seen=False).count()
+        return representation
+
+
+class FridayTesisCreateSerializer(ModelSerializer):
+    class Meta:
+        model = models.FridayTesis
+        fields = ('id',
+                  'title',
+                  'file',
+                  'attachment',
+                  'to_region',
+                  'to_district',
+                  'to_imams',
+                  'date',
+                  'created_at',
+                  'updated_at',
+                  'image',
+                  'video',
+                  'comment',
+                  'file_bool',
+                  )
 
     def create(self, validated_data):
-        # try:
+        try:
             tesis = models.FridayTesis.objects.create(
                 title = validated_data.get('title'),
                 file = validated_data.get('file'),
@@ -59,7 +85,5 @@ class FridayTesisSerializer(ModelSerializer):
                 tesis.to_district.add(Districts.objects.get(name=i))
             tesis.save()
             return tesis
-            
-        # except:
-        #     raise ValidationError('Something went wrong')
-        # return tesis
+        except:
+            raise ValidationError('Something went wrong')

@@ -1,8 +1,6 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
-from rest_framework.response import Response
+
 from apps.friday_tesis import models
-# from apps.users.models import User
-# from apps.common.regions import Regions, Districts
 
 
 class FridayTesisImamReadSerializer(ModelSerializer):
@@ -22,3 +20,14 @@ class FridayTesisImamReadSerializer(ModelSerializer):
             raise ValidationError('query not found')
         except:
             raise ValidationError('something went wrogn')
+
+
+class FridayTesisImamReadListSerializer(ModelSerializer):
+    class Meta:
+        model = models.FridayTesisImamRead
+        fields = ('id', 'tesis', 'imam', 'seen',)
+
+    def to_representation(self, instance):
+        representation =super().to_representation(instance)
+        representation['imam_profile'] = instance.imam.profil
+        return representation
