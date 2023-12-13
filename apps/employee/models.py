@@ -81,19 +81,19 @@ class Employee(models.Model):
         return self.name
 
 
-class WorkActivity(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='workactivity')
-    start_date = models.DateField()
-    end_date = models.DateField()
-    company = models.CharField(max_length=100, blank=True, null=True)
-    as_who = models.CharField(max_length=100, blank=True, null=True)
+# class WorkActivity(models.Model):
+#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='workactivity')
+#     start_date = models.DateField()
+#     end_date = models.DateField()
+#     company = models.CharField(max_length=100, blank=True, null=True)
+#     as_who = models.CharField(max_length=100, blank=True, null=True)
     
-    class Meta:
-        verbose_name = 'ish faoliyati '
-        verbose_name_plural = 'ish faoliyati '
+#     class Meta:
+#         verbose_name = 'ish faoliyati '
+#         verbose_name_plural = 'ish faoliyati '
     
-    def __str__(self) -> str:
-        return self.company
+#     def __str__(self) -> str:
+#         return self.company
 
 
 class SocialMedia(models.Model):
@@ -109,15 +109,15 @@ class SocialMedia(models.Model):
         return self.social_media
 
 
-class Activity(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='activity')
-    type = models.CharField(max_length=1000, blank=True, null=True)
-    activity = models.CharField(max_length=1000, blank=True, null=True)
-    image = models.ImageField(upload_to='images/employee_activity/', default="default/no_photo.png")
+# class Activity(models.Model):
+#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='activity')
+#     type = models.CharField(max_length=1000, blank=True, null=True)
+#     activity = models.CharField(max_length=1000, blank=True, null=True)
+#     image = models.ImageField(upload_to='images/employee_activity/', default="default/no_photo.png")
 
-    class Meta:
-        verbose_name = 'tashabbusi '
-        verbose_name_plural = 'tashabbuslari '
+#     class Meta:
+#         verbose_name = 'tashabbusi '
+#         verbose_name_plural = 'tashabbuslari '
 
-    def __str__(self) -> str:
-        return self.type
+#     def __str__(self) -> str:
+#         return self.type

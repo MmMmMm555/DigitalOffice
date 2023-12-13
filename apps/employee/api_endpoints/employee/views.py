@@ -7,10 +7,9 @@ from apps.employee import models
 
 
 class EmployeeListView(generics.ListAPIView):
-    queryset = models.Employee.objects.all().prefetch_related('activity', 'socialmedia', 'workactivity')
+    queryset = models.Employee.objects.all().prefetch_related('socialmedia',)
     serializer_class = serializers.EmployeeListSerializer
-    pagination_class = pagination.PageNumberPagination
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'surname', 'last_name',)
     filterset_fields = ('id', 'birth_date', 'education', 'graduated_year', 'academic_degree',)
@@ -32,19 +31,19 @@ class EmployeeDestroyView(generics.DestroyAPIView):
     serializer_class = serializers.EmployeeSerializer
     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
 
-class ActivityView(viewsets.ModelViewSet):
-    queryset = models.Activity.objects.all()
-    serializer_class = serializers.ActivitySerializer
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('id', 'employee',)
+# class ActivityView(viewsets.ModelViewSet):
+#     queryset = models.Activity.objects.all()
+#     serializer_class = serializers.ActivitySerializer
+#     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+#     filter_backends = (DjangoFilterBackend,)
+#     filterset_fields = ('id', 'employee',)
 
-class WorkActivityView(viewsets.ModelViewSet):
-    queryset = models.WorkActivity.objects.all()
-    serializer_class = serializers.WorkActivitySerializer
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('id', 'employee',)
+# class WorkActivityView(viewsets.ModelViewSet):
+#     queryset = models.WorkActivity.objects.all()
+#     serializer_class = serializers.WorkActivitySerializer
+#     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+#     filter_backends = (DjangoFilterBackend,)
+#     filterset_fields = ('id', 'employee',)
 
 class SocialMediaView(viewsets.ModelViewSet):
     queryset = models.SocialMedia.objects.all()

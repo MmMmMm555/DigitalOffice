@@ -27,11 +27,11 @@ class MosqueStatusChoices(models.TextChoices):
     RECONSTRUCTION = '3'
 
 class FireDefence(models.TextChoices):
-    EVACUATION_ROAD = '1', 'evacuation_road'
-    FIRE_SAFE = '2', 'fire_safe'
-    FIRE_CLOSET = '3', 'fire_closet'
-    FIRES_IGNAL = '4', 'fires_ignal'
-    AUTO_FIRE_EXTINGUISHER = '5', 'auto_fire_extinguisher'
+    EVACUATION_ROAD = '1'
+    FIRE_SAFE = '2'
+    FIRE_CLOSET = '3'
+    FIRES_IGNAL = '4'
+    AUTO_FIRE_EXTINGUISHER = '5'
 
 class FireDefenceImages(BaseModel):
     type = models.CharField(max_length=17, choices=FireDefence.choices, default=FireDefence.EVACUATION_ROAD)

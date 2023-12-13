@@ -106,6 +106,8 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
+ALLOWED_FILE_TYPES = ['pdf', 'docx', 'xls', 'txt', 'zip', 'pptx']
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
