@@ -60,6 +60,8 @@ CUSTOM_APPS = [
     'apps.employee',
     'apps.friday_tesis',
     'apps.orders',
+    'apps.wedding',
+    'apps.death',
 ]
 
 THIRD_PARTY_APPS = [

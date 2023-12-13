@@ -6,6 +6,7 @@ from apps.common.models import BaseModel
 from apps.common.regions import Regions, Districts
 from apps.friday_tesis.models import States
 from django.conf import settings
+
 # Create your models here.
 
 
@@ -65,8 +66,6 @@ class DirectionsEmployeeRead(BaseModel):
 class DirectionsEmployeeResult(BaseModel):
     direction = models.ForeignKey(Directions, on_delete=models.CASCADE, related_name='directionemployeeresult')
     employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='directionemployeeresult')
-    image = models.ImageField(upload_to='images/directionsresult', validators=[FileExtensionValidator(allowed_extensions=['jpg'])], blank=True)
-    video = models.FileField(upload_to='videos/directionresult', validators=[FileExtensionValidator(allowed_extensions=['mp4',])], blank=True)
     voice = models.FileField(upload_to='voices/directionresult', validators=[FileExtensionValidator(allowed_extensions=['mp3',])], blank=True)
     comment = models.TextField(blank=True)
     file = models.FileField(upload_to='files/directionresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], blank=True)
@@ -77,4 +76,12 @@ class DirectionsEmployeeResult(BaseModel):
     class Meta:
         verbose_name = 'Buyruq natija '
         verbose_name_plural = 'Buyruq natijalari '
+
+
+class ResultImages(BaseModel):
+    result = models.ForeignKey(DirectionsEmployeeResult, on_delete=models.CASCADE, verbose_name='result_image')
+    image = models.ImageField(upload_to='images/directionsresult', validators=[FileExtensionValidator(allowed_extensions=['jpg'])], blank=True)
     
+class ResultVideos(BaseModel):
+    result = models.ForeignKey(DirectionsEmployeeResult, on_delete=models.CASCADE, verbose_name='result_image')
+    video = models.FileField(upload_to='videos/directionresult', validators=[FileExtensionValidator(allowed_extensions=['mp4',])], blank=True)

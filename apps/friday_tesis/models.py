@@ -67,8 +67,6 @@ class FridayTesisImamRead(BaseModel):
 class FridayTesisImamResult(BaseModel):
     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
-    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['jpg'])], blank=True)
-    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['mp4',])], blank=True)
     comment = models.TextField(blank=True)
     file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], blank=True)
 
@@ -78,3 +76,12 @@ class FridayTesisImamResult(BaseModel):
     class Meta:
         verbose_name = 'Juma tezisi imom natija '
         verbose_name_plural = 'Juma tezislari imom natijalar '
+
+
+class ResultImages(BaseModel):
+    result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_image')
+    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['jpg'])], blank=True)
+
+class ResultVideos(BaseModel):
+    result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_image')
+    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['mp4',])], blank=True)
