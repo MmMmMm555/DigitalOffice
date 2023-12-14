@@ -62,6 +62,8 @@ CUSTOM_APPS = [
     'apps.orders',
     'apps.wedding',
     'apps.death',
+    'apps.marriage',
+    'apps.mavlud',
 ]
 
 THIRD_PARTY_APPS = [
@@ -108,7 +110,11 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
-ALLOWED_FILE_TYPES = ['pdf', 'docx', 'xls', 'txt', 'zip', 'pptx']
+ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip', 'pptx', 'ppt',]
+
+ALLOWED_IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'svg',]
+
+ALLOWED_VIDEO_TYPES = ['mp4', 'mpeg', 'mpeg-4', 'm4v',]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

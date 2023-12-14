@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from location_field.models.plain import PlainLocationField
 
 from apps.common.models import BaseModel
@@ -35,7 +37,7 @@ class FireDefence(models.TextChoices):
 
 class FireDefenceImages(BaseModel):
     type = models.CharField(max_length=17, choices=FireDefence.choices, default=FireDefence.EVACUATION_ROAD)
-    image = models.ImageField(upload_to='images/firedefence/')
+    image = models.ImageField(upload_to='images/firedefence/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     
     def __str__(self):
         return self.type

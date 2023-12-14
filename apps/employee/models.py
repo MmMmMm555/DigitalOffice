@@ -1,6 +1,8 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from location_field.models.plain import PlainLocationField
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 from apps.mosque.models import Mosque
 
@@ -57,13 +59,13 @@ class Graduation(models.TextChoices):
 
 
 class Employee(models.Model):
-    uuid = models.UUIDField(unique=True, max_length=10, default=uuid.uuid4)
+    uuid = models.UUIDField(unique=True, max_length=10, default=uuid.uuid4, blank=True)
     name = models.CharField(max_length=50, blank=False)
     surname = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     phone_number = PhoneNumberField(blank=False)
     address = PlainLocationField(based_fields=['city'], zoom=7)
-    image = models.ImageField(upload_to='images/profil_images/', default="default/default_user.png")
+    image = models.ImageField(upload_to='images/profil_images/', default="default/default_user.png", validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     birth_date = models.DateField()
     education = models.CharField(max_length=50, choices=Education.choices, default=Education.MEDIUM_SPECIAL, blank=True)
     graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, default=Graduation.TASHKENT_ISLAMIC_INSTITUTE, blank=True)

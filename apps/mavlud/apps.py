@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class WeddingConfig(AppConfig):
+class MavludConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.wedding'
-    verbose_name = "To'y"
+    name = 'apps.mavlud'
+    verbose_name = 'Mavlud'

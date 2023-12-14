@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.conf import settings
-from django.dispatch import receiver
 
 from apps.users.models import User
 from apps.common.models import BaseModel
@@ -20,7 +19,7 @@ class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
     # title_slug = models.SlugField(max_length=1000)
     file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
-    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], blank=True)
+    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     date = models.DateField()
     to_region = models.ManyToManyField(Regions, blank=True)
     to_district = models.ManyToManyField(Districts, blank=True)
@@ -68,7 +67,7 @@ class FridayTesisImamResult(BaseModel):
     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
     comment = models.TextField(blank=True)
-    file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], blank=True)
+    file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
 
     def __str__(self) -> str:
         return self.imam.username
@@ -80,8 +79,8 @@ class FridayTesisImamResult(BaseModel):
 
 class ResultImages(BaseModel):
     result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_image')
-    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['jpg'])], blank=True)
+    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
 
 class ResultVideos(BaseModel):
-    result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_image')
-    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=['mp4',])], blank=True)
+    result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_video')
+    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES)], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)

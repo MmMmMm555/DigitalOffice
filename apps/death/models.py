@@ -10,8 +10,8 @@ from apps.users.models import User
 class Death(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='death')
     date = models.DateField()
-    death_document = models.FileField(upload_to='files/death_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
-    file = models.FileField(upload_to='files/death_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
+    image = models.ImageField(upload_to='files/death_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+    file = models.FileField(upload_to='files/death_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     comment = models.TextField(blank=True, null=True)
     
     class Meta:
