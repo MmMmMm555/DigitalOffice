@@ -66,6 +66,7 @@ CUSTOM_APPS = [
     'apps.mavlud',
     'apps.neighborhood',
     'apps.family_conflicts',
+    'apps.individual_conversations',
 ]
 
 THIRD_PARTY_APPS = [
