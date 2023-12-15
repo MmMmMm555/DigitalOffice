@@ -22,9 +22,9 @@ class Types(models.TextChoices):
 class Neighborhood(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='neighborhood_imam') 
     comment = models.TextField(blank=True)
-    participants = models.CharField(max_length=20, choices=Participants.choices, blank=True)
-    types = models.CharField(max_length=20, choices=Types.choices, blank=True)
-    date = models.DateField(blank=True)
+    participants = models.CharField(max_length=20, choices=Participants.choices)
+    types = models.CharField(max_length=20, choices=Types.choices)
+    date = models.DateField()
     
     class Meta:
         verbose_name = 'Mahalla '
