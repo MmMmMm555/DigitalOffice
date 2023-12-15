@@ -21,6 +21,9 @@ urlpatterns = [
     path('api/v1/neighborhood/', include('apps.neighborhood.urls')),
     path('api/v1/individual_conversations/', include('apps.individual_conversations.urls')),
     path('api/v1/religious_advice/', include('apps.religious_advice.urls')),
+    path('api/v1/community_events/', include('apps.community_events.urls')),
+    path('api/v1/scientific_activity/', include('apps.scientific_activity.urls')),
+    path('api/v1/charity/', include('apps.charity.urls')),
 ]
 
 urlpatterns += swagger_urlpatterns

@@ -48,14 +48,14 @@ class Mosque(BaseModel):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=355)
     district = models.ForeignKey(Districts, on_delete=models.CASCADE, related_name='mosque')
-    location = PlainLocationField(based_fields=['city'], zoom=7)
+    location = PlainLocationField(based_fields=['city'], zoom=10)
 
     built_at = models.DateField()
     registered_at = models.DateField()
-    
+
     parking = models.BooleanField(default=False)
-    parking_capasity = models.IntegerField(blank=True, null=True)
-    
+    parking_capacity = models.IntegerField(default=0, blank=True)
+
     basement = models.BooleanField(default=False)
     second_floor = models.BooleanField(default=False)
     third_floor = models.BooleanField(default=False)

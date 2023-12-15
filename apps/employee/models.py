@@ -59,7 +59,7 @@ class Graduation(models.TextChoices):
 
 
 class Employee(models.Model):
-    uuid = models.UUIDField(unique=True, max_length=10, default=uuid.uuid4, blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4, blank=True, editable=True)
     name = models.CharField(max_length=50, blank=False)
     surname = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
@@ -69,7 +69,7 @@ class Employee(models.Model):
     birth_date = models.DateField()
     education = models.CharField(max_length=50, choices=Education.choices, default=Education.MEDIUM_SPECIAL, blank=True)
     graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, default=Graduation.TASHKENT_ISLAMIC_INSTITUTE, blank=True)
-    graduated_year = models.DateField(blank=True)
+    graduated_year = models.DateField()
     diploma_number = models.CharField(max_length=20, blank=True)
     academic_degree = models.CharField(max_length=50, choices=AcademicDegree.choices, default=AcademicDegree.BACHELOR, blank=True)
     achievement = models.CharField(max_length=50, choices=Achievement.choices, default=Achievement.STATE_AWARDS, blank=True)

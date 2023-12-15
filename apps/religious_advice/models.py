@@ -16,6 +16,7 @@ class Choices(models.TextChoices):
     COMMERCE = '3'
     DEBT = '4'
     HERITAGE = '5'
+
     FAITH = '6'
     JIHAD = '7'
     TAKFIR = '8'
@@ -24,14 +25,14 @@ class Choices(models.TextChoices):
 
 
 class ReligiousAdvice(BaseModel):
-    imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_individual_conversation')
+    imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_religious_advice')
     type = models.CharField( max_length=12, choices=Types.choices, default=Types.OTHER, blank=False)
     choices = models.CharField( max_length=12, choices=Choices.choices, blank=False)
     comment = models.TextField()
     date = models.DateField()
     
     def __str__(self):
-        return self.title
+        return self.imam.username
 
     class Meta: 
         verbose_name = 'Diniy maslahat '

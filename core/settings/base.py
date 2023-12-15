@@ -68,6 +68,9 @@ CUSTOM_APPS = [
     'apps.family_conflicts',
     'apps.individual_conversations',
     'apps.religious_advice',
+    'apps.community_events',
+    'apps.scientific_activity',
+    'apps.charity',
 ]
 
 THIRD_PARTY_APPS = [

@@ -29,7 +29,7 @@ class IndividualConversation(BaseModel):
 
 class Images(models.Model):
     conversation = models.ForeignKey(IndividualConversation, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='images/conversation_images/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+    image = models.ImageField(upload_to='images/conversation_images/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     
     class Meta: 
         verbose_name = 'Suhbat rasmi '
