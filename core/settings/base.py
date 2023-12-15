@@ -64,6 +64,8 @@ CUSTOM_APPS = [
     'apps.death',
     'apps.marriage',
     'apps.mavlud',
+    'apps.neighborhood',
+    'apps.family_conflicts',
 ]
 
 THIRD_PARTY_APPS = [
