@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/v1/mavlud/', include('apps.mavlud.urls')),
     path('api/v1/neighborhood/', include('apps.neighborhood.urls')),
     path('api/v1/individual_conversations/', include('apps.individual_conversations.urls')),
+    path('api/v1/religious_advice/', include('apps.religious_advice.urls')),
 ]
 
 urlpatterns += swagger_urlpatterns

@@ -15,7 +15,7 @@ class Types(models.TextChoices):
 
 class IndividualConversation(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_individual_conversation')
-    type = models.CharField( max_length=22, choices=Types.choices, default=Types.OTHER, )
+    type = models.CharField( max_length=22, choices=Types.choices, default=Types.NEED_SOCIAL_ASSISTANCE, blank=False)
     title = models.CharField(max_length=300)
     comment = models.TextField()
     date = models.DateField()

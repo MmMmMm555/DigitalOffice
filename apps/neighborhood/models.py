@@ -22,8 +22,8 @@ class Types(models.TextChoices):
 class Neighborhood(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='neighborhood_imam') 
     comment = models.TextField(blank=True)
-    participants = models.CharField(max_length=20, choices=Participants.choices)
-    types = models.CharField(max_length=20, choices=Types.choices)
+    participants = models.CharField(max_length=20, choices=Participants.choices, blank=False)
+    types = models.CharField(max_length=20, choices=Types.choices, blank=False)
     date = models.DateField()
     
     class Meta:

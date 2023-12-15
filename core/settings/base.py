@@ -67,6 +67,7 @@ CUSTOM_APPS = [
     'apps.neighborhood',
     'apps.family_conflicts',
     'apps.individual_conversations',
+    'apps.religious_advice',
 ]
 
 THIRD_PARTY_APPS = [
