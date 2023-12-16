@@ -71,6 +71,8 @@ CUSTOM_APPS = [
     'apps.community_events',
     'apps.scientific_activity',
     'apps.charity',
+    'apps.charity_promotion',
+    'apps.public_prayers',
 ]
 
 THIRD_PARTY_APPS = [
@@ -196,7 +198,7 @@ AUTH_USER_MODEL = 'users.User'
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "uz"
 
 TIME_ZONE = "Asia/Tashkent"
 

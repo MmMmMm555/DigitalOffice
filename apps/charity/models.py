@@ -31,9 +31,10 @@ class From(models.TextChoices):
 
 class Charity(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_charity')
-    type = models.CharField(max_length=22, choices=Types.choices, default=Types.POOR, blank=False)
+    types = models.CharField(max_length=22, choices=Types.choices, default=Types.POOR, blank=False)
     help_type = models.CharField(max_length=22, choices=HelpTypes.choices, blank=False)
     from_who = models.CharField(max_length=22, choices=From.choices, blank=False)
+    summa = models.FloatField(blank=False, default=0)
     comment = models.TextField()
     date = models.DateField()
     
@@ -46,7 +47,7 @@ class Charity(BaseModel):
 
 class Images(models.Model):
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='images/charity/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+    image = models.ImageField(upload_to='images/charity/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=False)
 
     class Meta:
         verbose_name = 'Hayriya rasmi '
