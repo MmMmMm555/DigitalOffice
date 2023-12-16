@@ -15,8 +15,13 @@ class States(models.TextChoices):
     ACCEPTED = 2
     DONE = 3
 
+class TesisType(models.TextChoices):
+    FRIDAY = 1
+    HAYIT = 2
+
 class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
+    type = models.CharField(max_length=6, choices=TesisType.choices, default=TesisType.FRIDAY)
     # title_slug = models.SlugField(max_length=1000)
     file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
     attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
