@@ -63,24 +63,24 @@ class Employee(models.Model):
     name = models.CharField(max_length=50, blank=False)
     surname = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
-    phone_number = PhoneNumberField(blank=False)
+    phone_number = PhoneNumberField(blank=False, unique=True)
     address = PlainLocationField(based_fields=['city'], zoom=7)
     image = models.ImageField(upload_to='images/profil_images/', default="default/default_user.png", validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     birth_date = models.DateField()
-    education = models.CharField(max_length=50, choices=Education.choices, default=Education.MEDIUM_SPECIAL, blank=True)
-    graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, default=Graduation.TASHKENT_ISLAMIC_INSTITUTE, blank=True)
-    graduated_year = models.DateField()
+    education = models.CharField(max_length=50, choices=Education.choices, blank=True)
+    graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, blank=True)
+    graduated_year = models.DateField(default="1000-01-01")
     diploma_number = models.CharField(max_length=20, blank=True)
-    academic_degree = models.CharField(max_length=50, choices=AcademicDegree.choices, default=AcademicDegree.BACHELOR, blank=True)
-    achievement = models.CharField(max_length=50, choices=Achievement.choices, default=Achievement.STATE_AWARDS, blank=True)
+    academic_degree = models.CharField(max_length=50, choices=AcademicDegree.choices, blank=True)
+    achievement = models.CharField(max_length=50, choices=Achievement.choices, blank=True)
     mosque = models.ForeignKey(Mosque, on_delete=models.CASCADE, related_name='employee')
 
     class Meta:
         verbose_name = 'Hodim '
         verbose_name_plural = 'Hodimlar '
-    
+
     def __str__(self) -> str:
-        return self.name
+        return f"{self.id} - {self.name}"
 
 
 # class WorkActivity(models.Model):
@@ -100,12 +100,12 @@ class Employee(models.Model):
 
 class SocialMedia(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='socialmedia')
-    social_media = models.CharField(max_length=30 , choices=Social.choices, default=Social.TELEGRAM)
-    link = models.URLField(max_length=60)
-    
+    social_media = models.CharField(max_length=30 , choices=Social.choices, blank=False)
+    link = models.URLField(max_length=60, blank=False)
+
     class Meta:
-        verbose_name = 'ijtimoiy tarmoq '
-        verbose_name_plural = 'ijtimoiy tarmoq '
+        verbose_name = 'Ijtimoiy tarmoq '
+        verbose_name_plural = 'Ijtimoiy tarmoq '
     
     def __str__(self) -> str:
         return self.social_media
