@@ -21,7 +21,7 @@ class TesisType(models.TextChoices):
 
 class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
-    type = models.CharField(max_length=6, choices=TesisType.choices, default=TesisType.FRIDAY)
+    types = models.CharField(max_length=6, choices=TesisType.choices, default=TesisType.FRIDAY)
     # title_slug = models.SlugField(max_length=1000)
     file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
     attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
@@ -61,7 +61,7 @@ class FridayTesisImamRead(BaseModel):
     requirement = models.BooleanField(default=False)
     state = models.CharField(max_length=10, choices=States.choices, default=States.UNSEEN)
     def __str__(self) -> str:
-        return f"{self.id}-{self.imam.username} {self.seen}"
+        return f"{self.id}-{self.imam.username} seen:{self.seen}  required:{self.requirement}"
 
     class Meta:
         verbose_name = 'Juma tezisi imom oqigan '

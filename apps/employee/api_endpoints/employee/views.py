@@ -53,6 +53,8 @@ class EmployeeDestroyView(generics.DestroyAPIView):
 class SocialMediaView(viewsets.ModelViewSet):
     queryset = models.SocialMedia.objects.all()
     serializer_class = serializers.SocialMediaSerializer
+    pagination_class = None
     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('id', 'employee',)
+    filterset_fields = ('id', 'employee', 'social_media',)
+    lookup_field = 'pk'
