@@ -9,7 +9,7 @@ from apps.common.permissions import IsSuperAdmin, IsImam
 class FridayTesisImamResultView(CreateAPIView):
     queryset = FridayTesisImamResult.objects.all()
     serializer_class = FridayTesisImamResultSerializer
-    permission_classes = (IsImam | IsSuperAdmin,)
+    permission_classes = (IsImam,)
     parser_classes = (FormParser, MultiPartParser,)
 
 
@@ -18,6 +18,10 @@ class FridayTesisImamResultListView(ListAPIView):
     serializer_class = FridayTesisImamResultSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
     filterset_fields = ('id', 'tesis', 'imam',)
-    
+
     def get_queryset(self):
+        if self.request.user.role == '4':
+            return FridayTesisImamResult.objects.filter(imam=self.request.user)
+        elif self.request.user.role == '1':
+            return FridayTesisImamResult.objects.all()
         return FridayTesisImamResult.objects.filter(imam=self.request.user)
