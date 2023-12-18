@@ -50,7 +50,7 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   )
 
     def create(self, validated_data):
-        # try:
+        try:
             tesis = models.FridayTesis.objects.create(
                 title = validated_data.get('title', None),
                 types = validated_data.get('types', None),
@@ -62,36 +62,119 @@ class FridayTesisCreateSerializer(ModelSerializer):
                 comment = validated_data.get('comment', None),
                 file_bool = validated_data.get('file_bool', None),
             )
+            
             imams = User.objects.filter(role='4')
+            
             for i in imams:
                 models.FridayTesisImamRead.objects.create(
                         tesis = tesis,
                         imam = i,
                     )
+
             imam_list = validated_data.get('to_imams', [])
             district_list = validated_data.get('to_district', [])
             region_list = validated_data.get('to_region', [])
             imams = imams.filter(region__in=region_list)
             region_list = Regions.objects.filter(name__in=region_list)
+
             if not district_list:
                 district_list = Districts.objects.filter(region__in=region_list)
+
             if district_list:
                 imams = imams.filter(district__in=district_list)
+
             if imam_list:
                 imams = imams.filter(username__in=imam_list)
-            for i in imams:
-                seen = models.FridayTesisImamRead.objects.filter(
-                        tesis = tesis,
-                        imam = i,
-                    )
-                for j in seen:
-                    j.requirement = True
-                    j.save()
-        
+
+            seen = models.FridayTesisImamRead.objects.filter(tesis=tesis, imam__in=imams,)
+            seen.update(requirement=True)
+
             tesis.to_imams.set(imams)
             tesis.to_region.set(region_list)
             tesis.to_district.set(district_list)
             tesis.save()
+            
             return tesis
+        except:
+            tesis.delete()
+            raise ValidationError('Something went wrong')
+
+
+class FridayTesisUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = models.FridayTesis
+        fields = ('id',
+                  'title',
+                  'types',
+                  'file',
+                  'attachment',
+                #   'to_region',
+                #   'to_district',
+                #   'to_imams',
+                  'date',
+                  'image',
+                  'video',
+                  'comment',
+                  'file_bool',
+                  )
+        extra_kwargs = {
+            'title': {'required': False},
+            'file': {'required': False},
+            'date': {'required': False},
+        }
+
+    def save(self):
+        models.FridayTesisImamRead.objects.filter(tesis=self.instance).update(seen=False)
+        return self.instance
+
+    # def update(self, instance, validated_data):
+    #     # try:
+    #     
+    #         tesis = instance
+    #         tesis.title = validated_data.get('title', tesis.title)
+    #         tesis.types = validated_data.get('types', tesis.types)
+    #         tesis.file = validated_data.get('file', tesis.file)
+    #         tesis.attachment = validated_data.get('attachment', tesis.attachment)
+    #         tesis.date = validated_data.get('date', tesis.date)
+    #         tesis.image = validated_data.get('image', tesis.image)
+    #         tesis.video = validated_data.get('video', tesis.video)
+    #         tesis.comment = validated_data.get('comment', tesis.comment)
+    #         tesis.file_bool = validated_data.get('file_bool', tesis.file_bool)
+    #         tesis.save()
+            
+            # models.FridayTesisImamRead.objects.filter(tesis=instance).update(seen=False)
+
+            # imams = User.objects.filter(role='4')
+            # print(instance.to_region)
+            # print(validated_data.get('to_region'))
+            # imam_list = validated_data.get('to_imams', instance.to_imams)
+            # district_list = validated_data.get('to_district', instance.to_district)
+            # region_list = validated_data.get('to_region', instance.to_region)
+            # print(region_list)
+            # imams = imams.filter(region__in=region_list)
+            # region_list = Regions.objects.filter(name__in=region_list)
+
+            # if not district_list:
+            #     district_list = Districts.objects.filter(region__in=region_list)
+
+            # if district_list:
+            #     imams = imams.filter(district__in=district_list)
+
+            # if imam_list:
+            #     imams = imams.filter(username__in=imam_list)
+
+            # seen = models.FridayTesisImamRead.objects.filter(tesis=instance, imam__in=imams,)
+            # seen.update(requirement=True)
+
+            # instance.to_imams.clear()
+            # instance.to_region.clear()
+            # instance.to_district.clear()
+
+            # instance.to_imams.set(imams)
+            # instance.to_region.set(region_list)
+            # instance.to_district.set(district_list)
+            # instance.save()
+
+            # return tesis
         # except:
-            # raise ValidationError('Something went wrong')
+        #     raise ValidationError('Something went wrong')

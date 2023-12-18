@@ -8,18 +8,20 @@ class FridayTesisImamReadSerializer(ModelSerializer):
         model = models.FridayTesisImamRead
         fields = ('tesis',)
     
-    def create(self, validatet_data):
-        tesis = validatet_data.get('tesis', None)
+    def create(self, validated_data):
+        tesis = validated_data.get('tesis', None)
         imam = self.context.get('request').user
         try:
-            read = models.FridayTesisImamRead.objects.filter(imam=imam, tesis=tesis).first()
-            if read:
-                read.seen = True
-                read.save()
-                return read
-            raise ValidationError('query not found')
+            if imam.role == '4':
+                read = models.FridayTesisImamRead.objects.filter(imam=imam, tesis=tesis).first()
+                if read:
+                    read.seen = True
+                    read.save()
+                    return read
+                raise ValidationError('query not found')
+            raise ValidationError('unsupported user')
         except:
-            raise ValidationError('something went wrogn')
+            raise ValidationError('something went wrong')
 
 
 class FridayTesisImamReadListSerializer(ModelSerializer):
@@ -29,5 +31,8 @@ class FridayTesisImamReadListSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation =super().to_representation(instance)
-        representation['imam_profile'] = instance.imam.profil
+        if instance.requirement:
+            representation['requirement'] = instance.requirement
+        representation['imam_name'] = f"{instance.imam.profil.name} {instance.imam.profil.last_name}"
+        representation['tesis_title'] = instance.tesis.title
         return representation
