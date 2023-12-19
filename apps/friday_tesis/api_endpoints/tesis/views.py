@@ -19,7 +19,7 @@ class FridayTesisUpdateView(generics.RetrieveUpdateAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisUpdateSerializer
     permission_classes = (IsSuperAdmin,)
-    parser_classes = (parsers.MultiPartParser, parsers.FormParser, parsers.FileUploadParser)
+    parser_classes = (parsers.MultiPartParser, parsers.FormParser, parsers.FileUploadParser,)
 
 
 class FridayTesisListView(generics.ListAPIView):
@@ -32,7 +32,7 @@ class FridayTesisListView(generics.ListAPIView):
     
     def get_queryset(self):
         if self.request.user.role == '1':
-            return models.FridayTesis.objects.all()
+            return self.queryset
         return models.FridayTesis.objects.filter(to_imams=self.request.user)
 
 

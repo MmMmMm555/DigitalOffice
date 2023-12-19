@@ -20,7 +20,7 @@ urlpatterns = [
      path('list/', FridayTesisListView.as_view(), name='tesis_list'),
 
      # seen apis
-     path('seen/create', FridayTesisImamReadView.as_view(), name='tesis_seen'),
+     path('seen/update/<int:pk>', FridayTesisImamReadView.as_view(), name='tesis_seen_update'),
      path('seen/list', FridayTesisImamReadListView.as_view(), name='tesis_seen_list'),
      
      # result apis

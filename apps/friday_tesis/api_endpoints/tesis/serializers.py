@@ -28,8 +28,8 @@ class FridayTesisSerializer(ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['seen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, seen=True).count()
-        representation['unseen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, seen=False).count()
+        representation['seen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='2').count()
+        representation['unseen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='1').count()
         return representation
 
 
@@ -129,11 +129,9 @@ class FridayTesisUpdateSerializer(ModelSerializer):
     def save(self):
         if self.instance.date <= date.today():
             raise ValidationError('editable date passed')
-        models.FridayTesis.objects.filter(id=self.instance.id).update(**self.validated_data)
-        self.validated_data.get('file_bool', self.instance.file_bool)
-        self.instance.save()
-        models.FridayTesisImamRead.objects.filter(tesis=self.instance).update(seen=False)
-        return self.instance
+        obj = models.FridayTesis.objects.filter(id=self.instance.id).update(**self.validated_data)
+        models.FridayTesisImamRead.objects.filter(tesis=self.instance).update(state='1')
+        return obj
 
     # def update(self, instance, validated_data):
         # try:

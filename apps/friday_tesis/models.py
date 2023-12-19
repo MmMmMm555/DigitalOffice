@@ -4,6 +4,7 @@ from django.conf import settings
 
 from apps.users.models import User
 from apps.common.models import BaseModel
+from apps.common.validators import validate_file_size
 from apps.common.regions import Regions, Districts
 
 
@@ -23,8 +24,8 @@ class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
     types = models.CharField(max_length=6, choices=TesisType.choices, default=TesisType.FRIDAY)
     # title_slug = models.SlugField(max_length=1000)
-    file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
-    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
+    file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
+    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     date = models.DateField()
     to_region = models.ManyToManyField(Regions, blank=True)
     to_district = models.ManyToManyField(Districts, blank=True)
@@ -57,11 +58,10 @@ class FridayTesis(BaseModel):
 class FridayTesisImamRead(BaseModel):
     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamread')
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fridaytesisimamread')
-    seen = models.BooleanField(default=False)
     requirement = models.BooleanField(default=False)
     state = models.CharField(max_length=10, choices=States.choices, default=States.UNSEEN)
     def __str__(self) -> str:
-        return f"{self.id}-{self.imam.username} seen:{self.seen}  required:{self.requirement}"
+        return f"{self.id}-{self.imam.username} seen:{self.state}  required:{self.requirement}"
 
     class Meta:
         verbose_name = 'Juma tezisi imom oqigan '
@@ -71,7 +71,7 @@ class ResultImages(BaseModel):
     image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
 
 class ResultVideos(BaseModel):
-    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES)], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_file_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
 
 class FridayTesisImamResult(BaseModel):
     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
@@ -81,7 +81,7 @@ class FridayTesisImamResult(BaseModel):
     man = models.PositiveIntegerField(default=0)
     old_man = models.PositiveIntegerField(default=0)
     old = models.PositiveIntegerField(default=0)
-    file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
+    file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     images = models.ManyToManyField(ResultImages, blank=True)
     videos = models.ManyToManyField(ResultVideos, blank=True)
 

@@ -28,19 +28,19 @@ class MosqueStatusChoices(models.TextChoices):
     REPAIR = '2'
     RECONSTRUCTION = '3'
 
-class FireDefence(models.TextChoices):
+class FireDefense(models.TextChoices):
     EVACUATION_ROAD = '1'
     FIRE_SAFE = '2'
     FIRE_CLOSET = '3'
-    FIRES_IGNAL = '4'
+    FIRE_SIGNAL = '4'
     AUTO_FIRE_EXTINGUISHER = '5'
 
-class FireDefenceImages(BaseModel):
-    type = models.CharField(max_length=17, choices=FireDefence.choices, default=FireDefence.EVACUATION_ROAD)
+class FireDefenseImages(BaseModel):
+    type = models.CharField(max_length=17, choices=FireDefense.choices, default=FireDefense.EVACUATION_ROAD)
     image = models.ImageField(upload_to='images/firedefence/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     
     def __str__(self):
-        return self.type
+        return str(self.id)
 
 
 class Mosque(BaseModel):
@@ -75,7 +75,7 @@ class Mosque(BaseModel):
     
     mosque_library = models.BooleanField(default=False)
 
-    fire_images = models.ManyToManyField(FireDefenceImages, blank=True)
+    fire_images = models.ManyToManyField(FireDefenseImages, blank=True)
     
     mosque_status = models.CharField(
         max_length=17, choices=MosqueStatusChoices.choices,

@@ -126,6 +126,19 @@ ALLOWED_IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'svg',]
 
 ALLOWED_VIDEO_TYPES = ['mp4', 'mpeg', 'mpeg-4', 'm4v',]
 
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 5242880
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+
+MAX_FILE_UPLOAD_SIZE = {"50 MB": 5242880}
+
+MAX_VIDEO_UPLOAD_SIZE = {"50 MB": 5242880}
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

@@ -32,13 +32,13 @@ class FridayTesisImamResultListView(ListAPIView):
 class ResultImageView(CreateAPIView):
     queryset = ResultImages.objects.all()
     serializer_class = ResultImagesSerializer
-    permission_classes = (IsImam,)
+    permission_classes = (IsImam | IsSuperAdmin,)
     parser_classes = (FormParser, MultiPartParser,)
 
 class ResultImageListView(ListAPIView):
     queryset = ResultImages.objects.all()
     serializer_class = ResultImagesSerializer
-    permission_classes = (IsImam,)
+    permission_classes = (IsImam | IsSuperAdmin,)
     filterset_fields = ('id',)
 
 class ResultVideoListView(ListAPIView):

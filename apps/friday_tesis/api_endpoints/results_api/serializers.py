@@ -26,7 +26,6 @@ class FridayTesisImamResultListSerializer(ModelSerializer):
         fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child', 'man', 'old_man', 'old', 'images', 'videos',)
 
 
-
 class FridayTesisImamResultSerializer(ModelSerializer):
     # def validate_file(self, value):
     #     if value.size > settings.MAX_FILE_SIZE:

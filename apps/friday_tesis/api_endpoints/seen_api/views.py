@@ -6,7 +6,7 @@ from apps.friday_tesis import models
 from apps.common.permissions import IsSuperAdmin, IsImam
 
 
-class FridayTesisImamReadView(generics.CreateAPIView):
+class FridayTesisImamReadView(generics.UpdateAPIView):
     queryset = models.FridayTesisImamRead.objects.all()
     serializer_class = FridayTesisImamReadSerializer
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
@@ -15,7 +15,12 @@ class FridayTesisImamReadView(generics.CreateAPIView):
 class FridayTesisImamReadListView(generics.ListAPIView):
     queryset = models.FridayTesisImamRead.objects.all()
     serializer_class = FridayTesisImamReadListSerializer
-    permission_classes = [IsSuperAdmin | IsImam]
+    permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('imam__profil_name',)
-    filterset_fields = ('tesis', 'created_at', 'seen', 'requirement', 'imam',)
+    search_fields = ('imam__profil_name', 'tesis__title',)
+    filterset_fields = ('tesis', 'created_at', 'state', 'requirement', 'imam',)
+    
+    def get_queryset(self):
+        if self.request.user.role == '1':
+            return self.queryset
+        return self.queryset.filter(imam=self.request.user)

@@ -1,9 +1,11 @@
 from django.urls import path
 
-# from apps.mosque.api_endpoints.MosqueGet.views import MosqueListView
-# from apps.mosque.api_endpoints.MosqueAdd.views import MosqueCreateAPIView
+from apps.mosque.api_endpoints.Mosque.views import MosqueCreateView, MosqueListView, MosqueRetrieveView
 
-urlpatterns = []
-#     path('', MosqueListView.as_view()),
-#     path('add/', MosqueCreateAPIView.as_view())
-# ]
+
+urlpatterns = [
+    # mosque
+    path('create/', MosqueCreateView.as_view(), name='mosque_create'),
+    path('list/', MosqueListView.as_view(), name='mosque_list'),
+    path('single/<int:pk>', MosqueRetrieveView.as_view(), name='mosque_single'),
+]
