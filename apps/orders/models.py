@@ -52,7 +52,6 @@ class Directions(BaseModel):
 class DirectionsEmployeeRead(BaseModel):
     direction = models.ForeignKey(Directions, on_delete=models.CASCADE, related_name='directionemployeeread')
     employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='directionemployeeread')
-    seen = models.BooleanField(default=False)
     requirement = models.BooleanField(default=False)
     state = models.CharField(max_length=10, choices=States.choices, default=States.UNSEEN)
 
@@ -64,25 +63,23 @@ class DirectionsEmployeeRead(BaseModel):
         verbose_name_plural = 'Buyruq oqilishlari '
 
 
+class ResultImages(BaseModel):
+    image = models.ImageField(upload_to='images/directionsresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+    
+class ResultVideos(BaseModel):
+    video = models.FileField(upload_to='videos/directionresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES)], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+
 class DirectionsEmployeeResult(BaseModel):
     direction = models.ForeignKey(Directions, on_delete=models.CASCADE, related_name='directionemployeeresult')
     employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='directionemployeeresult')
     voice = models.FileField(upload_to='voices/directionresult', validators=[FileExtensionValidator(allowed_extensions=['mp3',])], help_text=f"allowed images: ['mp3',]", blank=True)
     comment = models.TextField(blank=True)
     file = models.FileField(upload_to='files/directionresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
-
+    images = models.ManyToManyField(ResultImages, blank=True)
+    videos = models.ManyToManyField(ResultVideos, blank=True)
     def __str__(self) -> str:
         return self.employee.username
 
     class Meta:
         verbose_name = 'Buyruq natija '
         verbose_name_plural = 'Buyruq natijalari '
-
-
-class ResultImages(BaseModel):
-    result = models.ForeignKey(DirectionsEmployeeResult, on_delete=models.CASCADE, verbose_name='result_image')
-    image = models.ImageField(upload_to='images/directionsresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
-    
-class ResultVideos(BaseModel):
-    result = models.ForeignKey(DirectionsEmployeeResult, on_delete=models.CASCADE, verbose_name='result_image')
-    video = models.FileField(upload_to='videos/directionresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES)], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
