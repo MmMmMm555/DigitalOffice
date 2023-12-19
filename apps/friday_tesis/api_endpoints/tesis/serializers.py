@@ -1,4 +1,6 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
+from datetime import date
+
 from apps.friday_tesis import models
 from apps.users.models import User
 from apps.common.regions import Regions, Districts
@@ -9,6 +11,7 @@ class FridayTesisSerializer(ModelSerializer):
         model = models.FridayTesis
         fields = ('id',
                   'title',
+                  'types',
                   'file',
                   'attachment',
                   'to_region',
@@ -124,24 +127,29 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         }
 
     def save(self):
+        if self.instance.date <= date.today():
+            raise ValidationError('editable date passed')
+        models.FridayTesis.objects.filter(id=self.instance.id).update(**self.validated_data)
+        self.validated_data.get('file_bool', self.instance.file_bool)
+        self.instance.save()
         models.FridayTesisImamRead.objects.filter(tesis=self.instance).update(seen=False)
         return self.instance
 
     # def update(self, instance, validated_data):
-    #     # try:
-    #     
-    #         tesis = instance
-    #         tesis.title = validated_data.get('title', tesis.title)
-    #         tesis.types = validated_data.get('types', tesis.types)
-    #         tesis.file = validated_data.get('file', tesis.file)
-    #         tesis.attachment = validated_data.get('attachment', tesis.attachment)
-    #         tesis.date = validated_data.get('date', tesis.date)
-    #         tesis.image = validated_data.get('image', tesis.image)
-    #         tesis.video = validated_data.get('video', tesis.video)
-    #         tesis.comment = validated_data.get('comment', tesis.comment)
-    #         tesis.file_bool = validated_data.get('file_bool', tesis.file_bool)
-    #         tesis.save()
-            
+        # try:
+        
+            # tesis = instance
+            # instance.title = validated_data.get('title', instance.title)
+            # instance.types = validated_data.get('types', instance.types)
+            # instance.file = validated_data.get('file', instance.file)
+            # instance.attachment = validated_data.get('attachment', instance.attachment)
+            # instance.date = validated_data.get('date', instance.date)
+            # instance.image = validated_data.get('image', instance.image)
+            # instance.video = validated_data.get('video', instance.video)
+            # instance.comment = validated_data.get('comment', instance.comment)
+            # instance.file_bool = validated_data.get('file_bool', instance.file_bool)
+            # instance.save()
+
             # models.FridayTesisImamRead.objects.filter(tesis=instance).update(seen=False)
 
             # imams = User.objects.filter(role='4')
@@ -175,6 +183,6 @@ class FridayTesisUpdateSerializer(ModelSerializer):
             # instance.to_district.set(district_list)
             # instance.save()
 
-            # return tesis
+            # return instance
         # except:
         #     raise ValidationError('Something went wrong')

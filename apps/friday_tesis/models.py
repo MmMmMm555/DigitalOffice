@@ -11,13 +11,13 @@ from apps.common.regions import Regions, Districts
 
 
 class States(models.TextChoices):
-    UNSEEN = 1
-    ACCEPTED = 2
-    DONE = 3
+    UNSEEN = "1"
+    ACCEPTED = "2"
+    DONE = "3"
 
 class TesisType(models.TextChoices):
-    FRIDAY = 1
-    HAYIT = 2
+    FRIDAY = "1"
+    HAYIT = "2"
 
 class FridayTesis(BaseModel):
     title = models.CharField(max_length=1000)
@@ -67,25 +67,28 @@ class FridayTesisImamRead(BaseModel):
         verbose_name = 'Juma tezisi imom oqigan '
         verbose_name_plural = 'Juma tezislari imom oqiganlar '
 
+class ResultImages(BaseModel):
+    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+
+class ResultVideos(BaseModel):
+    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES)], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
 
 class FridayTesisImamResult(BaseModel):
     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
-    comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True, null=True)
+    child = models.PositiveIntegerField(default=0)
+    man = models.PositiveIntegerField(default=0)
+    old_man = models.PositiveIntegerField(default=0)
+    old = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
+    images = models.ManyToManyField(ResultImages, blank=True)
+    videos = models.ManyToManyField(ResultVideos, blank=True)
 
     def __str__(self) -> str:
         return self.imam.username
 
     class Meta:
+        unique_together = ['tesis', 'imam',]
         verbose_name = 'Juma tezisi imom natija '
         verbose_name_plural = 'Juma tezislari imom natijalar '
-
-
-class ResultImages(BaseModel):
-    result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_image')
-    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
-
-class ResultVideos(BaseModel):
-    result = models.ForeignKey(FridayTesisImamResult, on_delete=models.CASCADE, verbose_name='result_video')
-    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES)], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)

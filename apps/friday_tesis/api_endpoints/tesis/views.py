@@ -1,9 +1,9 @@
-from rest_framework import generics, parsers, permissions, filters
+from rest_framework import generics, parsers, permissions, filters, response
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-from apps.common.permissions import IsSuperAdmin
+from apps.common.permissions import IsSuperAdmin, IsImam
 from .serializers import FridayTesisSerializer, FridayTesisCreateSerializer, FridayTesisUpdateSerializer
 from apps.friday_tesis import models
 
@@ -25,10 +25,15 @@ class FridayTesisUpdateView(generics.RetrieveUpdateAPIView):
 class FridayTesisListView(generics.ListAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisSerializer
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('title',)
     filterset_fields = ('id', 'date', 'created_at', 'to_region', 'to_district',)
+    
+    def get_queryset(self):
+        if self.request.user.role == '1':
+            return models.FridayTesis.objects.all()
+        return models.FridayTesis.objects.filter(to_imams=self.request.user)
 
 
 class FridayTesisDeleteView(generics.DestroyAPIView):

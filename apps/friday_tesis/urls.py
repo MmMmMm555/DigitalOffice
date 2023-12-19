@@ -5,7 +5,12 @@ from apps.friday_tesis.api_endpoints.tesis.views import (FridayTesisCreateView,
                                                          FridayTesisDeleteView)
 from apps.friday_tesis.api_endpoints.seen_api.views import (FridayTesisImamReadView, 
                                                             FridayTesisImamReadListView)
-from apps.friday_tesis.api_endpoints.results_api.views import FridayTesisImamResultView, FridayTesisImamResultListView
+from apps.friday_tesis.api_endpoints.results_api.views import (FridayTesisImamResultView, 
+                                                               FridayTesisImamResultListView,
+                                                               ResultVideoView,
+                                                               ResultImageView,
+                                                               ResultImageListView,
+                                                               ResultVideoListView,)
 
 urlpatterns = [
      # tesis apis
@@ -21,5 +26,10 @@ urlpatterns = [
      # result apis
      path('result/create', FridayTesisImamResultView.as_view(), name='result_create'),
      path('result/list', FridayTesisImamResultListView.as_view(), name='result_list'),
-
+     
+     # result image vs videos api
+     path('result/image/create', ResultImageView.as_view(), name='result_image_create'),
+     path('result/video/create', ResultVideoView.as_view(), name='result_video_create'),     
+     path('result/image/list', ResultImageListView.as_view(), name='result_image_list'),
+     path('result/video/list', ResultVideoListView.as_view(), name='result_video_list'),     
 ]

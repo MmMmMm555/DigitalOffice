@@ -1,28 +1,61 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from apps.friday_tesis.models import (FridayTesisImamResult,
+                                      FridayTesisImamRead,
                                             ResultImages,
                                             ResultVideos,)
 
 
-class FridayTesisImamResultSerializer(ModelSerializer):
-    class Meta:
-        model = FridayTesisImamResult
-        fields = ('id', 'tesis', 'imam', 'comment', 'file',)
-    
-    def create(self, validated_data):
-        result = FridayTesisImamResult.objects.create(**validated_data)
-        if self.context['request'].user.role == '4':
-            result.imam = self.context['request'].user
-            result.save()
-        return result
 
 class ResultImagesSerializer(ModelSerializer):
     class Meta:
         model = ResultImages
-        fields = ('id', 'result', 'image',)
+        fields = ('id', 'image',)
 
 
 class ResultVideosSerializer(ModelSerializer):
     class Meta:
         model = ResultVideos
-        fields = ('id', 'result', 'videos',)
+        fields = ('id', 'video',)
+
+class FridayTesisImamResultListSerializer(ModelSerializer):
+    images = ResultImagesSerializer(many=True, read_only=True)
+    videos = ResultVideosSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = FridayTesisImamResult
+        fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child', 'man', 'old_man', 'old', 'images', 'videos',)
+
+
+
+class FridayTesisImamResultSerializer(ModelSerializer):
+    # def validate_file(self, value):
+    #     if value.size > settings.MAX_FILE_SIZE:
+    class Meta:
+        model = FridayTesisImamResult
+        fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child', 'man', 'old_man', 'old', 'images', 'videos',)
+        extra_kwargs = {
+            'child': {'required': True},
+            'man': {'required': True},
+            'old_man': {'required': True},
+            'old': {'required': True}, 
+        }
+        
+    def create(self, validated_data):
+        result = FridayTesisImamResult.objects.create(
+            tesis = validated_data['tesis'], 
+            imam = validated_data['imam'], 
+            comment = validated_data.get('comment', 'None'),
+            file = validated_data.get('file'),
+            child = validated_data.get('child'),
+            man = validated_data.get('man'),
+            old_man = validated_data.get('old_man'),
+            old = validated_data.get('old'),
+        )
+        result.images.set(validated_data.get('images', []))
+        result.videos.set(validated_data.get('videos', []))
+        result.save()
+        seen = FridayTesisImamRead.objects.filter(tesis=result.tesis, imam=self.context['request'].user.id).update(state="3")
+        if self.context['request'].user.role == '4':
+            result.imam = self.context['request'].user
+            result.save()
+        return result
