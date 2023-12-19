@@ -3,7 +3,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.mosque.api_endpoints.Mosque.serializers import (MosqueSerializer,
                                                           MosqueListSerializer,
-                                                          MosqueSingleSerializer,)
+                                                          MosqueSingleSerializer,
+                                                          MosqueUpdateSerializer,)
 from apps.mosque.models import Mosque
 from apps.common.permissions import IsSuperAdmin, IsImam
 
@@ -11,6 +12,13 @@ from apps.common.permissions import IsSuperAdmin, IsImam
 class MosqueCreateView(generics.CreateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSerializer
+    parser_classes = (FormParser, MultiPartParser,)
+    permission_classes = (IsSuperAdmin,)
+
+
+class MosqueUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Mosque.objects.all()
+    serializer_class = MosqueUpdateSerializer
     parser_classes = (FormParser, MultiPartParser,)
     permission_classes = (IsSuperAdmin,)
 
