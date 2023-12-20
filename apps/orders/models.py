@@ -90,7 +90,7 @@ class ResultFiles(BaseModel):
         verbose_name_plural = "Fayllar "
 
 class DirectionsEmployeeResult(BaseModel):
-    direction = models.ForeignKey(Directions, on_delete=models.CASCADE, related_name='direction_employee_result')
+    direction = models.ForeignKey(Directions, on_delete=models.SET_NULL, related_name='direction_employee_result', null=True)
     employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='direction_employee_result')
     voice = models.FileField(upload_to='voices/direction_result', validators=[FileExtensionValidator(allowed_extensions=['mp3',])], help_text=f"allowed images: ['mp3',]", blank=True)
     comment = models.TextField(blank=True)
