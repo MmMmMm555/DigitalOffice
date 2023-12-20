@@ -95,8 +95,8 @@ class Mosque(BaseModel):
     )
     
     def __str__(self):
-        return self.name
-    
+        return f"{self.id}: {self.name}"
+
     class Meta:
         verbose_name = 'Masjid'
         verbose_name_plural = 'Masjidlar'

@@ -3,7 +3,8 @@ from django.urls import path
 from apps.mosque.api_endpoints.Mosque.views import (MosqueCreateView,
                                                     MosqueListView, 
                                                     MosqueRetrieveView,
-                                                    MosqueUpdateView,)
+                                                    MosqueUpdateView,
+                                                    MosqueDeleteView,)
 from apps.mosque.api_endpoints.FireImages.views import (FireDefenseImagesCreateView,
                                                         FireDefenseImagesRetrieveView)
 
@@ -14,6 +15,7 @@ urlpatterns = [
     path('list/', MosqueListView.as_view(), name='mosque_list'),
     path('update/<int:pk>', MosqueUpdateView.as_view(), name='mosque_update'),
     path('single/<int:pk>', MosqueRetrieveView.as_view(), name='mosque_single'),
+    path('delete/<int:pk>', MosqueDeleteView.as_view(), name='mosque_delete'),
     
     # fire defense images api
     path('fire_image/create', FireDefenseImagesCreateView.as_view(), name='fire_image_create'),

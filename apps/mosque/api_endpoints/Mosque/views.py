@@ -71,3 +71,10 @@ class MosqueRetrieveView(generics.RetrieveAPIView):
             return Mosque.objects.all()
         id = self.request.user.profil.mosque
         return self.queryset.filter(id=id)
+
+
+class MosqueDeleteView(generics.DestroyAPIView):
+    queryset = Mosque.objects.all()
+    serializer_class = MosqueSerializer
+    permission_classes = (IsSuperAdmin,)
+    lookup_field = 'pk'

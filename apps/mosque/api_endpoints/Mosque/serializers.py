@@ -88,7 +88,6 @@ class MosqueListSerializer(MosqueSerializer):
 
 
 class MosqueSingleSerializer(ModelSerializer):
-    fire_images = FireDefenseImageSerializer(many=True)
     class Meta:
         model = Mosque
         fields = [
@@ -130,19 +129,21 @@ class MosqueSingleSerializer(ModelSerializer):
             'mosque_status',
             'mosque_heating_type',
             'mosque_heating_fuel',
+            'created_at',
+            'updated_at',
         ]
 
-    # def to_representation(self, instance):
-    #         representation = self.to_representation(instance)
-    #         images_id = instance.fire_images
-    #         print(images_id)
-    #         images = FireDefenseImages.objects.filter(id__in=images_id)
-    #         representation['evacuation_road_image'] = images.filter(type='1')
-    #         representation['fire_safe_image'] = images.filter(type='2')
-    #         representation['fire_closet_image'] = images.filter(type='3')
-    #         representation['fire_signal_image'] = images.filter(type='4')
-    #         representation['auto_fire_extinguisher_image'] = images.filter(type='5')
-    #         return representation
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        images_id = Mosque.objects.get(id=instance.id).fire_images.all().values_list('id', flat=True)
+        images = FireDefenseImages.objects.filter(id__in=images_id)
+        representation['evacuation_road_image'] = images.filter(type='1').values('id', 'type', 'image')
+        representation['fire_safe_image'] = images.filter(type='2').values('id', 'type', 'image')
+        representation['fire_closet_image'] = images.filter(type='3').values('id', 'type', 'image')
+        representation['fire_signal_image'] = images.filter(type='4').values('id', 'type', 'image')
+        representation['auto_fire_extinguisher_image'] = images.filter(type='5').values('id', 'type', 'image')
+
+        return representation
 
 
 class MosqueUpdateSerializer(ModelSerializer):
