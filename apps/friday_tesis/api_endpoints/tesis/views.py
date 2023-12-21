@@ -18,14 +18,14 @@ class FridayTesisCreateView(generics.CreateAPIView):
 class FridayTesisUpdateView(generics.RetrieveUpdateAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisUpdateSerializer
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser, parsers.FileUploadParser,)
 
 
 class FridayTesisListView(generics.ListAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisSerializer
-    permission_classes = (IsSuperAdmin | IsImam,)
+    # permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('title',)
     filterset_fields = ('id', 'date', 'created_at', 'to_region', 'to_district',)
@@ -39,4 +39,4 @@ class FridayTesisListView(generics.ListAPIView):
 class FridayTesisDeleteView(generics.DestroyAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisSerializer
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    # permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)

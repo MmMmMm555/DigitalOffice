@@ -13,20 +13,20 @@ class MosqueCreateView(generics.CreateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSerializer
     parser_classes = (FormParser, MultiPartParser,)
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
 
 
 class MosqueUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueUpdateSerializer
     parser_classes = (FormParser, MultiPartParser,)
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
 
 
 class MosqueListView(generics.ListAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueListSerializer
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
     search_fields = ('name', 'address',)
     filterset_fields = (
                        'id',
@@ -63,7 +63,7 @@ class MosqueListView(generics.ListAPIView):
 class MosqueRetrieveView(generics.RetrieveAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSingleSerializer
-    permission_classes = (IsSuperAdmin | IsImam,)
+    # permission_classes = (IsSuperAdmin | IsImam,)
     lookup_field = 'pk'
 
     def get_queryset(self):
@@ -76,5 +76,5 @@ class MosqueRetrieveView(generics.RetrieveAPIView):
 class MosqueDeleteView(generics.DestroyAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSerializer
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
     lookup_field = 'pk'

@@ -9,13 +9,14 @@ from apps.common.permissions import IsSuperAdmin, IsImam
 class FridayTesisImamReadView(generics.UpdateAPIView):
     queryset = models.FridayTesisImamRead.objects.all()
     serializer_class = FridayTesisImamReadSerializer
+    # permission_classes = (IsImam,)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
 
 
 class FridayTesisImamReadListView(generics.ListAPIView):
     queryset = models.FridayTesisImamRead.objects.all()
     serializer_class = FridayTesisImamReadListSerializer
-    permission_classes = (IsSuperAdmin | IsImam,)
+    # permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('imam__profil_name', 'tesis__title',)
     filterset_fields = ('tesis', 'created_at', 'state', 'requirement', 'imam',)

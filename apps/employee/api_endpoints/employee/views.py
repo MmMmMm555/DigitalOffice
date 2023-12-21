@@ -19,22 +19,30 @@ class EmployeeCreateView(generics.CreateAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeSerializer
     parser_classes = (parsers.FormParser, parsers.MultiPartParser)
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    # permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
 
 
 class EmployeeUpdateView(generics.RetrieveUpdateAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeUpdateSerializer
     parser_classes = (parsers.FormParser, parsers.MultiPartParser,)
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    # permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
 
 
 class EmployeeDestroyView(generics.DestroyAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeSerializer
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    # permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
 
 
+class SocialMediaView(viewsets.ModelViewSet):
+    queryset = models.SocialMedia.objects.all()
+    serializer_class = serializers.SocialMediaSerializer
+    pagination_class = None
+    # permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('id', 'employee', 'social_media',)
+    lookup_field = 'pk'
 
 # class ActivityView(viewsets.ModelViewSet):
 #     queryset = models.Activity.objects.all()
@@ -50,11 +58,3 @@ class EmployeeDestroyView(generics.DestroyAPIView):
 #     filter_backends = (DjangoFilterBackend,)
 #     filterset_fields = ('id', 'employee',)
 
-class SocialMediaView(viewsets.ModelViewSet):
-    queryset = models.SocialMedia.objects.all()
-    serializer_class = serializers.SocialMediaSerializer
-    pagination_class = None
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('id', 'employee', 'social_media',)
-    lookup_field = 'pk'

@@ -9,10 +9,10 @@ class FireDefenseImagesCreateView(generics.CreateAPIView):
     queryset = FireDefenseImages.objects.all()
     serializer_class = FireDefenseImageSerailizer
     parser_classes = (parsers.FormParser, parsers.MultiPartParser,)
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
 
 
 class FireDefenseImagesRetrieveView(generics.RetrieveAPIView):
     queryset = FireDefenseImages.objects.all()
     serializer_class = FireDefenseImageSerailizer
-    permission_classes = (IsSuperAdmin,)
+    # permission_classes = (IsSuperAdmin,)
