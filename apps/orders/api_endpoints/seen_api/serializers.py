@@ -3,31 +3,30 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 from apps.orders import models
 
 
-class DirectionEmployeeReadSerializer(ModelSerializer):
+class DirectionsEmployeeReadSerializer(ModelSerializer):
     class Meta:
         model = models.DirectionsEmployeeRead
-        fields = ('direction',)
-    
-    def create(self, validatet_data):
-        direction = validatet_data.get('direction', None)
+        fields = ('state',)
+
+    def save(self):
+        direction = self.instance
         employee = self.context.get('request').user
-        try:
-            read = models.DirectionsEmployeeRead.objects.filter(employee=employee, direction=direction).first()
-            if read:
-                read.seen = True
-                read.save()
-                return read
+        if direction.employee == employee:
+            if direction:
+                direction.state = self.validated_data['state']
+                direction.save()
+                return direction
             raise ValidationError('query not found')
-        except:
-            raise ValidationError('something went wrogn')
+        raise ValidationError('you are not allowed to this action')
 
 
-class DirectionEmployeeReadListSerializer(ModelSerializer):
+class DirectionsEmployeeReadListSerializer(ModelSerializer):
     class Meta:
         model = models.DirectionsEmployeeRead
-        fields = ('id', 'direction', 'employee', 'seen',)
+        fields = ('id', 'direction', 'employee', 'state', 'requirement', 'created_at',)
 
     def to_representation(self, instance):
-        representation =super().to_representation(instance)
-        representation['profile'] = instance.employee.profil
+        representation = super().to_representation(instance)
+        representation['employee_name'] = f"{instance.employee.profil.name} {instance.employee.profil.last_name}"
+        representation['direction_title'] = instance.direction.title
         return representation

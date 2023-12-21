@@ -1,8 +1,10 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
+from django.db import transaction
+from datetime import date, timedelta
+
 from apps.orders import models
 from apps.users.models import User
-from apps.common.regions import Regions, Districts
-from django.db import transaction
+from apps.common.regions import Districts
 
 # class DirectionSerializer(ModelSerializer):
 #     class Meta:
@@ -213,6 +215,13 @@ class DirectionUpdateSerializer(ModelSerializer):
             'title': {'required': False},
             'file': {'required': False},
         }
+    def save(self):
+        if self.instance.to_date <= date.today():
+            raise ValidationError('editable date passed')
+        obj = models.Directions.objects.filter(id=self.instance.id).update(**self.validated_data)
+        models.DirectionsEmployeeRead.objects.filter(direction=self.instance).update(state='1')
+        return obj
+
 
 #     def validate(self, attrs):
 #         if int(attrs.get('from_role')) >= int(attrs.get('to_role')):

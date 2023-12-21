@@ -57,7 +57,7 @@ class MosqueListView(generics.ListAPIView):
     def get_queryset(self):
         if self.request.user.role == '1':
             return Mosque.objects.all()
-        id = self.request.user.profil.mosque
+        id = self.request.user.profil.mosque.id
         return self.queryset.filter(id=id)
 
 class MosqueRetrieveView(generics.RetrieveAPIView):
@@ -69,7 +69,7 @@ class MosqueRetrieveView(generics.RetrieveAPIView):
     def get_queryset(self):
         if self.request.user.role == '1':
             return Mosque.objects.all()
-        id = self.request.user.profil.mosque
+        id = self.request.user.profil.mosque.id
         return self.queryset.filter(id=id)
 
 

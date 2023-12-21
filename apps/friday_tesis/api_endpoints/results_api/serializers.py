@@ -34,7 +34,7 @@ class FridayTesisImamResultSerializer(ModelSerializer):
     #     if value.size > settings.MAX_FILE_SIZE:
     class Meta:
         model = FridayTesisImamResult
-        fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child', 'man', 'old_man', 'old', 'images', 'videos',)
+        fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child', 'man', 'old_man', 'old', 'images', 'videos', 'created_at',)
         extra_kwargs = {
             'child': {'required': True},
             'man': {'required': True},

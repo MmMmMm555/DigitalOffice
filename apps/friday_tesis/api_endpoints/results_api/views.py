@@ -22,7 +22,7 @@ class FridayTesisImamResultListView(ListAPIView):
     queryset = FridayTesisImamResult.objects.all()
     serializer_class = FridayTesisImamResultListSerializer
     # permission_classes = (IsSuperAdmin | IsImam,)
-    filterset_fields = ('id', 'tesis', 'imam',)
+    filterset_fields = ('id', 'tesis', 'imam', 'created_at',)
 
     def get_queryset(self):
         if self.request.user.role == '1':

@@ -50,7 +50,7 @@ class Directions(BaseModel):
     file_bool = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.title
+        return f"{self.id}-{self.title}"
     
     class Meta:
         ordering = ['-created_at',]

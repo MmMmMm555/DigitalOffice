@@ -66,4 +66,4 @@ class DirectionSingleView(generics.RetrieveAPIView):
             return model.filter(from_role=role, to_region=region)
         if role == '1':
             return model
-        raise ValidationError('user not allowed to this action')
+        return []
