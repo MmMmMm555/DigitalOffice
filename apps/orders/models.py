@@ -53,6 +53,7 @@ class Directions(BaseModel):
         return self.title
     
     class Meta:
+        ordering = ['-created_at',]
         verbose_name = "Ko'rsatma "
         verbose_name_plural = "Ko'rsatmalar "
 
@@ -67,6 +68,8 @@ class DirectionsEmployeeRead(BaseModel):
         return self.employee.username
 
     class Meta:
+        ordering = ['-created_at',]
+        unique_together = ('direction', 'employee',)
         verbose_name = "Ko'rsatma oqilishi "
         verbose_name_plural = "Ko'rsatma oqilishlari "
 
@@ -102,5 +105,7 @@ class DirectionsEmployeeResult(BaseModel):
         return self.employee.username
 
     class Meta:
+        ordering = ['-created_at',]
+        unique_together = ('direction', 'employee',)
         verbose_name = "Ko'rsatma natija "
         verbose_name_plural = "Ko'rsatma natijalari "

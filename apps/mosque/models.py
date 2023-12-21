@@ -98,6 +98,7 @@ class Mosque(BaseModel):
         return f"{self.id}: {self.name}"
 
     class Meta:
+        ordering = ['-created_at',]
         verbose_name = 'Masjid'
         verbose_name_plural = 'Masjidlar'
 

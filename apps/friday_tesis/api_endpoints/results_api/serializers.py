@@ -1,6 +1,9 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
+from datetime import date, timedelta
+
 from apps.friday_tesis.models import (FridayTesisImamResult,
                                       FridayTesisImamRead,
+                                            FridayTesis,
                                             ResultImages,
                                             ResultVideos,)
 
@@ -38,7 +41,13 @@ class FridayTesisImamResultSerializer(ModelSerializer):
             'old_man': {'required': True},
             'old': {'required': True}, 
         }
-        
+    
+    def validate(self, attrs):
+        tesis_date = FridayTesis.objects.get(id=attrs.get('tesis').id).date
+        if tesis_date+timedelta(days=1) < date.today():
+            raise ValidationError("time expired")
+        return attrs
+
     def create(self, validated_data):
         result = FridayTesisImamResult.objects.create(
             tesis = validated_data['tesis'], 

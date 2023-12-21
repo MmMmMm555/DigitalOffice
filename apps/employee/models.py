@@ -76,6 +76,7 @@ class Employee(models.Model):
     mosque = models.ForeignKey(Mosque, on_delete=models.CASCADE, related_name='employee')
 
     class Meta:
+        ordering = ['-id',]
         verbose_name = 'Hodim '
         verbose_name_plural = 'Hodimlar '
 

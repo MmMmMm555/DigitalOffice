@@ -40,6 +40,7 @@ class FridayTesis(BaseModel):
         return f"{self.id}-{self.title}"
 
     class Meta:
+        ordering = ['-created_at',]
         verbose_name = 'Juma tezisi '
         verbose_name_plural = 'Juma tezislari '
 
@@ -64,6 +65,8 @@ class FridayTesisImamRead(BaseModel):
         return f"{self.id}-{self.imam.username} seen:{self.state}  required:{self.requirement}"
 
     class Meta:
+        ordering = ['-created_at',]
+        unique_together = ('tesis', 'imam',)
         verbose_name = 'Juma tezisi imom oqigan '
         verbose_name_plural = 'Juma tezislari imom oqiganlar '
 
@@ -89,6 +92,7 @@ class FridayTesisImamResult(BaseModel):
         return self.imam.username
 
     class Meta:
+        ordering = ['-created_at',]
         unique_together = ['tesis', 'imam',]
         verbose_name = 'Juma tezisi imom natija '
         verbose_name_plural = 'Juma tezislari imom natijalar '
