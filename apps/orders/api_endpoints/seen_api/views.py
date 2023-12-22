@@ -9,14 +9,14 @@ from apps.common.permissions import IsSuperAdmin, IsImam
 class DirectionEmployeeReadView(generics.UpdateAPIView):
     queryset = models.DirectionsEmployeeRead.objects.all()
     serializer_class = DirectionsEmployeeReadSerializer
-    # permission_classes = (IsImam,)
+    permission_classes = (IsImam,)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
 
 
 class DirectionEmployeeReadListView(generics.ListAPIView):
     queryset = models.DirectionsEmployeeRead.objects.all()
     serializer_class = DirectionsEmployeeReadListSerializer
-    # permission_classes = (IsSuperAdmin | IsImam,)
+    permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('employee__profil_name', 'direction__title',)
     filterset_fields = ('direction', 'created_at', 'state', 'requirement', 'employee',)

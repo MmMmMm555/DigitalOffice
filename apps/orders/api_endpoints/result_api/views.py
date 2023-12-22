@@ -17,14 +17,14 @@ from apps.common.permissions import IsSuperAdmin, IsImam, IsRegionAdmin, IsDistr
 class DirectionsEmployeeResultView(CreateAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultSerializer
-    # permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
+    permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
     parser_classes = (FormParser, MultiPartParser,)
 
 
 class DirectionsEmployeeResultListView(ListAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultListSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'direction', 'employee', 'created_at',)
 
     def get_queryset(self):
@@ -35,36 +35,36 @@ class DirectionsEmployeeResultListView(ListAPIView):
 class ResultImageView(CreateAPIView):
     queryset = ResultImages.objects.all()
     serializer_class = DirectionResultImagesSerializer
-    # permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
+    permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
     parser_classes = (FormParser, MultiPartParser,)
 
 class ResultImageListView(ListAPIView):
     queryset = ResultImages.objects.all()
     serializer_class = DirectionResultImagesSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filterset_fields = ('id',)
 
 class ResultVideoListView(ListAPIView):
     queryset = ResultVideos.objects.all()
     serializer_class = DirectionResultVideosSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filterset_fields = ('id',)
 
 class ResultVideoView(CreateAPIView):
     queryset = ResultVideos.objects.all()
     serializer_class = DirectionResultVideosSerializer
-    # permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
+    permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
     parser_classes = (FormParser, MultiPartParser,)
 
 
 class ResultFileListView(ListAPIView):
     queryset = ResultFiles.objects.all()
     serializer_class = DirectionResultFilesSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filterset_fields = ('id',)
 
 class ResultFileView(CreateAPIView):
     queryset = ResultFiles.objects.all()
     serializer_class = DirectionResultFilesSerializer
-    # permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
+    permission_classes = (IsImam|IsRegionAdmin|IsDistrictAdmin|IsDeputy,)
     parser_classes = (FormParser, MultiPartParser, FileUploadParser,)
