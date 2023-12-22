@@ -20,24 +20,23 @@ class DirectionCreateView(generics.CreateAPIView):
 class DirectionsListView(generics.ListAPIView):
     queryset = models.Directions.objects.all()
     serializer_class = DirectionListSerializer
-    # permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
+    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('title',)
     filterset_fields = ('id', 'created_at', 'to_region', 'to_district', 'required_to_region',
                         'required_to_district', 'to_role', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
-    # def get_queryset(self): TODO uncomment
-    
-    #     role = self.request.user.role
-    #     district = self.request.user.district
-    #     region = self.request.user.region
-    #     model = models.Directions.objects.all()
-    #     if role == '3':
-    #         return model.filter(from_role=role, to_district=district)
-    #     if role == '2':
-    #         return model.filter(from_role=role, to_region=region)
-    #     if role == '1':
-    #         return model
-    #     return []
+    def get_queryset(self):
+        role = self.request.user.role
+        district = self.request.user.district
+        region = self.request.user.region
+        model = models.Directions.objects.all()
+        if role == '3':
+            return model.filter(from_role=role, to_district=district)
+        if role == '2':
+            return model.filter(from_role=role, to_region=region)
+        if role == '1':
+            return model
+        return []
 
 
 class DirectionDeleteView(generics.DestroyAPIView):

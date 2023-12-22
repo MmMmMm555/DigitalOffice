@@ -156,6 +156,7 @@ class DirectionListSerializer(ModelSerializer):
                   'direction_type',
                   'from_date',
                   'to_date',)
+        depth = 1
 
 
 class DirectionSingleSerializer(ModelSerializer):
