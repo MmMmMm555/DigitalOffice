@@ -37,7 +37,7 @@ DEBUG = env.bool("DEBUG")
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
-    # ...
+    "http://localhost:5173",
 ]
 
 ALLOWED_HOSTS = ["*"]
@@ -120,7 +120,8 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
-ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip', 'pptx', 'ppt',]
+ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx',
+                      'xls', 'xlsx', 'txt', 'zip', 'pptx', 'ppt',]
 
 ALLOWED_IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'svg',]
 
