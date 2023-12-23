@@ -298,3 +298,22 @@ LOCATION_FIELD = {
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
+
+# cors
+
+CORS_ALLOWED_ORIGINS = [
+    'http://45.12.236.79',
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
