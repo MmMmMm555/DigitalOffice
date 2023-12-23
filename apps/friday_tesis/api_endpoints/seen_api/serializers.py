@@ -27,6 +27,9 @@ class FridayTesisImamReadListSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['imam_name'] = f"{instance.imam.profil.name} {instance.imam.profil.last_name}"
+        try:
+            representation['imam_name'] = f"{instance.imam.profil.name} {instance.imam.profil.last_name}"
+        except:
+            representation['imam_name'] = None
         representation['tesis_title'] = instance.tesis.title
         return representation

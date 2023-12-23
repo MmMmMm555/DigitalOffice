@@ -22,3 +22,6 @@ class User(AbstractUser):
     district = models.ForeignKey(Districts, on_delete=models.SET_NULL, blank=True, null=True, related_name='district')
     profil = models.OneToOneField(Employee, unique=True, verbose_name=_("Profile"), on_delete=models.CASCADE, related_name='profile', blank=True, null=True)
     role = models.CharField(max_length=18, choices=Role.choices, default=Role.IMAM, blank=True, null=True)
+    
+    def __str__(self) -> str:
+        return f"{self.id} {self.username}"

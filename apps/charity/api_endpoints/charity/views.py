@@ -1,13 +1,14 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.generics import (
+    CreateAPIView, ListAPIView, RetrieveUpdateAPIView, RetrieveAPIView, DestroyAPIView,)
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import (CharityCreateSerializer, 
-                          CharityImageSerializer, 
+from .serializers import (CharityCreateSerializer,
+                          CharityImageSerializer,
                           CharityUpdateSerializer,
                           CharityDetailSerializer)
 from apps.charity.models import Charity, Images
-from apps.common.permissions import IsImam, IsDeputy
+from apps.common.permissions import IsImam, IsDeputy, IsSuperAdmin
 
 
 class CharityCreateView(CreateAPIView):
@@ -26,7 +27,7 @@ class CharityUpdateView(RetrieveUpdateAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityUpdateSerializer
     parser_classes = (FormParser,)
-    permission_classes = (IsImam|IsDeputy,)
+    permission_classes = (IsImam | IsDeputy,)
     lookup_field = 'pk'
 
 
@@ -53,10 +54,16 @@ class CharityImageCreateView(CreateAPIView):
     queryset = Images.objects.all()
     serializer_class = CharityImageSerializer
     parser_classes = (MultiPartParser,)
-    permission_classes = (IsImam|IsDeputy,)
+    permission_classes = (IsImam | IsDeputy,)
 
 
 class CharityDetailView(RetrieveAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityDetailSerializer
     permission_classes = (IsAuthenticated,)
+
+
+class CharityDeleteView(DestroyAPIView):
+    queryset = Charity.objects.all()
+    serializer_class = CharityDetailSerializer
+    permission_classes = (IsImam | IsDeputy | IsSuperAdmin,)

@@ -31,7 +31,7 @@ class CharityUpdateSerializer(ModelSerializer):
         }
 
     def validate(self, attrs):
-        if self.context['request'].user == attrs.get('imam'):
+        if not self.context['request'].user.id == self.instance.imam.id:
             raise serializers.ValidationError('you dont have access to change')
         return attrs
 
@@ -46,6 +46,9 @@ class CharityDetailSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['imam'] = {
-            'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
+        try:
+            representation['imam'] = {
+                'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
+        except:
+            representation['imam'] = None
         return representation

@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError, ManyRelatedField
 from datetime import date
 
 from apps.friday_tesis import models
@@ -12,24 +12,43 @@ class FridayTesisSerializer(ModelSerializer):
         fields = ('id',
                   'title',
                   'types',
+                  'to_region',
+                  'to_district',
+                  'date',
+                  'created_at',
+                  'updated_at',
+                  )
+        depth = 1
+
+
+class FridayTesisDetailSerializer(ModelSerializer):
+    class Meta:
+        model = models.FridayTesis
+        fields = ('id',
+                  'title',
+                  'types',
                   'file',
                   'attachment',
                   'to_region',
                   'to_district',
                   'to_imams',
                   'date',
-                  'created_at',
-                  'updated_at',
                   'image',
                   'video',
                   'comment',
                   'file_bool',
+                  'created_at',
+                  'updated_at',
                   )
-    
+        depth = 1
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['seen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='2').count()
-        representation['unseen_count'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='1').count()
+        if instance.to_imams:
+            representation['to_imams'] = User.objects.filter(id__in=instance.to_imams.all()).values('id', 'profil__name', 'profil__last_name',)
+        representation['waiting'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='1').count()
+        representation['accepted'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='2').count()
+        representation['done'] = models.FridayTesisImamRead.objects.filter(tesis=instance, state='3').count()
         return representation
 
 

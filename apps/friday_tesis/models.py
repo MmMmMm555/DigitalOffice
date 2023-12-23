@@ -27,7 +27,7 @@ class FridayTesis(BaseModel):
     file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
     attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     date = models.DateField()
-    to_region = models.ManyToManyField(Regions, blank=True)
+    to_region = models.ManyToManyField(Regions, blank=False)
     to_district = models.ManyToManyField(Districts, blank=True)
     to_imams = models.ManyToManyField(User, blank=True)
     image = models.BooleanField(default=False)

@@ -27,6 +27,9 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['employee_name'] = f"{instance.employee.profil.name} {instance.employee.profil.last_name}"
+        try:
+            representation['employee_name'] = f"{instance.employee.profil.name or None} {instance.employee.profil.last_name or None}"
+        except:
+            representation['employee_name'] = None
         representation['direction_title'] = instance.direction.title
         return representation
