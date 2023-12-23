@@ -32,8 +32,12 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ###################################################################
 
 CORS_ORIGIN_ALLOW_ALL = True
-
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = False
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -43,20 +47,8 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "accept-encoding",
-    "authorization",
-    "content-type",
-    "dnt",
-    "origin",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-]
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE_ALL = True
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = ['*']
+
 # init sentry
 # sentry_sdk.init(
 #     dsn=env.str("SENTRY_DSN", default=""),  # noqa
