@@ -14,7 +14,7 @@ class CharityCreateView(CreateAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityCreateSerializer
     parser_classes = (FormParser,)
-    # permission_classes = (IsImam | IsDeputy,)
+    permission_classes = (IsImam | IsDeputy,)
 
     def perform_create(self, serializer):
         if self.request.user.role in ['4', '5']:
@@ -37,16 +37,16 @@ class CharityListView(ListAPIView):
     filterset_fields = ('id', 'imam', 'types',
                         'help_type', 'from_who', 'date',)
 
-    # def get_queryset(self):
-    #     if self.request.user.role in ['4', '5']:
-    #         return Charity.objects.filter(imam=self.request.user)
-    #     elif self.request.user.role in ['1']:
-    #         return Charity.objects.all()
-    #     elif self.request.user.role in ['2']:
-    #         return Charity.objects.filter(imam__region=self.request.user.region)
-    #     elif self.request.user.role in ['3']:
-    #         return Charity.objects.filter(imam__district=self.request.user.district)
-    #     return []
+    def get_queryset(self):
+        if self.request.user.role in ['4', '5']:
+            return Charity.objects.filter(imam=self.request.user)
+        elif self.request.user.role in ['1']:
+            return Charity.objects.all()
+        elif self.request.user.role in ['2']:
+            return Charity.objects.filter(imam__region=self.request.user.region)
+        elif self.request.user.role in ['3']:
+            return Charity.objects.filter(imam__district=self.request.user.district)
+        return []
 
 
 class CharityImageCreateView(CreateAPIView):

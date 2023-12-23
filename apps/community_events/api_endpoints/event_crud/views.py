@@ -26,16 +26,16 @@ class CommunityEventListAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'type', 'date',)
 
-    # def get_queryset(self):
-    #     if self.request.user.role in ['4', '5']:
-    #         return CommunityEvents.objects.filter(imam=self.request.user)
-    #     elif self.request.user.role in ['1']:
-    #         return CommunityEvents.objects.all()
-    #     elif self.request.user.role in ['2']:
-    #         return CommunityEvents.objects.filter(imam__region=self.request.user.region)
-    #     elif self.request.user.role in ['3']:
-    #         return CommunityEvents.objects.filter(imam__district=self.request.user.district)
-    #     return []
+    def get_queryset(self):
+        if self.request.user.role in ['4', '5']:
+            return CommunityEvents.objects.filter(imam=self.request.user)
+        elif self.request.user.role in ['1']:
+            return CommunityEvents.objects.all()
+        elif self.request.user.role in ['2']:
+            return CommunityEvents.objects.filter(imam__region=self.request.user.region)
+        elif self.request.user.role in ['3']:
+            return CommunityEvents.objects.filter(imam__district=self.request.user.district)
+        return []
 
 
 class CommunityEventsDetailAPIView(RetrieveAPIView):
