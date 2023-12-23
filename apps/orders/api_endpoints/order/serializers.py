@@ -42,6 +42,7 @@ class DirectionCreateSerializer(ModelSerializer):
         fields = (
             'id',
             'title',
+            'creator',
             'file',
             'types',
             'direction_type',
@@ -175,6 +176,7 @@ class DirectionSingleSerializer(ModelSerializer):
         model = models.Directions
         fields = ('id',
                   'title',
+                  'creator',
                   'direction_type',
                   'file',
                   'to_region',
@@ -199,6 +201,7 @@ class DirectionSingleSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        representation['creator'] = User.objects.filter(id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
         if instance.to_employee:
             representation['to_employee'] = User.objects.filter(
                 id__in=instance.to_employee.all()).values('id', 'profil__name', 'profil__last_name',)

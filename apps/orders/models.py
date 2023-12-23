@@ -24,12 +24,13 @@ class DirectionTypes(models.TextChoices):
     MISSION = '5'
 
 class Directions(BaseModel):
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name='directions_creator',)
     title = models.CharField(max_length=1000)
     direction_type = models.CharField(max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
     file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}")
     types = models.CharField(max_length=12, choices=Types.choices, default=Types.INFORMATION)
     
-    from_role = models.CharField(max_length=18, choices=Role.choices[:3], default=Role.IMAM)
+    from_role = models.CharField(max_length=18, choices=Role.choices[:3], default=Role.SUPER_ADMIN)
     to_role = models.CharField(max_length=18, choices=Role.choices[1:], default=Role.IMAM)
     
     to_region = models.ManyToManyField(Regions, related_name='direction')

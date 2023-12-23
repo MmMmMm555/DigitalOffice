@@ -18,24 +18,7 @@ class Participation(models.TextChoices):
     OTHER = '3'
 
 
-class CharityPromotion(BaseModel):
-    imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_charity_promotion')
-    types = models.CharField(max_length=22, choices=Types.choices, default=Types.BUILDING, blank=False)
-    participant = models.CharField(max_length=22, choices=Participation.choices, default=Participation.INITIATIVE, blank=False)
-    help_type = models.CharField(max_length=22, choices=HelpTypes.choices, blank=False)
-    from_who = models.CharField(max_length=22, choices=From.choices, blank=False)
-    comment = models.TextField()
-    date = models.DateField()
-    
-    def __str__(self):
-        return self.imam.username
-
-    class Meta: 
-        verbose_name = 'Hayriya aksiyasi '
-        verbose_name_plural = 'Hayriya aksiyalari '
-
-class Images(models.Model):
-    charity_promotion = models.ForeignKey(CharityPromotion, on_delete=models.CASCADE, related_name='images')
+class CharityPromotionImages(models.Model):
     image = models.ImageField(upload_to='images/charity_promotion/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=False)
 
     class Meta:
@@ -44,3 +27,21 @@ class Images(models.Model):
     
     def __str__(self):
         return self.charity_promotion.imam.username+" "+self.image.url
+
+
+class CharityPromotion(BaseModel):
+    imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_charity_promotion')
+    types = models.CharField(max_length=22, choices=Types.choices, default=Types.BUILDING, blank=False)
+    participant = models.CharField(max_length=22, choices=Participation.choices, default=Participation.INITIATIVE, blank=False)
+    help_type = models.CharField(max_length=22, choices=HelpTypes.choices, blank=False)
+    from_who = models.CharField(max_length=22, choices=From.choices, blank=False)
+    comment = models.TextField()
+    images = models.ManyToManyField(CharityPromotionImages, blank=True)
+    date = models.DateField()
+    
+    def __str__(self):
+        return self.imam.username
+
+    class Meta: 
+        verbose_name = 'Hayriya aksiyasi '
+        verbose_name_plural = 'Hayriya aksiyalari '

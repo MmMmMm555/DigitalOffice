@@ -55,6 +55,12 @@ class CharityImageCreateView(CreateAPIView):
     parser_classes = (MultiPartParser,)
     permission_classes = (IsImam|IsDeputy,)
 
+class CharityImageListView(ListAPIView):
+    queryset = Images.objects.all()
+    serializer_class = CharityImageSerializer
+    permission_classes = (IsAuthenticated,)
+    filterset_fields = ('id',)  
+
 
 class CharityDetailView(RetrieveAPIView):
     queryset = Charity.objects.all()

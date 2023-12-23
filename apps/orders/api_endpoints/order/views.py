@@ -15,6 +15,9 @@ class DirectionCreateView(generics.CreateAPIView):
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     parser_classes = (parsers.MultiPartParser,
                       parsers.FormParser, parsers.FileUploadParser,)
+    
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user, from_role=self.request.user.role)
 
 
 class DirectionsListView(generics.ListAPIView):
@@ -26,17 +29,7 @@ class DirectionsListView(generics.ListAPIView):
                         'required_to_district', 'to_role', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
     def get_queryset(self):
-        role = self.request.user.role
-        district = self.request.user.district
-        region = self.request.user.region
-        model = models.Directions.objects.all()
-        if role == '3':
-            return model.filter(from_role=role, to_district=district)
-        if role == '2':
-            return model.filter(from_role=role, to_region=region)
-        if role == '1':
-            return model
-        return []
+        return models.Directions.objects.filter(creator=self.request.user)
 
 
 class DirectionDeleteView(generics.DestroyAPIView):

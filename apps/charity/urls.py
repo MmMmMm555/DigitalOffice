@@ -11,5 +11,6 @@ urlpatterns = [
 
     # images apis
     path('image/create/', views.CharityImageCreateView.as_view(), name='charity_image_create'),
+    path('image/list/', views.CharityImageListView.as_view(), name='charity_image_list'),
    
 ]
