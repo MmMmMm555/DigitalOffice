@@ -26,8 +26,8 @@ class Choices(models.TextChoices):
 
 class ReligiousAdvice(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_religious_advice')
-    type = models.CharField( max_length=12, choices=Types.choices, default=Types.OTHER, blank=False)
-    choices = models.CharField( max_length=12, choices=Choices.choices, blank=False)
+    type = models.CharField(max_length=12, choices=Types.choices, default=Types.OTHER, blank=False)
+    choices = models.CharField(max_length=12, choices=Choices.choices, blank=False)
     comment = models.TextField()
     date = models.DateField()
     
