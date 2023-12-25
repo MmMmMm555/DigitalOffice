@@ -4,7 +4,7 @@ from apps.marriage.api_endpoints.marriage_crud import views
 
 
 urlpatterns = [
-    # family conflict apis
+    # marriage apis
     path('create/', views.MarriageCreateAPIView.as_view(),
          name='marriage_create'),
     path('list/', views.MarriageListAPIView.as_view(),

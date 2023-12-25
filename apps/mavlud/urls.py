@@ -4,7 +4,7 @@ from apps.mavlud.api_endpoints.mavlud_crud import views
 
 
 urlpatterns = [
-    # family conflict apis
+    # mavlud apis
     path('create/', views.MavludCreateAPIView.as_view(),
          name='mavlud_create'),
     path('list/', views.MavludListAPIView.as_view(),
