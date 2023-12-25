@@ -37,7 +37,7 @@ class Directions(BaseModel):
     to_district = models.ManyToManyField(Districts, related_name='direction', blank=True)
     to_employee = models.ManyToManyField(User, related_name='direction', blank=True)
     
-    required_to_region = models.ManyToManyField(Regions)
+    required_to_region = models.ManyToManyField(Regions, blank=True)
     required_to_district = models.ManyToManyField(Districts, blank=True)
     required_to_employee = models.ManyToManyField(User, blank=True)
 

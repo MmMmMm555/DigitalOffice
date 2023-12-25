@@ -32,7 +32,7 @@ class FridayTesisListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('title',)
     filterset_fields = ('id', 'date', 'created_at',
-                        'to_region', 'to_district',)
+                        'to_region', 'to_district', 'types',)
 
     def get_queryset(self):
         if self.request.user.role == '1':
