@@ -33,9 +33,16 @@ class DeathDetailSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['imam'] = {
-            'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
+        imam = getattr(instance, 'imam', None)
+        if imam:
+            representation['imam'] = {
+                'id': getattr(imam, 'id', None),
+                'name': f"{getattr(imam.profil, 'name', '')} {getattr(imam.profil, 'last_name', '')}"
+            }
+        else:
+            representation['imam'] = {'id': getattr(imam, 'id', None),}
         return representation
+        
 
 
 class DeathListSerializer(ModelSerializer):

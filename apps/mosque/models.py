@@ -73,6 +73,8 @@ class Mosque(BaseModel):
     other_room = models.BooleanField(default=False)
     other_room_amount = models.IntegerField(default=0, blank=True)
     
+#capacity = models.PositiveIntegerField(default=0, blank=False) 
+    
     mosque_library = models.BooleanField(default=False)
 
     fire_images = models.ManyToManyField(FireDefenseImages, blank=True)
