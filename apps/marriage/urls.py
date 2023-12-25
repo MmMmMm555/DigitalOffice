@@ -6,13 +6,13 @@ from apps.marriage.api_endpoints.marriage_crud import views
 urlpatterns = [
     # family conflict apis
     path('create/', views.MarriageCreateAPIView.as_view(),
-         name='family_conflict_create'),
+         name='marriage_create'),
     path('list/', views.MarriageListAPIView.as_view(),
-         name='family_conflict_list'),
+         name='marriage_list'),
     path('detail/<int:pk>/', views.MarriageDetailAPIView.as_view(),
-         name='family_conflict_detail'),
+         name='marriage_detail'),
     path('update/<int:pk>/', views.MarriageUpdateAPIView.as_view(),
-         name='family_conflict_update'),
+         name='marriage_update'),
     path('delete/<int:pk>', views.MarriageDeleteAPIView.as_view(),
-         name='family_conflict_delete'),
+         name='marriage_delete'),
 ]

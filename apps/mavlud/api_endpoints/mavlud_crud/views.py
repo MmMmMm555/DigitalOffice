@@ -5,13 +5,13 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.common.permissions import IsImam, IsDeputy
-from apps.marriage.models import Marriage
-from .serializers import (MarriageSerializer, MarriageListSerializer, MarriageUpdateSerializer, MarriageDetailSerializer,)
+from apps.mavlud.models import Mavlud
+from .serializers import (MavludSerializer, MavludListSerializer, MavludUpdateSerializer, MavludDetailSerializer,)
 
 
-class MarriageCreateAPIView(CreateAPIView):
-    queryset = Marriage.objects.all()
-    serializer_class = MarriageSerializer
+class MavludCreateAPIView(CreateAPIView):
+    queryset = Mavlud.objects.all()
+    serializer_class = MavludSerializer
     permission_classes = (IsImam | IsDeputy,)
     parser_classes = (MultiPartParser, FormParser,)
 
@@ -19,34 +19,35 @@ class MarriageCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class MarriageListAPIView(ListAPIView):
-    queryset = Marriage.objects.all()
-    serializer_class = MarriageListSerializer
+class MavludListAPIView(ListAPIView):
+    queryset = Mavlud.objects.all()
+    serializer_class = MavludListSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('id', 'imam', 'date', 'mahr',)
+    search_fields = ('title',)
+    filterset_fields = ('id', 'imam', 'date',)
 
     def get_queryset(self):
         user_role = self.request.user.role
         if user_role == '4' or user_role == '5':
-            return Marriage.objects.filter(imam=self.request.user)
+            return Mavlud.objects.filter(imam=self.request.user)
         elif user_role == '1':
-            return Marriage.objects.all()
+            return Mavlud.objects.all()
         elif user_role == '2':
-            return Marriage.objects.filter(imam__region=self.request.user.region)
+            return Mavlud.objects.filter(imam__region=self.request.user.region)
         elif user_role == '3':
-            return Marriage.objects.filter(imam__district=self.request.user.district)
+            return Mavlud.objects.filter(imam__district=self.request.user.district)
         return []
 
 
-class MarriageDetailAPIView(RetrieveAPIView):
-    queryset = Marriage.objects.all()
-    serializer_class = MarriageDetailSerializer
+class MavludDetailAPIView(RetrieveAPIView):
+    queryset = Mavlud.objects.all()
+    serializer_class = MavludDetailSerializer
     permission_classes = (IsAuthenticated,)
 
 
-class MarriageUpdateAPIView(RetrieveUpdateAPIView):
-    queryset = Marriage.objects.all()
-    serializer_class = MarriageUpdateSerializer
+class MavludUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Mavlud.objects.all()
+    serializer_class = MavludUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)
     parser_classes = (MultiPartParser, FormParser,)
     
@@ -58,9 +59,9 @@ class MarriageUpdateAPIView(RetrieveUpdateAPIView):
             return Response({'message': 'You are not allowed to update'}, status=403)
 
 
-class MarriageDeleteAPIView(DestroyAPIView):
-    queryset = Marriage.objects.all()
-    serializer_class = MarriageSerializer
+class MavludDeleteAPIView(DestroyAPIView):
+    queryset = Mavlud.objects.all()
+    serializer_class = MavludSerializer
     permission_classes = (IsImam | IsDeputy,)
     
     def perform_destroy(self, instance):
