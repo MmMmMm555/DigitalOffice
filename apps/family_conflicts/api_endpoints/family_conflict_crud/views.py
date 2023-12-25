@@ -41,7 +41,7 @@ class FamilyConflictListAPIView(ListAPIView):
 class FamilyConflictDetailAPIView(RetrieveAPIView):
     queryset = FamilyConflict.objects.all()
     serializer_class = FamilyConflictSerializer
-    permission_classes = (IsImam | IsDeputy,)
+    permission_classes = (IsAuthenticated,)
 
 
 class FamilyConflictUpdateAPIView(RetrieveUpdateAPIView):
