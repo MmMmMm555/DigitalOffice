@@ -12,7 +12,7 @@ class WeddingTypes(models.TextChoices):
 class Wedding(BaseModel):
     title = models.CharField(max_length=300, blank=False)
     comment = models.TextField(blank=True, null=True)
-    imam = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    imam = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False)
     types = models.CharField(max_length=15, choices=WeddingTypes.choices, default=WeddingTypes.MARRIAGE)
     date = models.DateField()
     

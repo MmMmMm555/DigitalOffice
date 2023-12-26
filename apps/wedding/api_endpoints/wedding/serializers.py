@@ -1,18 +1,18 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.organizations.models import Organization
+from apps.wedding.models import Wedding
 
 
-class OrganizationSerializer(ModelSerializer):
+class WeddingSerializer(ModelSerializer):
     class Meta:
-        model = Organization
-        fields = ('id', 'imam', 'description', 'prisoner_type', 'institution_type', 'participant_type', 'date',)
+        model = Wedding
+        fields = ('id', 'imam', 'title', 'comment', 'types', 'date',)
 
 
-class OrganizationDetailSerializer(ModelSerializer):
+class WeddingDetailSerializer(ModelSerializer):
     class Meta:
-        model = Organization
-        fields = ('id', 'imam', 'description', 'prisoner_type', 'institution_type', 'participant_type', 'date', 'created_at', 'updated_at',)
+        model = Wedding
+        fields = ('id', 'imam', 'title', 'comment', 'types', 'date', 'created_at', 'updated_at',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -27,10 +27,10 @@ class OrganizationDetailSerializer(ModelSerializer):
         return representation
 
 
-class OrganizationListSerializer(ModelSerializer):
+class WeddingListSerializer(ModelSerializer):
     class Meta:
-        model = Organization
-        fields = ('id', 'imam', 'prisoner_type', 'institution_type', 'participant_type', 'date',)
+        model = Wedding
+        fields = ('id', 'imam', 'title', 'types', 'date',)
 
 
     def to_representation(self, instance):
@@ -46,14 +46,13 @@ class OrganizationListSerializer(ModelSerializer):
         return representation
 
 
-class OrganizationUpdateSerializer(ModelSerializer):
+class WeddingUpdateSerializer(ModelSerializer):
     class Meta:
-        model = Organization
-        fields = ('id', 'imam', 'description', 'prisoner_type', 'institution_type', 'participant_type', 'date',)
+        model = Wedding
+        fields = ('id', 'imam', 'title', 'comment', 'types', 'date',)
 
         extra_kwargs = {
             'imam': {'required': False},
-            'participant_type': {'required': False},
-            'description': {'required': False},
+            'title': {'required': False},
             'date': {'required': False},
         }

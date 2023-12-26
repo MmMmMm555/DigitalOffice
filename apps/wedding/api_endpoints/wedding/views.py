@@ -5,14 +5,14 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.common.permissions import IsImam, IsDeputy
-from apps.organizations.models import Organization
-from .serializers import (OrganizationSerializer, OrganizationListSerializer,
-                          OrganizationUpdateSerializer, OrganizationDetailSerializer,)
+from apps.wedding.models import Wedding
+from .serializers import (WeddingSerializer, WeddingListSerializer,
+                          WeddingUpdateSerializer, WeddingDetailSerializer,)
 
 
-class OrganizationCreateAPIView(CreateAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+class WeddingCreateAPIView(CreateAPIView):
+    queryset = Wedding.objects.all()
+    serializer_class = WeddingSerializer
     permission_classes = (IsImam | IsDeputy,)
     parser_classes = (MultiPartParser, FormParser,)
 
@@ -20,36 +20,35 @@ class OrganizationCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class OrganizationListAPIView(ListAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationListSerializer
+class WeddingListAPIView(ListAPIView):
+    queryset = Wedding.objects.all()
+    serializer_class = WeddingListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
-    filterset_fields = ('id', 'imam', 'date', 'participant_type',
-                    'institution_type', 'participant_type',)
+    filterset_fields = ('id', 'imam', 'date', 'types',)
 
     def get_queryset(self):
         user_role = self.request.user.role
         if user_role == '4' or user_role == '5':
-            return Organization.objects.filter(imam=self.request.user)
+            return Wedding.objects.filter(imam=self.request.user)
         elif user_role == '1':
-            return Organization.objects.all()
+            return Wedding.objects.all()
         elif user_role == '2':
-            return Organization.objects.filter(imam__region=self.request.user.region)
+            return Wedding.objects.filter(imam__region=self.request.user.region)
         elif user_role == '3':
-            return Organization.objects.filter(imam__district=self.request.user.district)
+            return Wedding.objects.filter(imam__district=self.request.user.district)
         return []
 
 
-class OrganizationDetailAPIView(RetrieveAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationDetailSerializer
+class WeddingDetailAPIView(RetrieveAPIView):
+    queryset = Wedding.objects.all()
+    serializer_class = WeddingDetailSerializer
     permission_classes = (IsAuthenticated,)
 
 
-class OrganizationUpdateAPIView(RetrieveUpdateAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationUpdateSerializer
+class WeddingUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Wedding.objects.all()
+    serializer_class = WeddingUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)
     parser_classes = (MultiPartParser, FormParser,)
 
@@ -61,9 +60,9 @@ class OrganizationUpdateAPIView(RetrieveUpdateAPIView):
             return Response({'message': 'You are not allowed to update'}, status=403)
 
 
-class OrganizationDeleteAPIView(DestroyAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+class WeddingDeleteAPIView(DestroyAPIView):
+    queryset = Wedding.objects.all()
+    serializer_class = WeddingSerializer
     permission_classes = (IsImam | IsDeputy,)
 
     def perform_destroy(self, instance):
