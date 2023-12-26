@@ -74,6 +74,7 @@ CUSTOM_APPS = [
     'apps.charity_promotion',
     'apps.public_prayers',
     'apps.organizations',
+    'apps.ceremony',
 ]
 
 THIRD_PARTY_APPS = [
