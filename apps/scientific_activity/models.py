@@ -22,10 +22,19 @@ class ArticleType(models.TextChoices):
     OTHER = '5'
 
 
+class Images(models.Model):
+    image = models.ImageField(upload_to='images/article', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+
+    class Meta: 
+        verbose_name = 'Maqola rasmi '
+        verbose_name_plural = 'Maqola rasmlari '
+
+
 class Article(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_articles')
     type = models.CharField(max_length=22, choices=Types.choices, default=Types.PRINT, blank=False)
     comment = models.TextField()
+    images = models.ManyToManyField(Images, blank=True)
     url = models.URLField(max_length=200, null=True, blank=True)
     publication = models.CharField(max_length=200, blank=True, null=True)
     publication_type = models.CharField(max_length=10, blank=True, null=True, choices=PublicationType.choices)
@@ -39,23 +48,25 @@ class Article(BaseModel):
         verbose_name = 'Maqola '
         verbose_name_plural = 'Maqolalar '
 
-class Images(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='images/article', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
-
-    class Meta: 
-        verbose_name = 'Maqola rasmi '
-        verbose_name_plural = 'Maqola rasmlari '
-
 
 
 class Direction(models.TextChoices):
     RELIGIOUS = '1'
     EDUCATIONAL = '2'
 
+
+class BookImages(models.Model):
+    image = models.ImageField(upload_to='images/book', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+
+    class Meta: 
+        verbose_name = 'Kitob rasmi '
+        verbose_name_plural = 'Kitob rasmlari '
+
+
 class Book(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_books')
     name = models.CharField(max_length=200)
+    images = models.ManyToManyField(BookImages, blank=True)
     direction = models.CharField(max_length=22, choices=Direction.choices, default=Direction.RELIGIOUS, blank=False)
     publication = models.CharField(max_length=200, blank=True, null=True)
     comment = models.TextField()
@@ -67,11 +78,3 @@ class Book(BaseModel):
     class Meta: 
         verbose_name = 'Kitob '
         verbose_name_plural = 'Kitoblar '
-
-class BookImages(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='images/book', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
-
-    class Meta: 
-        verbose_name = 'Kitob rasmi '
-        verbose_name_plural = 'Kitob rasmlari '
