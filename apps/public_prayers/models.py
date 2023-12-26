@@ -14,8 +14,8 @@ class Prayers(models.Model):
 class PublicPrayers(BaseModel):
     imam = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='imam_prayers')
-    prayer = models.ForeignKey(
-        Prayers, on_delete=models.SET_NULL, related_name='prayers', null=True)
+    prayer = models.ManyToManyField(
+        Prayers, related_name='prayers')
 
     def __str__(self):
         return str(self.id)+": "+self.imam.username+" - "+self.prayer.name+" - "+self.created_at.strftime("%Y-%m-%d")
