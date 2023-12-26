@@ -8,7 +8,7 @@ class Prayers(models.Model):
     name = models.CharField(max_length=255, blank=False)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.id} {self.name}"
 
 
 class PublicPrayers(BaseModel):
