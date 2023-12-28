@@ -201,7 +201,8 @@ class DirectionSingleSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['creator'] = User.objects.filter(id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
+        representation['creator'] = User.objects.filter(
+            id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
         if instance.to_employee:
             representation['to_employee'] = User.objects.filter(
                 id__in=instance.to_employee.all()).values('id', 'profil__name', 'profil__last_name',)
@@ -239,79 +240,81 @@ class DirectionUpdateSerializer(ModelSerializer):
             'file': {'required': False},
         }
 
+    def validate(self, attrs):
+        if self.instance.direction_employee_result.all():
+            raise ValidationError('you can not edit now')
+        return attrs
+
     def save(self):
-        if self.instance.to_date <= date.today():
-            raise ValidationError('editable date passed')
         obj = models.Directions.objects.filter(
             id=self.instance.id).update(**self.validated_data)
         models.DirectionsEmployeeRead.objects.filter(
             direction=self.instance).update(state='1')
         return obj
 
+    # def validate(self, attrs):
+    #     if int(attrs.get('from_role')) >= int(attrs.get('to_role')):
+    #         raise ValidationError('selected roles are not right position')
+    #     return attrs
 
-#     def validate(self, attrs):
-#         if int(attrs.get('from_role')) >= int(attrs.get('to_role')):
-#             raise ValidationError('selected roles are not right position')
-#         return attrs
+    # def create(self, validated_data):
+    #     try:
+    #         # creation instance
+    #         direction = super().create(validated_data)
+    #         direction = models.Directions.objects.get(id=direction.id)
+    #         # getting instance role
+    #         to_role = direction.to_role
+    #         # getting m2m field values
+    #         employee = User.objects.filter(role=to_role[0])
+    #         employee_list = direction.to_employee.all()
+    #         district_list = direction.to_district.all()
+    #         region_list = direction.to_region.all()
+    #         # getting m2m require field values
+    #         employee_required = User.objects.filter(role=to_role[0])
+    #         employee_list_required  = direction.required_to_employee.all()
+    #         district_list_required  = direction.required_to_district.all()
+    #         region_list_required  = direction.required_to_region.all()
 
-#     def create(self, validated_data):
-#         try:
-#             # creation instance
-#             direction = super().create(validated_data)
-#             direction = models.Directions.objects.get(id=direction.id)
-#             # getting instance role
-#             to_role = direction.to_role
-#             # getting m2m field values
-#             employee = User.objects.filter(role=to_role[0])
-#             employee_list = direction.to_employee.all()
-#             district_list = direction.to_district.all()
-#             region_list = direction.to_region.all()
-#             # getting m2m require field values
-#             employee_required = User.objects.filter(role=to_role[0])
-#             employee_list_required  = direction.required_to_employee.all()
-#             district_list_required  = direction.required_to_district.all()
-#             region_list_required  = direction.required_to_region.all()
+    #         # filtering m2m fields
+    #         if employee_list:
+    #             for i in employee.filter(id__in=employee_list.values_list('id', flat=True)):
+    #                 try:
+    #                     models.DirectionsEmployeeRead.objects.create(
+    #                         direction = direction,
+    #                         employee = i,)
+    #                 except:
+    #                     pass
+    #         elif district_list:
+    #             employee = employee.filter(district__in=district_list, region__in=region_list)
+    #         else:
+    #             district_list = Districts.objects.filter(region__in=region_list)
 
-#             # filtering m2m fields
-#             if employee_list:
-#                 for i in employee.filter(id__in=employee_list.values_list('id', flat=True)):
-#                     try:
-#                         models.DirectionsEmployeeRead.objects.create(
-#                             direction = direction,
-#                             employee = i,)
-#                     except:
-#                         pass
-#             elif district_list:
-#                 employee = employee.filter(district__in=district_list, region__in=region_list)
-#             else:
-#                 district_list = Districts.objects.filter(region__in=region_list)
+    #         # filtering m2m required fields
+    #         if employee_list_required:
+    #             models.DirectionsEmployeeRead.objects.filter(direction=direction, employee__in=employee_required.filter(id__in=employee_list_required.values_list('id', flat=True))).update(requirement=True)
+    #         elif district_list_required:
+    #             employee_required = employee_required.filter(region__in=region_list_required, district__in=district_list_required)
+    #         else:
+    #             district_list_required = Districts.objects.filter(region__in=region_list_required)
 
-#             # filtering m2m required fields
-#             if employee_list_required:
-#                 models.DirectionsEmployeeRead.objects.filter(direction=direction, employee__in=employee_required.filter(id__in=employee_list_required.values_list('id', flat=True))).update(requirement=True)
-#             elif district_list_required:
-#                 employee_required = employee_required.filter(region__in=region_list_required, district__in=district_list_required)
-#             else:
-#                 district_list_required = Districts.objects.filter(region__in=region_list_required)
+    #         # creating direction_read models
+    #         for i in employee.filter(district__in=district_list):
+    #             try:
+    #                 models.DirectionsEmployeeRead.objects.create(
+    #                         direction = direction,
+    #                         employee = i,)
+    #             except:
+    #                 pass
+    #         # updating direction_read requirement
 
-#             # creating direction_read models
-#             for i in employee.filter(district__in=district_list):
-#                 try:
-#                     models.DirectionsEmployeeRead.objects.create(
-#                             direction = direction,
-#                             employee = i,)
-#                 except:
-#                     pass
-#             # updating direction_read requirement
-
-#             models.DirectionsEmployeeRead.objects.filter(direction=direction, employee__in=employee_required.filter(district__in=district_list_required)).update(requirement=True)
-#             # setting m2m field values to direction
-#             direction.required_to_district.set(district_list_required)
-#             direction.to_district.set(district_list)
-#             direction.required_to_employee.set(models.DirectionsEmployeeRead.objects.filter(direction=direction, requirement=True).values_list('employee__id', flat=True))
-#             direction.to_employee.set(models.DirectionsEmployeeRead.objects.filter(direction=direction).values_list('employee__id', flat=True))
-#             # saving direction
-#             direction.save()
-#             return direction
-#         except:
-#             raise ValidationError('Something went wrong')
+    #         models.DirectionsEmployeeRead.objects.filter(direction=direction, employee__in=employee_required.filter(district__in=district_list_required)).update(requirement=True)
+    #         # setting m2m field values to direction
+    #         direction.required_to_district.set(district_list_required)
+    #         direction.to_district.set(district_list)
+    #         direction.required_to_employee.set(models.DirectionsEmployeeRead.objects.filter(direction=direction, requirement=True).values_list('employee__id', flat=True))
+    #         direction.to_employee.set(models.DirectionsEmployeeRead.objects.filter(direction=direction).values_list('employee__id', flat=True))
+    #         # saving direction
+    #         direction.save()
+    #         return direction
+    #     except:
+    #         raise ValidationError('Something went wrong')

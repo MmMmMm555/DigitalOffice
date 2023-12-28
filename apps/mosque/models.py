@@ -4,7 +4,7 @@ from django.core.validators import FileExtensionValidator
 from location_field.models.plain import PlainLocationField
 
 from apps.common.models import BaseModel
-from apps.common.regions import Districts
+from apps.common.regions import Districts, Regions
 
 # Create your models here.
 
@@ -34,6 +34,7 @@ class FireDefense(models.TextChoices):
     FIRE_CLOSET = '3'
     FIRE_SIGNAL = '4'
     AUTO_FIRE_EXTINGUISHER = '5'
+    EMERGENCY_EXIT_DOOR = '6'
 
 class FireDefenseImages(BaseModel):
     type = models.CharField(max_length=17, choices=FireDefense.choices, default=FireDefense.EVACUATION_ROAD)
@@ -47,7 +48,8 @@ class Mosque(BaseModel):
     # other fields
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=355)
-    district = models.ForeignKey(Districts, on_delete=models.CASCADE, related_name='mosque')
+    region = models.ForeignKey(Regions, on_delete=models.CASCADE, related_name='mosque_region')
+    district = models.ForeignKey(Districts, on_delete=models.CASCADE, related_name='mosque_district')
     location = PlainLocationField(based_fields=['city'], zoom=10)
 
     built_at = models.DateField()
@@ -59,12 +61,16 @@ class Mosque(BaseModel):
     basement = models.BooleanField(default=False)
     second_floor = models.BooleanField(default=False)
     third_floor = models.BooleanField(default=False)
+
     cultural_heritage = models.BooleanField(default=False)
+
     fire_safety = models.BooleanField(default=False)
     auto_fire_extinguisher = models.BooleanField(default=False)
     fire_closet = models.BooleanField(default=False)
     fire_signal = models.BooleanField(default=False)
-    
+    evacuation_road = models.BooleanField(default=False)
+    emergency_exit_door = models.BooleanField(default=False)
+
     service_rooms_bool = models.BooleanField(default=False)
     imam_room = models.BooleanField(default=False)
     sub_imam_room = models.BooleanField(default=False)
@@ -72,13 +78,13 @@ class Mosque(BaseModel):
     guard_room = models.BooleanField(default=False)
     other_room = models.BooleanField(default=False)
     other_room_amount = models.IntegerField(default=0, blank=True)
-    
-#capacity = models.PositiveIntegerField(default=0, blank=False) 
-    
+
+    capacity = models.PositiveIntegerField(default=0, blank=False)
+
     mosque_library = models.BooleanField(default=False)
 
     fire_images = models.ManyToManyField(FireDefenseImages, blank=True)
-    
+
     mosque_status = models.CharField(
         max_length=17, choices=MosqueStatusChoices.choices,
         default=MosqueStatusChoices.GOOD,

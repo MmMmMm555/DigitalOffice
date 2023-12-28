@@ -17,6 +17,7 @@ class MosqueSerializer(ModelSerializer):
             'id',
             'name',
             'address',
+            'region',
             'district',
             'location',
 
@@ -29,13 +30,15 @@ class MosqueSerializer(ModelSerializer):
             'basement',
             'second_floor',
             'third_floor',
-
+            'capacity',
             'cultural_heritage',
 
             'fire_safety',
             'auto_fire_extinguisher',
             'fire_closet',
             'fire_signal',
+            'emergency_exit_door',
+            'evacuation_road',
             'fire_images',
 
             'service_rooms_bool',
@@ -66,11 +69,13 @@ class MosqueListSerializer(MosqueSerializer):
             'mosque_status',
             'mosque_heating_type',
             'mosque_heating_fuel',
+            'region',
             'district',
             'built_at',
             'registered_at',
             'parking',
             'basement',
+            'capacity',
             'second_floor',
             'third_floor',
             'cultural_heritage',
@@ -78,6 +83,8 @@ class MosqueListSerializer(MosqueSerializer):
             'auto_fire_extinguisher',
             'fire_closet',
             'fire_signal',
+            'emergency_exit_door',
+            'evacuation_road',
             'service_rooms_bool',
             'imam_room',
             'sub_imam_room',
@@ -95,6 +102,7 @@ class MosqueSingleSerializer(ModelSerializer):
             'id',
             'name',
             'address',
+            'region',
             'district',
             'location',
 
@@ -109,13 +117,15 @@ class MosqueSingleSerializer(ModelSerializer):
             'basement',
             'second_floor',
             'third_floor',
-
+            'capacity',
             'cultural_heritage',
 
             'fire_safety',
             'auto_fire_extinguisher',
             'fire_closet',
             'fire_signal',
+            'emergency_exit_door',
+            'evacuation_road',
             'fire_images',
 
             'service_rooms_bool',
@@ -157,6 +167,8 @@ class MosqueSingleSerializer(ModelSerializer):
             type='4').values('id', 'type', 'image')
         representation['auto_fire_extinguisher_image'] = images.filter(
             type='5').values('id', 'type', 'image')
+        representation['emergency_exit_door_image'] = images.filter(
+            type='6').values('id', 'type', 'image')
 
         return representation
 
@@ -169,6 +181,7 @@ class MosqueUpdateSerializer(ModelSerializer):
             'id',
             'name',
             'address',
+            'region',
             'district',
             'location',
 
@@ -181,13 +194,15 @@ class MosqueUpdateSerializer(ModelSerializer):
             'basement',
             'second_floor',
             'third_floor',
-
+            'capacity',
             'cultural_heritage',
 
             'fire_safety',
             'auto_fire_extinguisher',
             'fire_closet',
             'fire_signal',
+            'emergency_exit_door',
+            'evacuation_road',
             'fire_images',
 
             'service_rooms_bool',

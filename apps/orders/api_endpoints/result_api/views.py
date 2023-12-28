@@ -22,7 +22,7 @@ class DirectionsEmployeeResultView(CreateAPIView):
 
 
 class DirectionsEmployeeResultListView(ListAPIView):
-    queryset = DirectionsEmployeeResult.objects.all()
+    queryset = DirectionsEmployeeResult.objects.all().select_related('direction_name')
     serializer_class = DirectionsEmployeeResultListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'direction', 'employee', 'created_at',)
