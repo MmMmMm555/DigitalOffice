@@ -41,8 +41,11 @@ class DirectionsEmployeeResultListSerializer(ModelSerializer):
         representation = super().to_representation(instance)
         representation['direction'] = {
             'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type}
-        representation['employee'] = {
-            'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}"}
+        try:
+            representation['employee'] = {
+                'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}"}
+        except:
+            representation['employee'] = {'id': instance.employee.id}
         return representation
 
 
