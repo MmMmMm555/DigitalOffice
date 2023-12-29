@@ -67,7 +67,6 @@ class DirectionCreateSerializer(ModelSerializer):
             'from_role': {'required': True},
             'to_role': {'required': True},
             'from_date': {'required': True},
-            'to_date': {'required': True},
         }
 
     def validate(self, attrs):
