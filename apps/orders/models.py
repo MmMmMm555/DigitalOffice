@@ -41,8 +41,8 @@ class Directions(BaseModel):
     required_to_district = models.ManyToManyField(Districts, blank=True)
     required_to_employee = models.ManyToManyField(User, blank=True)
 
-    from_date = models.DateField(blank=True)
-    to_date = models.DateField(blank=True)
+    from_date = models.DateField(blank=False)
+    to_date = models.DateField(blank=True, null=True,)
 
     voice = models.BooleanField(default=False)
     image = models.BooleanField(default=False)

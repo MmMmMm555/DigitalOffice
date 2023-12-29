@@ -75,7 +75,7 @@ class DirectionCreateSerializer(ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        try:
+        # try:
             with transaction.atomic():
                 # creation instance
                 direction = super().create(validated_data)
@@ -154,8 +154,8 @@ class DirectionCreateSerializer(ModelSerializer):
                 # saving direction
                 direction.save()
                 return direction
-        except:
-            raise ValidationError('Something went wrong')
+        # except:
+        #     raise ValidationError('Something went wrong')
 
 
 class DirectionListSerializer(ModelSerializer):

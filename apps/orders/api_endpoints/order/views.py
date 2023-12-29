@@ -28,8 +28,8 @@ class DirectionsListView(generics.ListAPIView):
     filterset_fields = ('id', 'created_at', 'to_region', 'to_district', 'required_to_region',
                         'required_to_district', 'to_role', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
-    def get_queryset(self):
-        return models.Directions.objects.filter(creator=self.request.user)
+    # def get_queryset(self):
+    #     return models.Directions.objects.filter(creator=self.request.user)
 
 
 class DirectionDeleteView(generics.DestroyAPIView):
@@ -65,4 +65,4 @@ class DirectionSingleView(generics.RetrieveAPIView):
             return model.filter(from_role=role, to_region=region)
         if role == '1':
             return model
-        return []
+        return model
