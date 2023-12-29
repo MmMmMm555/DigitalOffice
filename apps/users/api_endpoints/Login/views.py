@@ -6,6 +6,6 @@ from .serializers import MyTokenObtainPairSerializer
 
 
 class LoginObtainTokenPairView(TokenObtainPairView):
-    permission_classes = (AllowAny,)
+    # permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
-    parser_classes = [FormParser, MultiPartParser, FileUploadParser,]
+    # parser_classes = [FormParser, MultiPartParser, FileUploadParser,]
