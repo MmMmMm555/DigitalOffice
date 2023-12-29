@@ -16,6 +16,7 @@ class Types(models.TextChoices):
     INFORMATION = '1'
     IMPLEMENT = '2'
 
+
 class DirectionTypes(models.TextChoices):
     DECISION = '1'
     ORDER = '2'
@@ -23,20 +24,30 @@ class DirectionTypes(models.TextChoices):
     MESSAGE = '4'
     MISSION = '5'
 
+
 class Directions(BaseModel):
-    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name='directions_creator',)
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL,
+                                null=True, blank=False, related_name='directions_creator',)
     title = models.CharField(max_length=1000)
-    direction_type = models.CharField(max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
-    file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}")
-    types = models.CharField(max_length=12, choices=Types.choices, default=Types.INFORMATION)
-    
-    from_role = models.CharField(max_length=18, choices=Role.choices[:3], default=Role.SUPER_ADMIN)
-    to_role = models.CharField(max_length=18, choices=Role.choices[1:], default=Role.IMAM)
-    
+    direction_type = models.CharField(
+        max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
+    file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}")
+    comments = models.TextField(blank=True)
+    types = models.CharField(
+        max_length=12, choices=Types.choices, default=Types.INFORMATION)
+
+    from_role = models.CharField(
+        max_length=18, choices=Role.choices[:3], default=Role.SUPER_ADMIN)
+    to_role = models.CharField(
+        max_length=18, choices=Role.choices[1:], default=Role.IMAM)
+
     to_region = models.ManyToManyField(Regions, related_name='direction')
-    to_district = models.ManyToManyField(Districts, related_name='direction', blank=True)
-    to_employee = models.ManyToManyField(User, related_name='direction', blank=True)
-    
+    to_district = models.ManyToManyField(
+        Districts, related_name='direction', blank=True)
+    to_employee = models.ManyToManyField(
+        User, related_name='direction', blank=True)
+
     required_to_region = models.ManyToManyField(Regions, blank=True)
     required_to_district = models.ManyToManyField(Districts, blank=True)
     required_to_employee = models.ManyToManyField(User, blank=True)
@@ -52,7 +63,7 @@ class Directions(BaseModel):
 
     def __str__(self) -> str:
         return f"{self.id}-{self.title}"
-    
+
     class Meta:
         ordering = ['-created_at',]
         verbose_name = "Ko'rsatma "
@@ -60,10 +71,13 @@ class Directions(BaseModel):
 
 
 class DirectionsEmployeeRead(BaseModel):
-    direction = models.ForeignKey(Directions, on_delete=models.CASCADE, related_name='directionemployeeread')
-    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='directionemployeeread')
+    direction = models.ForeignKey(
+        Directions, on_delete=models.CASCADE, related_name='directionemployeeread')
+    employee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='directionemployeeread')
     requirement = models.BooleanField(default=False)
-    state = models.CharField(max_length=10, choices=States.choices, default=States.UNSEEN)
+    state = models.CharField(
+        max_length=10, choices=States.choices, default=States.UNSEEN)
 
     def __str__(self) -> str:
         return self.employee.username
@@ -76,32 +90,44 @@ class DirectionsEmployeeRead(BaseModel):
 
 
 class ResultImages(BaseModel):
-    image = models.ImageField(upload_to='images/direction_result', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+    image = models.ImageField(upload_to='images/direction_result', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+
     class Meta:
         verbose_name = "Rasm "
         verbose_name_plural = "Rasmlar "
 
+
 class ResultVideos(BaseModel):
-    video = models.FileField(upload_to='videos/direction_result', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_file_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+    video = models.FileField(upload_to='videos/direction_result', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_file_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+
     class Meta:
         verbose_name = "Video "
         verbose_name_plural = "Videolar "
 
+
 class ResultFiles(BaseModel):
-    file = models.FileField(upload_to='files/direction_result', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
+    file = models.FileField(upload_to='files/direction_result', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
+
     class Meta:
         verbose_name = "Fayl "
         verbose_name_plural = "Fayllar "
 
+
 class DirectionsEmployeeResult(BaseModel):
-    direction = models.ForeignKey(Directions, on_delete=models.SET_NULL, related_name='direction_employee_result', null=True)
-    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='direction_employee_result')
-    voice = models.FileField(upload_to='voices/direction_result', validators=[FileExtensionValidator(allowed_extensions=['mp3',])], help_text=f"allowed images: ['mp3',]", blank=True)
+    direction = models.ForeignKey(
+        Directions, on_delete=models.SET_NULL, related_name='direction_employee_result', null=True)
+    employee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='direction_employee_result')
+    voice = models.FileField(upload_to='voices/direction_result', validators=[FileExtensionValidator(
+        allowed_extensions=['mp3',])], help_text=f"allowed images: ['mp3',]", blank=True)
     comment = models.TextField(blank=True)
     images = models.ManyToManyField(ResultImages, blank=True)
     videos = models.ManyToManyField(ResultVideos, blank=True)
     files = models.ManyToManyField(ResultFiles, blank=True)
-    
+
     def __str__(self) -> str:
         return self.employee.username
 
