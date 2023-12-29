@@ -62,6 +62,13 @@ class DirectionCreateSerializer(ModelSerializer):
             'comment',
             'file_bool',
         )
+        extra_kwargs = {
+            'creator': {'required': True},
+            'from_role': {'required': True},
+            'to_role': {'required': True},
+            'from_date': {'required': True},
+            'to_date': {'required': True},
+        }
 
     def validate(self, attrs):
         if int(attrs.get('from_role')) >= int(attrs.get('to_role')):
