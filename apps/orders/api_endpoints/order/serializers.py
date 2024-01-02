@@ -247,6 +247,7 @@ class DirectionUpdateSerializer(ModelSerializer):
         extra_kwargs = {
             'title': {'required': False},
             'file': {'required': False},
+            'from_date': {'required': False},
         }
 
     def validate(self, attrs):
