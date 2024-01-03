@@ -18,8 +18,12 @@ from apps.common.permissions import IsSuperAdmin, IsImam, IsRegionAdmin, IsDistr
 class DirectionsEmployeeResultView(CreateAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultSerializer
-    permission_classes = (IsImam | IsRegionAdmin | IsDistrictAdmin | IsDeputy,)
+    permission_classes = (IsImam | IsRegionAdmin |
+                          IsDistrictAdmin | IsDeputy | IsSuperAdmin,)
     parser_classes = (FormParser, MultiPartParser,)
+
+    def perform_create(self, serializer):
+        serializer.save(employee=self.request.user)
 
 
 class DirectionsEmployeeResultListView(ListAPIView):
