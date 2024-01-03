@@ -8,9 +8,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return {
             "id": self.user.id,
             "email": self.user.email,
+            "username": self.user.username,
             "role": self.user.role,
+            "first_name": self.user.profil.name,
+            "last_name": self.user.profil.last_name,
             **attrs,
         }
+
     # @classmethod
     # def get_token(cls, user):
     #     token = super(MyTokenObtainPairSerializer, cls).get_token(user)
