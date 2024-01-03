@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -34,7 +34,7 @@ class DirectionsEmployeeResultListView(ListAPIView):
         return DirectionsEmployeeResult.objects.filter(employee=self.request.user)
 
 
-class DirectionsEmployeeResultDetailView(ListAPIView):
+class DirectionsEmployeeResultDetailView(RetrieveAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultDetailSerializer
     permission_classes = (IsAuthenticated,)
