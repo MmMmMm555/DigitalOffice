@@ -30,7 +30,7 @@ class DirectionsEmployeeResultListView(ListAPIView):
     queryset = DirectionsEmployeeResult.objects.all().select_related('direction_name')
     serializer_class = DirectionsEmployeeResultListSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('id', 'direction', 'employee', 'created_at',)
+    filterset_fields = ('id', 'direction', 'direction__direction_type', 'employee', 'created_at',)
 
     def get_queryset(self):
         if self.request.user.role == '1':

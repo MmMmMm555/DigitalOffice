@@ -19,7 +19,7 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
     permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('employee__profil_name', 'direction__title',)
-    filterset_fields = ('direction', 'created_at', 'state', 'requirement', 'employee',)
+    filterset_fields = ('direction', 'direction__direction_type', 'created_at', 'state', 'requirement', 'employee',)
     
     def get_queryset(self):
         if self.request.user.role == '1':
