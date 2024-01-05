@@ -76,8 +76,8 @@ class DirectionsEmployeeResultSerializer(ModelSerializer):
                   'comment', 'files', 'images', 'videos',)
 
     def validate(self, attrs):
-        if not DirectionsEmployeeRead.objects.filter(direction=attrs.get('direction'), employee=attrs.get('employee')):
-            raise ValidationError({'detail': "you can not set result to this direction"})
+        # if not DirectionsEmployeeRead.objects.filter(direction=attrs.get('direction'), employee=attrs.get('employee')):
+        #     raise ValidationError({'detail': "you can not set result to this direction"})
         direction_date = Directions.objects.get(
             id=attrs.get('direction').id).to_date
         if direction_date < date.today():
