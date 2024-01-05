@@ -100,8 +100,10 @@ class FridayTesisCreateSerializer(ModelSerializer):
             imam_list = validated_data.get('to_imams', [])
             district_list = validated_data.get('to_district', [])
             region_list = validated_data.get('to_region', [])
+            if region_list == []:
+                region_list = Regions.objects.all()
             imams = imams.filter(region__in=region_list)
-            region_list = Regions.objects.filter(name__in=region_list)
+            # region_list = Regions.objects.filter(name__in=region_list)
 
             if not district_list:
                 district_list = Districts.objects.filter(
