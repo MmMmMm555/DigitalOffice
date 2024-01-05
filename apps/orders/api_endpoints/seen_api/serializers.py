@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError, BaseSerializer
 
 from apps.orders import models
 
@@ -36,3 +36,12 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
             representation['employee_name'] = {instance.employee.username}
         representation['direction_title'] = instance.direction.title
         return representation
+
+
+# class DirectionsUnseenCount(BaseSerializer):
+#     count = Integer
+
+#     def to_representation(self, instance):
+#         representation = super().to_representation(instance)
+#         representation['count'] = instance.count
+#         return representation
