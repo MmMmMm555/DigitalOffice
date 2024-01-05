@@ -92,7 +92,15 @@ class MosqueListSerializer(MosqueSerializer):
             'guard_room',
             'other_room',
             'mosque_library',)
-
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.region:
+            representation['region'] = {'name': instance.region.name,
+                                        'id': instance.region.id,}
+        if instance.district:
+            representation['district'] = {'name': instance.district.name,
+                                          'id': instance.district.id,}
+        return representation
 
 class MosqueSingleSerializer(ModelSerializer):
     employee = SerializerMethodField()

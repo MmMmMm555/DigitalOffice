@@ -62,9 +62,11 @@ class DirectionsEmployeeResultDetailSerializer(ModelSerializer):
         representation['direction'] = {
         'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_role': instance.direction.from_role, 'to_role': instance.direction.to_role}
         try:
+            representation['from'] = f"{instance.employee.profil.mosque.region} {instance.employee.profil.mosque.district} {instance.employee.profil.mosque.name}"
             representation['employee'] = {
             'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}", "role": instance.employee.role}
         except:
+            representation['from'] = 'Nomalum'
             representation['employee'] = {'id': instance.employee.id}
         return representation
 
