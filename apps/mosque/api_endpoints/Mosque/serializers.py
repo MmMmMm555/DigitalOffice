@@ -4,7 +4,6 @@ from apps.mosque.models import Mosque, FireDefenseImages
 
 
 class FireDefenseImageSerializer(ModelSerializer):
-
     class Meta:
         model = FireDefenseImages
         fields = ('id', 'image', 'type',)
@@ -92,18 +91,21 @@ class MosqueListSerializer(MosqueSerializer):
             'guard_room',
             'other_room',
             'mosque_library',)
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if instance.region:
             representation['region'] = {'name': instance.region.name,
-                                        'id': instance.region.id,}
+                                        'id': instance.region.id, }
         if instance.district:
             representation['district'] = {'name': instance.district.name,
-                                          'id': instance.district.id,}
+                                          'id': instance.district.id, }
         return representation
+
 
 class MosqueSingleSerializer(ModelSerializer):
     employee = SerializerMethodField()
+
     class Meta:
         model = Mosque
         fields = [
@@ -153,30 +155,26 @@ class MosqueSingleSerializer(ModelSerializer):
             'created_at',
             'updated_at',
         ]
-    
+
     def get_employee(self, obj):
         return obj.employee.all().values('id', 'name', 'last_name',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        images_id = Mosque.objects.get(
-            id=instance.id).fire_images.all().values_list('id', flat=True)
-        images = FireDefenseImages.objects.filter(id__in=images_id)
+        images = instance.fire_images.all().values('id', 'type', 'image',)
+        if instance.region:
+            representation['region'] = {'name': instance.region.name,
+                                        'id': instance.region.id, }
         if instance.district:
             representation['district'] = {'name': instance.district.name,
-                                          'id': instance.district.id, 'region_name': instance.district.region.name, 'region_id': instance.district.region.id, }
-        representation['evacuation_road_image'] = images.filter(
-            type='1').values('id', 'type', 'image')
-        representation['fire_safe_image'] = images.filter(
-            type='2').values('id', 'type', 'image')
-        representation['fire_closet_image'] = images.filter(
-            type='3').values('id', 'type', 'image')
-        representation['fire_signal_image'] = images.filter(
-            type='4').values('id', 'type', 'image')
+                                          'id': instance.district.id, }
+        representation['evacuation_road_image'] = images.filter(type='1')
+        representation['fire_safe_image'] = images.filter(type='2')
+        representation['fire_closet_image'] = images.filter(type='3')
+        representation['fire_signal_image'] = images.filter(type='4')
         representation['auto_fire_extinguisher_image'] = images.filter(
-            type='5').values('id', 'type', 'image')
-        representation['emergency_exit_door_image'] = images.filter(
-            type='6').values('id', 'type', 'image')
+            type='5')
+        representation['emergency_exit_door_image'] = images.filter(type='6')
 
         return representation
 
@@ -231,6 +229,7 @@ class MosqueUpdateSerializer(ModelSerializer):
         extra_kwargs = {
             'name': {'required': False},
             'address': {'required': False},
+            'region': {'required': False},
             'district': {'required': False},
             'location': {'required': False},
             'built_at': {'required': False},

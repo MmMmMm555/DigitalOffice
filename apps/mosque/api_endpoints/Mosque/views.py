@@ -25,7 +25,7 @@ class MosqueUpdateView(generics.RetrieveUpdateAPIView):
 
 class MosqueListView(generics.ListAPIView):
     queryset = Mosque.objects.all()
-    serializer_class = MosqueListSerializer
+    serializer_class = MosqueListSerializer()
     permission_classes = (IsSuperAdmin,)
     search_fields = ('name', 'address',)
     filterset_fields = (
