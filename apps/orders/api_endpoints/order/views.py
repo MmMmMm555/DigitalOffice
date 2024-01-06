@@ -1,4 +1,4 @@
-from rest_framework import generics, parsers
+from rest_framework import generics, parsers, permissions
 
 from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
 from .serializers import (DirectionCreateSerializer,
@@ -54,7 +54,7 @@ class DirectionUpdateView(generics.RetrieveUpdateAPIView):
 class DirectionSingleView(generics.RetrieveAPIView):
     queryset = models.Directions.objects.all()
     serializer_class = DirectionSingleSerializer
-    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
+    permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'pk'
 
     # def get_queryset(self):
