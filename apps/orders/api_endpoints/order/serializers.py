@@ -192,17 +192,13 @@ class DirectionSingleSerializer(ModelSerializer):
         representation['creator'] = User.objects.filter(
             id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
         if instance.to_employee:
-            representation['to_employee'] = Mosque.objects.filter(
-                id__in=instance.to_employee.all()).values('id', 'name', 'district__name', 'region__name',)
+            representation['to_employee'] = instance.to_employee.all().values('id', 'name', 'district__name', 'region__name',)
         if instance.required_to_employee:
-            representation['required_to_employee'] = Mosque.objects.filter(
-                id__in=instance.required_to_employee.all()).values('id', 'name', 'district__name', 'region__name',)
-        representation['waiting'] = models.DirectionsEmployeeRead.objects.filter(
-            direction=instance, state='1').count()
-        representation['accepted'] = models.DirectionsEmployeeRead.objects.filter(
-            direction=instance, state='2').count()
-        representation['done'] = models.DirectionsEmployeeRead.objects.filter(
-            direction=instance, state='3').count()
+            representation['required_to_employee'] = instance.required_to_employee.all().values('id', 'name', 'district__name', 'region__name',)
+        seen = models.DirectionsEmployeeRead.objects.filter(direction=instance)
+        representation['waiting'] = seen.filter(state='1').count()
+        representation['accepted'] = seen.filter(state='2').count()
+        representation['done'] = seen.filter(state='3').count()
         return representation
 
 
