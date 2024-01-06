@@ -28,7 +28,7 @@ class FridayTesis(BaseModel):
         max_length=6, choices=TesisType.choices, default=TesisType.FRIDAY)
     # title_slug = models.SlugField(max_length=1000)
     file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(
-        allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}")
+        allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     file_comment = models.TextField(blank=True, null=True)
     attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)

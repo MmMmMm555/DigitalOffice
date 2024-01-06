@@ -1,9 +1,11 @@
-from rest_framework.serializers import ModelSerializer, ValidationError, ManyRelatedField
+from rest_framework.serializers import ModelSerializer, ValidationError
 from datetime import date, datetime
 
 from apps.friday_tesis import models
 from apps.users.models import User
 from apps.common.regions import Regions, Districts
+
+from django.db import transaction
 
 
 class FridayTesisSerializer(ModelSerializer):
@@ -80,60 +82,56 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   )
 
     def create(self, validated_data):
-        try:
-            tesis = models.FridayTesis.objects.create(
-                title=validated_data.get('title', None),
-                types=validated_data.get('types', None),
-                file=validated_data.get('file', None),
-                file_comment=validated_data.get('file_comment', None),
-                attachment=validated_data.get('attachment', None),
-                attachment_comment=validated_data.get('attachment_comment', None),
-                date=validated_data.get('date', None),
-                image=validated_data.get('image', None),
-                video=validated_data.get('video', None),
-                comment=validated_data.get('comment', None),
-                file_bool=validated_data.get('file_bool', None),
-            )
-
-            imams = User.objects.filter(role='4')
-
-            for i in imams:
-                models.FridayTesisImamRead.objects.create(
-                    tesis=tesis,
-                    imam=i,
+        # try:
+            with transaction.atomic():
+                thesis = models.FridayTesis.objects.create(
+                    title=validated_data.get('title', None),
+                    types=validated_data.get('types', None),
+                    file=validated_data.get('file', None),
+                    file_comment=validated_data.get('file_comment', None),
+                    attachment=validated_data.get('attachment', None),
+                    attachment_comment=validated_data.get(
+                        'attachment_comment', None),
+                    date=validated_data.get('date', None),
+                    image=validated_data.get('image', None),
+                    video=validated_data.get('video', None),
+                    comment=validated_data.get('comment', None),
+                    file_bool=validated_data.get('file_bool', None),
                 )
 
-            imam_list = validated_data.get('to_imams', [])
-            district_list = validated_data.get('to_district', [])
-            region_list = validated_data.get('to_region', [])
-            if region_list == []:
-                region_list = Regions.objects.all()
-            imams = imams.filter(region__in=region_list)
-            # region_list = Regions.objects.filter(name__in=region_list)
+                imams = User.objects.filter(role='4')
 
-            if not district_list:
-                district_list = Districts.objects.filter(
-                    region__in=region_list)
+                for i in imams:
+                    models.FridayTesisImamRead.objects.create(
+                        tesis=thesis,
+                        imam=i,
+                    )
 
-            if district_list:
-                imams = imams.filter(district__in=district_list)
+                seen = models.FridayTesisImamRead.objects.filter(tesis=thesis)
 
-            if imam_list:
-                imams = imams.filter(username__in=imam_list)
+                imam_list = validated_data.get('to_imams')
+                district_list = validated_data.get('to_district')
+                region_list = validated_data.get('to_region')
 
-            seen = models.FridayTesisImamRead.objects.filter(
-                tesis=tesis, imam__in=imams,)
-            seen.update(requirement=True)
+                if region_list:
+                    imams = imams.filter(region__in=region_list)
+                    # seen.filter(imam__in=imams).update(requirement=True)
+                if district_list:
+                    imams = imams.filter(district__in=district_list)
+                    # seen.filter(imam__in=imams).update(requirement=True)
+                if imam_list:
+                    imams = imams.filter(username__in=imam_list)
+                    seen.filter(imam__in=imams).update(requirement=True)
 
-            tesis.to_imams.set(imams)
-            tesis.to_region.set(region_list)
-            tesis.to_district.set(district_list)
-            tesis.save()
+                thesis.to_imams.set(imams)
+                thesis.to_region.set(region_list)
+                thesis.to_district.set(district_list)
+                thesis.save()
 
-            return tesis
-        except:
-            tesis.delete()
-            raise ValidationError('Something went wrong')
+                return thesis
+        # except:
+        #     thesis.delete()
+        #     raise ValidationError('Something went wrong')
 
 
 class FridayTesisUpdateSerializer(ModelSerializer):
@@ -157,7 +155,6 @@ class FridayTesisUpdateSerializer(ModelSerializer):
                   )
         extra_kwargs = {
             'title': {'required': False},
-            'file': {'required': False},
             'date': {'required': False},
         }
 
