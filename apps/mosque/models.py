@@ -13,9 +13,11 @@ class MosqueTypeChoices(models.TextChoices):
     NEIGHBORHOOD = '1'
     JOME = '2'
 
+
 class MosqueHeatingTypeChoices(models.TextChoices):
     CENTRAL = '1'
     LOCAL = '2'
+
 
 class MosqueHeatingFuelChoices(models.TextChoices):
     GAS = '1'
@@ -23,10 +25,12 @@ class MosqueHeatingFuelChoices(models.TextChoices):
     SOLID_FUEL = '3'
     NONE = '4'
 
+
 class MosqueStatusChoices(models.TextChoices):
     GOOD = '1'
     REPAIR = '2'
     RECONSTRUCTION = '3'
+
 
 class FireDefense(models.TextChoices):
     EVACUATION_ROAD = '1'
@@ -35,10 +39,13 @@ class FireDefense(models.TextChoices):
     FIRE_SIGNAL = '4'
     AUTO_FIRE_EXTINGUISHER = '5'
 
+
 class FireDefenseImages(BaseModel):
-    type = models.CharField(max_length=17, choices=FireDefense.choices, default=FireDefense.EVACUATION_ROAD)
-    image = models.ImageField(upload_to='images/firedefence/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
-    
+    type = models.CharField(
+        max_length=17, choices=FireDefense.choices, default=FireDefense.EVACUATION_ROAD)
+    image = models.ImageField(upload_to='images/firedefence/', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+
     def __str__(self):
         return str(self.id)
 
@@ -47,7 +54,8 @@ class Mosque(BaseModel):
     # other fields
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=355)
-    district = models.ForeignKey(Districts, on_delete=models.CASCADE, related_name='mosque')
+    district = models.ForeignKey(
+        Districts, on_delete=models.CASCADE, related_name='mosque')
     location = PlainLocationField(based_fields=['city'], zoom=10)
 
     built_at = models.DateField()
@@ -64,7 +72,7 @@ class Mosque(BaseModel):
     auto_fire_extinguisher = models.BooleanField(default=False)
     fire_closet = models.BooleanField(default=False)
     fire_signal = models.BooleanField(default=False)
-    
+
     service_rooms_bool = models.BooleanField(default=False)
     imam_room = models.BooleanField(default=False)
     sub_imam_room = models.BooleanField(default=False)
@@ -72,11 +80,11 @@ class Mosque(BaseModel):
     guard_room = models.BooleanField(default=False)
     other_room = models.BooleanField(default=False)
     other_room_amount = models.IntegerField(default=0, blank=True)
-    
+
     mosque_library = models.BooleanField(default=False)
 
     fire_images = models.ManyToManyField(FireDefenseImages, blank=True)
-    
+
     mosque_status = models.CharField(
         max_length=17, choices=MosqueStatusChoices.choices,
         default=MosqueStatusChoices.GOOD,
@@ -93,7 +101,7 @@ class Mosque(BaseModel):
         max_length=17, choices=MosqueHeatingFuelChoices.choices,
         default=MosqueHeatingFuelChoices.NONE,
     )
-    
+
     def __str__(self):
         return f"{self.id}: {self.name}"
 

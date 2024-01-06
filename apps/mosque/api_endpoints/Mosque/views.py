@@ -29,36 +29,37 @@ class MosqueListView(generics.ListAPIView):
     # permission_classes = (IsSuperAdmin,)
     search_fields = ('name', 'address',)
     filterset_fields = (
-                       'id',
-                       'mosque_type',
-                       'mosque_status',
-                       'mosque_heating_type',
-                       'mosque_heating_fuel',
-                       'district', 
-                       'built_at',
-                       'registered_at',
-                       'parking',   
-                       'basement',
-                       'second_floor',
-                       'third_floor',
-                       'cultural_heritage',
-                       'fire_safety',
-                       'auto_fire_extinguisher',
-                       'fire_closet',
-                       'fire_signal',
-                       'service_rooms_bool',
-                       'imam_room',
-                       'sub_imam_room',
-                       'casher_room',
-                       'guard_room',
-                       'other_room',
-                       'mosque_library',)
-    
+        'id',
+        'mosque_type',
+        'mosque_status',
+        'mosque_heating_type',
+        'mosque_heating_fuel',
+        'district',
+        'built_at',
+        'registered_at',
+        'parking',
+        'basement',
+        'second_floor',
+        'third_floor',
+        'cultural_heritage',
+        'fire_safety',
+        'auto_fire_extinguisher',
+        'fire_closet',
+        'fire_signal',
+        'service_rooms_bool',
+        'imam_room',
+        'sub_imam_room',
+        'casher_room',
+        'guard_room',
+        'other_room',
+        'mosque_library',)
+
     def get_queryset(self):
         if self.request.user.role == '1':
             return Mosque.objects.all()
         id = self.request.user.profil.mosque.id
         return self.queryset.filter(id=id)
+
 
 class MosqueRetrieveView(generics.RetrieveAPIView):
     queryset = Mosque.objects.all()
