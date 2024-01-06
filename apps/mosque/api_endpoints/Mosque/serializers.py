@@ -19,6 +19,7 @@ class MosqueSerializer(ModelSerializer):
             'region',
             'district',
             'location',
+            'image',
 
             'built_at',
             'registered_at',
@@ -49,6 +50,9 @@ class MosqueSerializer(ModelSerializer):
             'other_room_amount',
 
             'mosque_library',
+            'shrine',
+            'graveyard',
+            'shop',
 
             'mosque_type',
             'mosque_status',
@@ -95,7 +99,10 @@ class MosqueListSerializer(MosqueSerializer):
             'casher_room',
             'guard_room',
             'other_room',
-            'mosque_library',)
+            'mosque_library',
+            'shrine',
+            'graveyard',
+            'shop',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -123,6 +130,7 @@ class MosqueSingleSerializer(ModelSerializer):
             'region',
             'district',
             'location',
+            'image',
 
             'employee',
 
@@ -155,6 +163,9 @@ class MosqueSingleSerializer(ModelSerializer):
             'other_room_amount',
 
             'mosque_library',
+            'shrine',
+            'graveyard',
+            'shop',
 
             'mosque_type',
             'mosque_status',
@@ -198,6 +209,7 @@ class MosqueUpdateSerializer(ModelSerializer):
             'region',
             'district',
             'location',
+            'image',
 
             'built_at',
             'registered_at',
@@ -228,6 +240,9 @@ class MosqueUpdateSerializer(ModelSerializer):
             'other_room_amount',
 
             'mosque_library',
+            'shrine',
+            'graveyard',
+            'shop',
 
             'mosque_type',
             'mosque_status',

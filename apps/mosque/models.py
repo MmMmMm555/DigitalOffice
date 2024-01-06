@@ -51,6 +51,7 @@ class Mosque(BaseModel):
     region = models.ForeignKey(Regions, on_delete=models.CASCADE, related_name='mosque_region')
     district = models.ForeignKey(Districts, on_delete=models.CASCADE, related_name='mosque_district')
     location = PlainLocationField(based_fields=['city'], zoom=10)
+    image = models.ImageField(upload_to='images/mosque/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True, default="images/default/default_mosque.png")
 
     built_at = models.DateField()
     registered_at = models.DateField()
@@ -82,6 +83,9 @@ class Mosque(BaseModel):
     capacity = models.PositiveIntegerField(default=0, blank=False)
 
     mosque_library = models.BooleanField(default=False)
+    shop = models.BooleanField(default=False)
+    shrine = models.BooleanField(default=False)
+    graveyard = models.BooleanField(default=False)
 
     fire_images = models.ManyToManyField(FireDefenseImages, blank=True)
 

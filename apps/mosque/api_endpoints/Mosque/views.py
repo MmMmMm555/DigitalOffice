@@ -1,27 +1,28 @@
 from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
 from django.db.models import Count, Q
+from rest_framework.permissions import IsAuthenticated
 
 from apps.mosque.api_endpoints.Mosque.serializers import (MosqueSerializer,
                                                           MosqueListSerializer,
                                                           MosqueSingleSerializer,
                                                           MosqueUpdateSerializer,)
 from apps.mosque.models import Mosque
-from apps.common.permissions import IsSuperAdmin, IsImam
+from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
 
 
 class MosqueCreateView(generics.CreateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSerializer
     parser_classes = (FormParser, MultiPartParser,)
-    permission_classes = (IsSuperAdmin,)
+    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
 
 
 class MosqueUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueUpdateSerializer
     parser_classes = (FormParser, MultiPartParser,)
-    permission_classes = (IsSuperAdmin,)
+    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
 
 
 class MosqueListView(generics.ListAPIView):
@@ -59,30 +60,23 @@ class MosqueListView(generics.ListAPIView):
         'casher_room',
         'guard_room',
         'other_room',
-        'mosque_library',)
+        'mosque_library',
+        'shrine',
+        'graveyard',
+        'shop',)
 
     def get_queryset(self):
         has_imam = self.request.GET.get('has_imam', None)
-        query = self.queryset
         if has_imam:
-            query = query.filter(has_imam=0)
-        if self.request.user.role == '1':
-            return query
-        id = self.request.user.profil.mosque.id
-        return query.filter(id=id)
+            return self.queryset.filter(has_imam=0)
+        return self.queryset
 
 
 class MosqueRetrieveView(generics.RetrieveAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSingleSerializer
-    permission_classes = (IsSuperAdmin | IsImam,)
+    permission_classes = (IsAuthenticated,)
     lookup_field = 'pk'
-
-    def get_queryset(self):
-        if self.request.user.role == '1':
-            return Mosque.objects.all()
-        id = self.request.user.profil.mosque.id
-        return Mosque.objects.filter(id=id)
 
 
 class MosqueDeleteView(generics.DestroyAPIView):

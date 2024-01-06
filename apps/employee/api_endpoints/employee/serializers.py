@@ -39,7 +39,7 @@ class EmployeeSerializer(ModelSerializer):
                  'achievement',
                 )
        extra_kwargs = {
-            "image": {"required": True},
+            # "image": {"required": True},
             "graduated_year": {"required": False},
             }
 
@@ -64,7 +64,7 @@ class EmployeeUpdateSerializer(ModelSerializer):
                  'achievement',
                 )
        extra_kwargs = {
-            "image": {"required": False},
+            # "image": {"required": False},
             "name": {"required": False},
             "surname": {"required": False},
             "last_name": {"required": False},
