@@ -7,6 +7,7 @@ from apps.common.models import BaseModel
 from apps.common.regions import Regions, Districts
 from apps.common.validators import validate_file_size
 from apps.friday_tesis.models import States
+from apps.mosque.models import Mosque
 
 
 # Create your models here.
@@ -55,11 +56,11 @@ class Directions(BaseModel):
     to_district = models.ManyToManyField(
         Districts, related_name='direction', blank=True)
     to_employee = models.ManyToManyField(
-        User, related_name='direction', blank=True)
+        Mosque, related_name='direction', blank=True)
 
     required_to_region = models.ManyToManyField(Regions, blank=True)
     required_to_district = models.ManyToManyField(Districts, blank=True)
-    required_to_employee = models.ManyToManyField(User, blank=True)
+    required_to_employee = models.ManyToManyField(Mosque, blank=True)
 
     from_date = models.DateField(blank=False)
     to_date = models.DateField(blank=True, null=True,)
