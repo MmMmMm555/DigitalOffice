@@ -82,7 +82,7 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   )
 
     def create(self, validated_data):
-        # try:
+        try:
             with transaction.atomic():
                 thesis = models.FridayTesis.objects.create(
                     title=validated_data.get('title', None),
@@ -115,10 +115,10 @@ class FridayTesisCreateSerializer(ModelSerializer):
 
                 if region_list:
                     imams = imams.filter(region__in=region_list)
-                    # seen.filter(imam__in=imams).update(requirement=True)
+                    seen.filter(imam__in=imams).update(requirement=True)
                 if district_list:
                     imams = imams.filter(district__in=district_list)
-                    # seen.filter(imam__in=imams).update(requirement=True)
+                    seen.filter(imam__in=imams).update(requirement=True)
                 if imam_list:
                     imams = imams.filter(username__in=imam_list)
                     seen.filter(imam__in=imams).update(requirement=True)
@@ -129,9 +129,9 @@ class FridayTesisCreateSerializer(ModelSerializer):
                 thesis.save()
 
                 return thesis
-        # except:
-        #     thesis.delete()
-        #     raise ValidationError('Something went wrong')
+        except:
+            thesis.delete()
+            raise ValidationError('Something went wrong')
 
 
 class FridayTesisUpdateSerializer(ModelSerializer):
