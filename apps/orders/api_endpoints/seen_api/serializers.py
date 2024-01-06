@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
+# , BaseSerializer, IntegerField, StringRelatedField
 
 from apps.orders import models
 
@@ -23,10 +24,20 @@ class DirectionsEmployeeReadSerializer(ModelSerializer):
 class DirectionsEmployeeReadListSerializer(ModelSerializer):
     class Meta:
         model = models.DirectionsEmployeeRead
-        fields = ('id', 'direction', 'employee', 'state', 'requirement', 'created_at',)
+        fields = ('id', 'direction', 'employee',
+                  'state', 'requirement', 'created_at',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['employee_name'] = f"{instance.employee.profil.name} {instance.employee.profil.last_name}"
-        representation['direction_title'] = instance.direction.title
+        representation['direction'] = {
+            'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_date': instance.direction.from_date, 'to_date': instance.direction.to_date}
+        try:
+            representation['employee_name'] = f"{instance.employee.profil.name or None} {instance.employee.profil.last_name or None}"
+        except:
+            representation['employee_name'] = {instance.employee.username}
         return representation
+
+
+# class DirectionsUnseenCount(BaseSerializer):
+#     count = IntegerField()
+#     direction = StringRelatedField()

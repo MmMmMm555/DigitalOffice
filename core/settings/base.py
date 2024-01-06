@@ -37,7 +37,7 @@ DEBUG = env.bool("DEBUG")
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
-    # ...
+    "http://localhost:5173",
 ]
 
 ALLOWED_HOSTS = ["*"]
@@ -74,6 +74,7 @@ CUSTOM_APPS = [
     'apps.charity_promotion',
     'apps.public_prayers',
     'apps.organizations',
+    'apps.ceremony',
 ]
 
 THIRD_PARTY_APPS = [
@@ -251,13 +252,13 @@ SIMPLE_JWT = {
     "LEEWAY": 0,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
+    # "USER_ID_FIELD": "id",
+    # "USER_ID_CLAIM": "user_id",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
     "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-    "JTI_CLAIM": "jti",
+    # "JTI_CLAIM": "jti",
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
@@ -298,3 +299,22 @@ LOCATION_FIELD = {
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
+
+# cors
+
+CORS_ALLOWED_ORIGINS = [
+    'http://45.12.236.79',
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]

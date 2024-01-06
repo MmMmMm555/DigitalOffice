@@ -65,7 +65,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50, blank=False)
     phone_number = PhoneNumberField(blank=False, unique=True)
     address = PlainLocationField(based_fields=['city'], zoom=7)
-    image = models.ImageField(upload_to='images/profil_images/', default="default/default_user.png", validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+    image = models.ImageField(upload_to='images/profil_images/', default="images/default/default_user.jpg", validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
     birth_date = models.DateField()
     education = models.CharField(max_length=50, choices=Education.choices, blank=True)
     graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, blank=True)

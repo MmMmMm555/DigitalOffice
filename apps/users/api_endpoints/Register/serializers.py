@@ -8,7 +8,7 @@ from apps.users.models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        required=True,
+        required=True,  
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 

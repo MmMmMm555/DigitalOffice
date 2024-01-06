@@ -19,18 +19,37 @@ IF YOU WANT SET CSRF_TRUSTED_ORIGINS = ["*"] THEN YOU SHOULD SET:
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 """
 
-CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ["https://example.uz"]
 
+# CSRF_TRUSTED_ORIGINS = [
+#     "http://localhost:5173",
+# ]
 
 ###################################################################
 # CORS
+
+CORS_ALLOWED_ORIGINS = [
+    'http://45.12.236.79',
+]
+
 ###################################################################
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ["*"]
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE_ALL = True
+# CORS_ALLOW_ALL_ORIGINS = True
 
+# CORS_ALLOW_CREDENTIALS = False
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+# CORS_ALLOW_HEADERS = ['*']
 
 # init sentry
 # sentry_sdk.init(
