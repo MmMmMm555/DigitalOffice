@@ -193,10 +193,10 @@ class DirectionSingleSerializer(ModelSerializer):
             id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
         if instance.to_employee:
             representation['to_employee'] = Mosque.objects.filter(
-                id__in=instance.to_employee.all()).values('id', 'name', 'district__name', 'region_name',)
+                id__in=instance.to_employee.all()).values('id', 'name', 'district__name', 'region__name',)
         if instance.required_to_employee:
             representation['required_to_employee'] = Mosque.objects.filter(
-                id__in=instance.required_to_employee.all()).values('id', 'name', 'district__name', 'region_name',)
+                id__in=instance.required_to_employee.all()).values('id', 'name', 'district__name', 'region__name',)
         representation['waiting'] = models.DirectionsEmployeeRead.objects.filter(
             direction=instance, state='1').count()
         representation['accepted'] = models.DirectionsEmployeeRead.objects.filter(
