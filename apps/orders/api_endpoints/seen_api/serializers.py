@@ -1,4 +1,5 @@
-from rest_framework.serializers import ModelSerializer, ValidationError, BaseSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
+# , BaseSerializer, IntegerField, StringRelatedField
 
 from apps.orders import models
 
@@ -34,14 +35,9 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
             representation['employee_name'] = f"{instance.employee.profil.name or None} {instance.employee.profil.last_name or None}"
         except:
             representation['employee_name'] = {instance.employee.username}
-        representation['direction_title'] = instance.direction.title
         return representation
 
 
 # class DirectionsUnseenCount(BaseSerializer):
-#     count = Integer
-
-#     def to_representation(self, instance):
-#         representation = super().to_representation(instance)
-#         representation['count'] = instance.count
-#         return representation
+#     count = IntegerField()
+#     direction = StringRelatedField()

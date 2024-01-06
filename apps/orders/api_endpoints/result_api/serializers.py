@@ -58,7 +58,7 @@ class DirectionsEmployeeResultDetailSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         seen = DirectionsEmployeeRead.objects.filter(employee=instance.employee, direction=instance.direction).first()
-        representation['state'] = seen.state if seen else "0"
+        representation['state'] = seen.state if seen else "1"
         representation['direction'] = {
         'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_role': instance.direction.from_role, 'to_role': instance.direction.to_role}
         try:

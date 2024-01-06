@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer, SerializerMethodField, IntegerField
 
 from apps.mosque.models import Mosque, FireDefenseImages
 
@@ -58,12 +58,17 @@ class MosqueSerializer(ModelSerializer):
 
 
 class MosqueListSerializer(MosqueSerializer):
+    employee_count = IntegerField(read_only=True)
+    has_imam = IntegerField(read_only=True)
+
     class Meta:
         model = Mosque
         fields = (
             'id',
             'name',
             'address',
+            'employee_count',
+            'has_imam',
             'mosque_type',
             'mosque_status',
             'mosque_heating_type',
@@ -94,6 +99,9 @@ class MosqueListSerializer(MosqueSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        representation['has_imam'] = False
+        if instance.has_imam >= 1:
+            representation['has_imam'] = True
         if instance.region:
             representation['region'] = {'name': instance.region.name,
                                         'id': instance.region.id, }

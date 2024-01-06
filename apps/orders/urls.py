@@ -5,6 +5,7 @@ from apps.orders.api_endpoints.order.views import (DirectionCreateView,
                                                    DirectionSingleView,
                                                    DirectionUpdateView,)
 from apps.orders.api_endpoints.seen_api.views import DirectionEmployeeReadListView, DirectionEmployeeReadView
+# , UnseenCount
 from apps.orders.api_endpoints.result_api.views import (DirectionsEmployeeResultView,
                                                                DirectionsEmployeeResultListView,
                                                                DirectionsEmployeeResultDetailView,
@@ -26,6 +27,7 @@ urlpatterns = [
     # seen apis
     path('seen/update/<int:pk>', DirectionEmployeeReadView.as_view(), name='order_seen_update'),
     path('seen/list', DirectionEmployeeReadListView.as_view(), name='order_seen_list'),
+    # path('seen/count', UnseenCount, name='order_unseen_count'),
 
     # result apis
     path('result/create', DirectionsEmployeeResultView.as_view(), name='result_create'),

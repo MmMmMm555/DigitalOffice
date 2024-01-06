@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
+from django.db.models import Count, Q
 
 from apps.mosque.api_endpoints.Mosque.serializers import (MosqueSerializer,
                                                           MosqueListSerializer,
@@ -24,45 +25,52 @@ class MosqueUpdateView(generics.RetrieveUpdateAPIView):
 
 
 class MosqueListView(generics.ListAPIView):
-    queryset = Mosque.objects.all()
+    """Agar imomi yo'q masjidlar listi kerak bolsa "api/v1/mosque/list/?has_imam=false" qilib filter jo'natiladi"""
+    queryset = Mosque.objects.all().annotate(employee_count=Count(
+        'employee', filter=Q(employee__profile__role__in=['4', '5'])), has_imam=Count('employee', filter=Q(employee__profile__role='4')))
     serializer_class = MosqueListSerializer
     permission_classes = (IsSuperAdmin,)
     search_fields = ('name', 'address',)
     filterset_fields = (
-                       'id',
-                       'mosque_type',
-                       'mosque_status',
-                       'mosque_heating_type',
-                       'mosque_heating_fuel',
-                       'region',
-                       'district', 
-                       'built_at',
-                       'registered_at',
-                       'parking',   
-                       'basement',
-                       'second_floor',
-                       'third_floor',
-                       'capacity',
-                       'cultural_heritage',
-                       'fire_safety',
-                       'auto_fire_extinguisher',
-                       'fire_closet',
-                       'fire_signal',
-                       'emergency_exit_door',
-                       'evacuation_road',
-                       'service_rooms_bool',
-                       'imam_room',
-                       'sub_imam_room',
-                       'casher_room',
-                       'guard_room',
-                       'other_room',
-                       'mosque_library',)
-    
+        'id',
+        'mosque_type',
+        'mosque_status',
+        'mosque_heating_type',
+        'mosque_heating_fuel',
+        'region',
+        'district',
+        'built_at',
+        'registered_at',
+        'parking',
+        'basement',
+        'second_floor',
+        'third_floor',
+        'capacity',
+        'cultural_heritage',
+        'fire_safety',
+        'auto_fire_extinguisher',
+        'fire_closet',
+        'fire_signal',
+        'emergency_exit_door',
+        'evacuation_road',
+        'service_rooms_bool',
+        'imam_room',
+        'sub_imam_room',
+        'casher_room',
+        'guard_room',
+        'other_room',
+        'mosque_library',)
+
     def get_queryset(self):
+        has_imam = self.request.GET.get('has_imam', None)
+        query = self.queryset
+        if has_imam:
+            query = query.filter(has_imam=0)
         if self.request.user.role == '1':
-            return Mosque.objects.all()
+            return query
         id = self.request.user.profil.mosque.id
-        return Mosque.objects.filter(id=id)
+        return query.filter(id=id)
+
 
 class MosqueRetrieveView(generics.RetrieveAPIView):
     queryset = Mosque.objects.all()

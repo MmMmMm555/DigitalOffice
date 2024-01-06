@@ -29,6 +29,9 @@ class DirectionsListView(generics.ListAPIView):
                         'required_to_district', 'to_role', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
     # def get_queryset(self):
+    #     start_date = 
+    #     finish_date = 
+    #     return models.Directions.objects.filter(from_date__gte=start_date, from_date__lte=finish_date)
     #     return models.Directions.objects.filter(creator=self.request.user)
 
 
@@ -54,15 +57,15 @@ class DirectionSingleView(generics.RetrieveAPIView):
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     lookup_field = 'pk'
 
-    def get_queryset(self):
-        role = self.request.user.role
-        district = self.request.user.district
-        region = self.request.user.region
-        model = models.Directions.objects.all()
-        if role == '3':
-            return model.filter(from_role=role, to_district=district)
-        if role == '2':
-            return model.filter(from_role=role, to_region=region)
-        if role == '1':
-            return model
-        return model
+    # def get_queryset(self):
+    #     role = self.request.user.role
+    #     district = self.request.user.district
+    #     region = self.request.user.region
+    #     model = models.Directions.objects.all()
+    #     if role == '3':
+    #         return model.filter(from_role=role, to_district=district)
+    #     if role == '2':
+    #         return model.filter(from_role=role, to_region=region)
+    #     if role == '1':
+    #         return model
+    #     return model
