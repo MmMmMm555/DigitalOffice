@@ -4,6 +4,7 @@ from datetime import date, timedelta
 
 from apps.orders import models
 from apps.users.models import User
+from apps.mosque.models import Mosque
 from apps.common.regions import Districts
 
 
@@ -47,7 +48,7 @@ class DirectionCreateSerializer(ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        try:
+        # try:.
             with transaction.atomic():
                 # creation instance
                 direction = super().create(validated_data)
@@ -127,21 +128,15 @@ class DirectionCreateSerializer(ModelSerializer):
 
                 # setting m2m field values to direction
                 direction.required_to_district.set(district_list_required)
+                direction.required_to_region.set(region_list_required)
                 direction.to_district.set(district_list)
-                direction.required_to_employee.set(
-                    models.DirectionsEmployeeRead.objects.filter(
-                        direction=direction, requirement=True).values_list('employee__profil__mosque__id', flat=True)
-                )
-                direction.to_employee.set(
-                    models.DirectionsEmployeeRead.objects.filter(
-                        direction=direction).values_list('employee__profil__mosque__id', flat=True)
-                )
+                direction.to_region.set(region_list)
 
                 # saving direction
                 direction.save()
                 return direction
-        except:
-            raise ValidationError('Something went wrong')
+        # except:
+        #     raise ValidationError('Something went wrong')
 
 
 class DirectionListSerializer(ModelSerializer):
@@ -197,11 +192,11 @@ class DirectionSingleSerializer(ModelSerializer):
         representation['creator'] = User.objects.filter(
             id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
         if instance.to_employee:
-            representation['to_employee'] = User.objects.filter(
-                id__in=instance.to_employee.all()).values('id', 'profil__name', 'profil__last_name',)
+            representation['to_employee'] = Mosque.objects.filter(
+                id__in=instance.to_employee.all()).values('id', 'name',)
         if instance.required_to_employee:
-            representation['required_to_employee'] = User.objects.filter(
-                id__in=instance.required_to_employee.all()).values('id', 'profil__name', 'profil__last_name',)
+            representation['required_to_employee'] = Mosque.objects.filter(
+                id__in=instance.required_to_employee.all()).values('id', 'name',)
         representation['waiting'] = models.DirectionsEmployeeRead.objects.filter(
             direction=instance, state='1').count()
         representation['accepted'] = models.DirectionsEmployeeRead.objects.filter(
