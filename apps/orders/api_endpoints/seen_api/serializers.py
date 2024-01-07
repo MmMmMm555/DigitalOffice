@@ -31,8 +31,12 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
         representation = super().to_representation(instance)
         representation['result_id'] = None
         if instance.state == '3':
-            representation['result_id'] = models.DirectionsEmployeeResult.objects.filter(
+            try:
+                result = models.DirectionsEmployeeResult.objects.filter(
                 employee=instance.employee, direction=instance.direction).first().id
+            except:
+                result = None
+            representation['result_id'] = result
         representation['direction'] = {
             'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_date': instance.direction.from_date, 'to_date': instance.direction.to_date}
         try:
