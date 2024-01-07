@@ -180,20 +180,19 @@ class MosqueSingleSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        images = instance.fire_images.all().values('id', 'type', 'image',)
-        if instance.region:
-            representation['region'] = {'name': instance.region.name,
-                                        'id': instance.region.id, }
-        if instance.district:
-            representation['district'] = {'name': instance.district.name,
-                                          'id': instance.district.id, }
-        representation['evacuation_road_image'] = images.filter(type='1')
-        representation['fire_safe_image'] = images.filter(type='2')
-        representation['fire_closet_image'] = images.filter(type='3')
-        representation['fire_signal_image'] = images.filter(type='4')
-        representation['auto_fire_extinguisher_image'] = images.filter(
-            type='5')
-        representation['emergency_exit_door_image'] = images.filter(type='6')
+
+        images = instance.fire_images.all()
+
+        representation['evacuation_road_image'] = FireDefenseImageSerializer(
+            images.filter(type='1'), many=True, context=self.context).data
+        representation['fire_safe_image'] = FireDefenseImageSerializer(
+            images.filter(type='2'), many=True, context=self.context).data
+        representation['fire_closet_image'] = FireDefenseImageSerializer(
+            images.filter(type='3'), many=True, context=self.context).data
+        representation['fire_signal_image'] = FireDefenseImageSerializer(
+            images.filter(type='4'), many=True, context=self.context).data
+        representation['auto_fire_extinguisher_image'] = FireDefenseImageSerializer(
+            images.filter(type='5'), many=True, context=self.context).data
 
         return representation
 

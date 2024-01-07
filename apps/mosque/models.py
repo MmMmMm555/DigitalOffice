@@ -13,9 +13,11 @@ class MosqueTypeChoices(models.TextChoices):
     NEIGHBORHOOD = '1'
     JOME = '2'
 
+
 class MosqueHeatingTypeChoices(models.TextChoices):
     CENTRAL = '1'
     LOCAL = '2'
+
 
 class MosqueHeatingFuelChoices(models.TextChoices):
     GAS = '1'
@@ -23,10 +25,12 @@ class MosqueHeatingFuelChoices(models.TextChoices):
     SOLID_FUEL = '3'
     NONE = '4'
 
+
 class MosqueStatusChoices(models.TextChoices):
     GOOD = '1'
     REPAIR = '2'
     RECONSTRUCTION = '3'
+
 
 class FireDefense(models.TextChoices):
     EVACUATION_ROAD = '1'
@@ -36,10 +40,13 @@ class FireDefense(models.TextChoices):
     AUTO_FIRE_EXTINGUISHER = '5'
     EMERGENCY_EXIT_DOOR = '6'
 
+
 class FireDefenseImages(BaseModel):
-    type = models.CharField(max_length=17, choices=FireDefense.choices, default=FireDefense.EVACUATION_ROAD)
-    image = models.ImageField(upload_to='images/firedefence/', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
-    
+    type = models.CharField(
+        max_length=17, choices=FireDefense.choices, default=FireDefense.EVACUATION_ROAD)
+    image = models.ImageField(upload_to='images/firedefence/', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+
     def __str__(self):
         return str(self.id)
 
@@ -105,7 +112,7 @@ class Mosque(BaseModel):
         max_length=17, choices=MosqueHeatingFuelChoices.choices,
         default=MosqueHeatingFuelChoices.NONE,
     )
-    
+
     def __str__(self):
         return f"{self.id}: {self.name}"
 

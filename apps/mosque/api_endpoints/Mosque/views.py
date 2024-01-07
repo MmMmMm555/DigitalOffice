@@ -72,6 +72,7 @@ class MosqueListView(generics.ListAPIView):
         return self.queryset
 
 
+
 class MosqueRetrieveView(generics.RetrieveAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSingleSerializer
