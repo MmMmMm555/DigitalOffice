@@ -54,21 +54,25 @@ class Social(models.TextChoices):
     WHATSAPP = '7'
 
 
-class Graduation(models.TextChoices):
-    TASHKENT_ISLAMIC_INSTITUTE = '1'
-    SCHOOL_OF_HADITH_SCIENCE = '2'
-    MIR_ARAB_HIGHER_MADRASAH = '3'
-    KOKALDOSH = '4'
-    MIR_ARAB = '5'
-    KHOJA_BUKHARI = '6'
-    IMAM_TERMIZI = '7'
-    FAKHRIDDIN_AR_RAZI = '8'
-    MUHAMMAD_AL_BERUNI = '9'
-    SAYYID_MUHIDDIN_MAKHDUM = '10'
-    HIDAYAH = '11'
-    KHADICHAI_KUBRO = '12'
-    JOYBORI_KALON = '13'
-    ANOTHER = '14'
+class Graduation(models.Model):
+    name = models.CharField(max_length=200, blank=False)
+
+
+# class Graduation(models.TextChoices):
+#     TASHKENT_ISLAMIC_INSTITUTE = '1'
+#     SCHOOL_OF_HADITH_SCIENCE = '2'
+#     MIR_ARAB_HIGHER_MADRASAH = '3'
+#     KOKALDOSH = '4'
+#     MIR_ARAB = '5'
+#     KHOJA_BUKHARI = '6'
+#     IMAM_TERMIZI = '7'
+#     FAKHRIDDIN_AR_RAZI = '8'
+#     MUHAMMAD_AL_BERUNI = '9'
+#     SAYYID_MUHIDDIN_MAKHDUM = '10'
+#     HIDAYAH = '11'
+#     KHADICHAI_KUBRO = '12'
+#     JOYBORI_KALON = '13'
+#     ANOTHER = '14'
 
 
 class Department(models.Model):
@@ -95,8 +99,7 @@ class Employee(models.Model):
         max_length=50, choices=Education.choices, blank=True)
     nation = models.CharField(
         max_length=10, choices=Nation.choices, blank=True, default=Nation.UZBEK)
-    graduated_univer = models.CharField(
-        max_length=70, choices=Graduation.choices, blank=True)
+    graduated_univer = models.ManyToManyField(Graduation, blank=True)
     graduated_year = models.DateField(default="1000-01-01")
     diploma_number = models.CharField(max_length=20, blank=True)
     academic_degree = models.CharField(
