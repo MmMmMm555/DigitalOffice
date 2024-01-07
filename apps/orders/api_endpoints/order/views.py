@@ -1,4 +1,5 @@
 from rest_framework import generics, parsers, permissions
+from datetime import date
 
 from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
 from .serializers import (DirectionCreateSerializer,
@@ -28,11 +29,13 @@ class DirectionsListView(generics.ListAPIView):
     filterset_fields = ('id', 'created_at', 'to_region', 'to_district', 'required_to_region',
                         'required_to_district', 'to_role', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
-    # def get_queryset(self):
-    #     start_date = 
-    #     finish_date = 
-    #     return models.Directions.objects.filter(from_date__gte=start_date, from_date__lte=finish_date)
-    #     return models.Directions.objects.filter(creator=self.request.user)
+    def get_queryset(self):
+        # today = date.today()
+        start_date = self.request.GET.get('start_date')
+        finish_date = self.request.GET.get('finish_date')
+        if start_date and finish_date:
+            return self.queryset.filter(created_at__range=[start_date, finish_date])
+        return models.Directions.objects.filter(creator=self.request.user)
 
 
 class DirectionDeleteView(generics.DestroyAPIView):
