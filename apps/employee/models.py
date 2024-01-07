@@ -10,10 +10,12 @@ import uuid
 
 # Create your models here.
 
+
 class Education(models.TextChoices):
     MEDIUM_SPECIAL = '1'
     HIGH = '2'
     NONE = '3'
+
 
 class Achievement(models.TextChoices):
     STATE_AWARDS = '1'
@@ -26,11 +28,13 @@ class Achievement(models.TextChoices):
     DIPLOMAS_OF_COMPETITION_WINNERS = '8'
     INTERNATIONAL_AWARDS = '9'
 
+
 class AcademicDegree(models.TextChoices):
     BACHELOR = '1'
     MASTER = '2'
     PhD = '3'
     DsC = '4'
+
 
 class Social(models.TextChoices):
     TELEGRAM = '1'
@@ -40,6 +44,7 @@ class Social(models.TextChoices):
     TWITTER = '5'
     YOUTUBE = '6'
     WHATSAPP = '7'
+
 
 class Graduation(models.TextChoices):
     TASHKENT_ISLAMIC_INSTITUTE = '1'
@@ -65,15 +70,21 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50, blank=False)
     phone_number = PhoneNumberField(blank=False, unique=True)
     address = PlainLocationField(based_fields=['city'], zoom=7)
-    image = models.ImageField(upload_to='images/profil_images/', default="images/default/default_user.jpg", validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+    image = models.ImageField(upload_to='images/profil_images/', default="images/default/default_user.jpg", validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
     birth_date = models.DateField()
-    education = models.CharField(max_length=50, choices=Education.choices, blank=True)
-    graduated_univer = models.CharField(max_length=70, choices=Graduation.choices, blank=True)
+    education = models.CharField(
+        max_length=50, choices=Education.choices, blank=True)
+    graduated_univer = models.CharField(
+        max_length=70, choices=Graduation.choices, blank=True)
     graduated_year = models.DateField(default="1000-01-01")
     diploma_number = models.CharField(max_length=20, blank=True)
-    academic_degree = models.CharField(max_length=50, choices=AcademicDegree.choices, blank=True)
-    achievement = models.CharField(max_length=50, choices=Achievement.choices, blank=True)
-    mosque = models.ForeignKey(Mosque, on_delete=models.CASCADE, related_name='employee')
+    academic_degree = models.CharField(
+        max_length=50, choices=AcademicDegree.choices, blank=True)
+    achievement = models.CharField(
+        max_length=50, choices=Achievement.choices, blank=True)
+    mosque = models.ForeignKey(
+        Mosque, on_delete=models.SET_NULL, null=True, related_name='employee')
 
     class Meta:
         ordering = ['-id',]
@@ -90,24 +101,26 @@ class Employee(models.Model):
 #     end_date = models.DateField()
 #     company = models.CharField(max_length=100, blank=True, null=True)
 #     as_who = models.CharField(max_length=100, blank=True, null=True)
-    
+
 #     class Meta:
 #         verbose_name = 'ish faoliyati '
 #         verbose_name_plural = 'ish faoliyati '
-    
+
 #     def __str__(self) -> str:
 #         return self.company
 
 
 class SocialMedia(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='socialmedia')
-    social_media = models.CharField(max_length=30 , choices=Social.choices, blank=False)
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name='socialmedia')
+    social_media = models.CharField(
+        max_length=30, choices=Social.choices, blank=False)
     link = models.URLField(max_length=60, blank=False)
 
     class Meta:
         verbose_name = 'Ijtimoiy tarmoq '
         verbose_name_plural = 'Ijtimoiy tarmoq '
-    
+
     def __str__(self) -> str:
         return self.social_media
 
