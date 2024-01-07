@@ -32,7 +32,7 @@ class EmployeeUpdateView(generics.RetrieveUpdateAPIView):
 class EmployeeDestroyView(generics.DestroyAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeSerializer
-    # permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
+    permission_classes = (IsSuperAdmin,)
 
 
 class SocialMediaView(viewsets.ModelViewSet):
@@ -43,18 +43,3 @@ class SocialMediaView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('id', 'employee', 'social_media',)
     lookup_field = 'pk'
-
-# class ActivityView(viewsets.ModelViewSet):
-#     queryset = models.Activity.objects.all()
-#     serializer_class = serializers.ActivitySerializer
-#     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
-#     filter_backends = (DjangoFilterBackend,)
-#     filterset_fields = ('id', 'employee',)
-
-# class WorkActivityView(viewsets.ModelViewSet):
-#     queryset = models.WorkActivity.objects.all()
-#     serializer_class = serializers.WorkActivitySerializer
-#     permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
-#     filter_backends = (DjangoFilterBackend,)
-#     filterset_fields = ('id', 'employee',)
-

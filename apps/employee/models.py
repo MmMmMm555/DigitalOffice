@@ -77,7 +77,7 @@ class Department(models.Model):
 
 class Position(models.Model):
     name = models.CharField(max_length=200, blank=False)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='position')
 
 
 class Employee(models.Model):
