@@ -27,9 +27,12 @@ class FridayTesisImamReadListSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        representation['result_id'] = None
+        if instance.state == '3':
+            representation['result_id'] = models.FridayTesisImamResult.objects.filter(imam=instance.imam, tesis=instance.tesis).first().id
         try:
             representation['imam_name'] = f"{instance.imam.profil.name} {instance.imam.profil.last_name}"
         except:
-            representation['imam_name'] = None
+            representation['imam_name'] = instance.imam.username
         representation['tesis_title'] = instance.tesis.title
         return representation

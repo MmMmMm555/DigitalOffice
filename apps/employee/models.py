@@ -36,6 +36,14 @@ class AcademicDegree(models.TextChoices):
     DsC = '4'
 
 
+class Nation(models.TextChoices):
+    UZBEK = '1'
+    RUSSIAN = '2'
+    KAZAKH = '3'
+    TAJIK = '4'
+    TURKMEN = '5'
+
+
 class Social(models.TextChoices):
     TELEGRAM = '1'
     INSTAGRAM = '2'
@@ -63,6 +71,15 @@ class Graduation(models.TextChoices):
     ANOTHER = '14'
 
 
+class Department(models.Model):
+    name = models.CharField(max_length=200, blank=False)
+
+
+class Position(models.Model):
+    name = models.CharField(max_length=200, blank=False)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+
+
 class Employee(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, blank=True, editable=True)
     name = models.CharField(max_length=50, blank=False)
@@ -70,11 +87,14 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50, blank=False)
     phone_number = PhoneNumberField(blank=False, unique=True)
     address = PlainLocationField(based_fields=['city'], zoom=7)
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.ImageField(upload_to='images/profil_images/', default="images/default/default_user.jpg", validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
     birth_date = models.DateField()
     education = models.CharField(
         max_length=50, choices=Education.choices, blank=True)
+    nation = models.CharField(
+        max_length=10, choices=Nation.choices, blank=True, default=Nation.UZBEK)
     graduated_univer = models.CharField(
         max_length=70, choices=Graduation.choices, blank=True)
     graduated_year = models.DateField(default="1000-01-01")
@@ -84,7 +104,7 @@ class Employee(models.Model):
     achievement = models.CharField(
         max_length=50, choices=Achievement.choices, blank=True)
     mosque = models.ForeignKey(
-        Mosque, on_delete=models.SET_NULL, null=True, related_name='employee')
+        Mosque, on_delete=models.SET_NULL, null=True, related_name='employee', blank=True)
 
     class Meta:
         ordering = ['-id',]
