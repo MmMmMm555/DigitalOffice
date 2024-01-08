@@ -2,8 +2,10 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 from datetime import date, datetime
 
 from apps.friday_tesis import models
+from apps.users.models import Role
+from apps.orders.models import States
 from apps.users.models import User
-from apps.common.regions import Regions, Districts
+# from apps.common.regions import Regions, Districts
 
 from django.db import transaction
 
@@ -52,11 +54,11 @@ class FridayTesisDetailSerializer(ModelSerializer):
             representation['to_imams'] = User.objects.filter(
                 id__in=instance.to_imams.all()).values('id', 'profil__name', 'profil__last_name',)
         representation['waiting'] = models.FridayTesisImamRead.objects.filter(
-            tesis=instance, state='1').count()
+            tesis=instance, state=States.UNSEEN).count()
         representation['accepted'] = models.FridayTesisImamRead.objects.filter(
-            tesis=instance, state='2').count()
+            tesis=instance, state=States.ACCEPTED).count()
         representation['done'] = models.FridayTesisImamRead.objects.filter(
-            tesis=instance, state='3').count()
+            tesis=instance, state=States.DONE).count()
         return representation
 
 
@@ -99,7 +101,7 @@ class FridayTesisCreateSerializer(ModelSerializer):
                     file_bool=validated_data.get('file_bool', None),
                 )
 
-                imams = User.objects.filter(role='4')
+                imams = User.objects.filter(role=Role.IMAM)
 
                 for i in imams:
                     models.FridayTesisImamRead.objects.create(
@@ -164,7 +166,7 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         obj = models.FridayTesis.objects.filter(
             id=self.instance.id).update(**self.validated_data)
         models.FridayTesisImamRead.objects.filter(
-            tesis=self.instance).update(state='1')
+        tesis=self.instance).update(state=States.UNSEEN)
         return obj
 
     # def update(self, instance, validated_data):

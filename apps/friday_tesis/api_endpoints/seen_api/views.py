@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import FridayTesisImamReadSerializer, FridayTesisImamReadListSerializer
 from apps.friday_tesis import models
 from apps.common.permissions import IsSuperAdmin, IsImam
+from apps.users.models import Role
 
 
 class FridayTesisImamReadView(generics.UpdateAPIView):
@@ -23,6 +24,6 @@ class FridayTesisImamReadListView(generics.ListAPIView):
                         'tesis__types', 'requirement', 'imam',)
 
     def get_queryset(self):
-        if self.request.user.role == '1':
+        if self.request.user.role == Role.SUPER_ADMIN:
             return self.queryset
         return self.queryset.filter(imam=self.request.user)

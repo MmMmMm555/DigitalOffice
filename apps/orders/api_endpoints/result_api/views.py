@@ -13,6 +13,7 @@ from apps.orders.models import (DirectionsEmployeeResult,
                                 ResultFiles,
                                 ResultVideos,)
 from apps.common.permissions import IsSuperAdmin, IsImam, IsRegionAdmin, IsDistrictAdmin, IsDeputy
+from apps.users.models import Role
 
 
 class DirectionsEmployeeResultView(CreateAPIView):
@@ -34,7 +35,7 @@ class DirectionsEmployeeResultListView(ListAPIView):
     filterset_fields = ('id', 'direction', 'direction__direction_type', 'employee', 'created_at',)
 
     def get_queryset(self):
-        if self.request.user.role == '1':
+        if self.request.user.role == Role.SUPER_ADMIN:
             return DirectionsEmployeeResult.objects.all()
         return DirectionsEmployeeResult.objects.filter(employee=self.request.user)
 

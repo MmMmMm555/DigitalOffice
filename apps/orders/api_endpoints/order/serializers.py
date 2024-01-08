@@ -6,6 +6,7 @@ from apps.orders import models
 from apps.users.models import User
 from apps.mosque.models import Mosque
 from apps.common.regions import Districts
+from apps.orders.models import States
 
 
 class DirectionCreateSerializer(ModelSerializer):
@@ -196,9 +197,9 @@ class DirectionSingleSerializer(ModelSerializer):
         if instance.required_to_employee:
             representation['required_to_employee'] = instance.required_to_employee.all().values('id', 'name', 'district__name', 'region__name',)
         seen = models.DirectionsEmployeeRead.objects.filter(direction=instance)
-        representation['waiting'] = seen.filter(state='1').count()
-        representation['accepted'] = seen.filter(state='2').count()
-        representation['done'] = seen.filter(state='3').count()
+        representation['waiting'] = seen.filter(state=States.UNSEEN).count()
+        representation['accepted'] = seen.filter(state=States.ACCEPTED).count()
+        representation['done'] = seen.filter(state=States.DONE).count()
         return representation
 
 
@@ -234,5 +235,5 @@ class DirectionUpdateSerializer(ModelSerializer):
         obj = models.Directions.objects.filter(
             id=self.instance.id).update(**self.validated_data)
         models.DirectionsEmployeeRead.objects.filter(
-            direction=self.instance).update(state='1')
+            direction=self.instance).update(state=States.UNSEEN)
         return obj

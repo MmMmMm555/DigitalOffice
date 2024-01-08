@@ -2,6 +2,7 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 # , BaseSerializer, IntegerField, StringRelatedField
 
 from apps.orders import models
+from apps.orders.models import States
 
 
 class DirectionsEmployeeReadSerializer(ModelSerializer):
@@ -30,7 +31,7 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['result_id'] = None
-        if instance.state == '3':
+        if instance.state == States.DONE:
             try:
                 result = models.DirectionsEmployeeResult.objects.filter(
                 employee=instance.employee, direction=instance.direction).first().id

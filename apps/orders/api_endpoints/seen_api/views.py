@@ -6,8 +6,8 @@ from .serializers import DirectionsEmployeeReadSerializer, DirectionsEmployeeRea
 # DirectionsUnseenCount
 from apps.orders import models
 from apps.common.permissions import IsSuperAdmin, IsImam
-# from rest_framework.response import Response
-# from rest_framework import status
+from apps.users.models import Role
+
 
 
 class DirectionEmployeeReadView(generics.UpdateAPIView):
@@ -27,7 +27,7 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
                         'created_at', 'state', 'requirement', 'employee',)
 
     def get_queryset(self):
-        if self.request.user.role == '1':
+        if self.request.user.role == Role.SUPER_ADMIN:
             return self.queryset
         return self.queryset.filter(employee=self.request.user)
 

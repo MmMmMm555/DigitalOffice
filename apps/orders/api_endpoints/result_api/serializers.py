@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from datetime import date
 
+from apps.orders.models import States
 from apps.orders.models import (DirectionsEmployeeResult,
                                 DirectionsEmployeeRead,
                                 Directions,
@@ -58,7 +59,7 @@ class DirectionsEmployeeResultDetailSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         seen = DirectionsEmployeeRead.objects.filter(employee=instance.employee, direction=instance.direction).first()
-        representation['state'] = seen.state if seen else "1"
+        representation['state'] = seen.state if seen else States.UNSEEN
         representation['direction'] = {
         'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_role': instance.direction.from_role, 'to_role': instance.direction.to_role}
         try:
@@ -97,8 +98,5 @@ class DirectionsEmployeeResultSerializer(ModelSerializer):
         result.files.set(validated_data.get('files', []))
         result.save()
         DirectionsEmployeeRead.objects.filter(
-            direction=result.direction, employee=self.context['request'].user.id).update(state="3")
-        if self.context['request'].user.role in ['2', '3', '4', '5']:
-            result.employee = self.context['request'].user
-            result.save()
+            direction=result.direction, employee=self.context['request'].user.id).update(state=States.DONE)
         return result

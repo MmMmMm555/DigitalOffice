@@ -1,6 +1,7 @@
 from rest_framework import generics, parsers, permissions, filters, response
 
 from django_filters.rest_framework import DjangoFilterBackend
+from apps.users.models import Role
 
 
 from apps.common.permissions import IsSuperAdmin, IsImam
@@ -35,9 +36,18 @@ class FridayTesisListView(generics.ListAPIView):
                         'to_region', 'to_district', 'types',)
 
     def get_queryset(self):
-        if self.request.user.role == '1':
-            return self.queryset
-        return models.FridayTesis.objects.filter(to_imams=self.request.user)
+        start_date = self.request.GET.get('start_date')
+        finish_date = self.request.GET.get('finish_date')
+        query = models.FridayTesis.objects.all()
+        if self.request.user.role != Role.SUPER_ADMIN:
+            query = query.filter(creator=self.request.user)
+        if start_date and finish_date:
+            query = query.filter(created_at__range=[start_date, finish_date])
+        elif start_date:
+            query = query.filter(created_at__gte=start_date)
+        elif finish_date:
+            query = query.filter(created_at__lte=finish_date)
+        return query
 
 
 class FridayTesisDeleteView(generics.DestroyAPIView):

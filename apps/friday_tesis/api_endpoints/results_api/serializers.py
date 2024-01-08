@@ -2,6 +2,7 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 from datetime import date, timedelta
 from django.db import transaction
 
+from apps.orders.models import States
 from apps.friday_tesis.models import (FridayTesisImamResult,
                                       FridayTesisImamRead,
                                       FridayTesis,
@@ -65,7 +66,7 @@ class FridayTesisImamResultSerializer(ModelSerializer):
             result.videos.set(validated_data.get('videos', []))
             result.save()
             seen = FridayTesisImamRead.objects.filter(
-                tesis=result.tesis, imam=self.context['request'].user.id).update(state="3")
+                tesis=result.tesis, imam=self.context['request'].user.id).update(state=States.DONE)
             return result
 
 
@@ -81,7 +82,7 @@ class FridayTesisImamResultDetailSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         seen = FridayTesisImamRead.objects.filter(imam=instance.imam, tesis=instance.tesis).first()
-        representation['state'] = seen.state if seen else "1"
+        representation['state'] = seen.state if seen else States.UNSEEN
         representation['tesis'] = {
         'id': instance.tesis.id, 'title': instance.tesis.title, 'types': instance.tesis.types}
         try:

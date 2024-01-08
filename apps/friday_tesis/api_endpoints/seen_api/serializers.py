@@ -1,6 +1,8 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.friday_tesis import models
+from apps.orders.models import States
+
 
 
 class FridayTesisImamReadSerializer(ModelSerializer):
@@ -28,7 +30,7 @@ class FridayTesisImamReadListSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['result_id'] = None
-        if instance.state == '3':
+        if instance.state == States.DONE:
             try:
                 result = models.FridayTesisImamResult.objects.filter(imam=instance.imam, tesis=instance.tesis).last().id
             except:
