@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 
 from apps.users.models import User, Role
 from apps.common.models import BaseModel
@@ -14,12 +15,10 @@ from apps.mosque.models import Mosque
 
 
 class ToRole(models.TextChoices):
-    REGION_ADMIN = '2'
-    DISTRICT_ADMIN = '3'
-    IMAM = '4'
-    SUB_IMAM = '5'
-    IMAM_AND_SUB = '6'
-    ALL = '7'
+    REGION_ADMIN = u'2'
+    DISTRICT_ADMIN = u'3'
+    IMAM = u'4'
+    SUB_IMAM = u'5'
 
 
 class Types(models.TextChoices):
@@ -49,8 +48,8 @@ class Directions(BaseModel):
 
     from_role = models.CharField(
         max_length=18, choices=Role.choices[:3], default=Role.SUPER_ADMIN)
-    to_role = models.CharField(
-        max_length=18, choices=ToRole.choices, default=ToRole.IMAM)
+    to_role = ArrayField(models.CharField(
+        max_length=18, choices=ToRole.choices, default=ToRole.IMAM, blank=True, null=True), default=list, blank=True)
 
     to_region = models.ManyToManyField(Regions, related_name='direction')
     to_district = models.ManyToManyField(

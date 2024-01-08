@@ -86,7 +86,7 @@ class FridayTesisImamResultDetailSerializer(ModelSerializer):
         representation['tesis'] = {
         'id': instance.tesis.id, 'title': instance.tesis.title, 'types': instance.tesis.types}
         try:
-            representation['from'] = f"{instance.imam.profil.mosque.region} {instance.imam.profil.mosque.district} {instance.imam.profil.mosque.name}"
+            representation['from'] = f"{instance.imam.profil.mosque.region}, {instance.imam.profil.mosque.district}, {instance.imam.profil.mosque.name}"
             representation['imam'] = {
             'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}", "role": instance.imam.role}
         except:

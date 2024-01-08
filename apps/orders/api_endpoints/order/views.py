@@ -15,8 +15,7 @@ class DirectionCreateView(generics.CreateAPIView):
     queryset = models.Directions.objects.all()
     serializer_class = DirectionCreateSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
-    parser_classes = (parsers.MultiPartParser,
-                      parsers.FormParser, parsers.FileUploadParser,)
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser)
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user,
@@ -29,7 +28,7 @@ class DirectionsListView(generics.ListAPIView):
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('title',)
     filterset_fields = ('id', 'created_at', 'to_region', 'to_district', 'required_to_region',
-                        'required_to_district', 'to_role', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
+                        'required_to_district', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
     def get_queryset(self):
         # today = date.today()

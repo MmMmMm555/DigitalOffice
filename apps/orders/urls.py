@@ -20,9 +20,9 @@ urlpatterns = [
     # direction apis
     path('create/', DirectionCreateView.as_view(), name='direction_create'),
     path('list/', DirectionsListView.as_view(), name='direction_list'),
-    path('update/<int:pk>', DirectionUpdateView.as_view(), name='direction_update'),
-    path('delete/<int:pk>', DirectionDeleteView.as_view(), name='direction_delete'),
-    path('detail/<int:pk>', DirectionSingleView.as_view(), name='direction_detail'),
+    # path('update/<int:pk>', DirectionUpdateView.as_view(), name='direction_update'),
+    # path('delete/<int:pk>', DirectionDeleteView.as_view(), name='direction_delete'),
+    # path('detail/<int:pk>', DirectionSingleView.as_view(), name='direction_detail'),
 
     # seen apis
     path('seen/update/<int:pk>', DirectionEmployeeReadView.as_view(), name='order_seen_update'),
