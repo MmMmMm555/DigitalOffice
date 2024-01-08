@@ -1,5 +1,6 @@
 from rest_framework import generics, filters, parsers
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import F
 
 from .serializers import FridayTesisImamReadSerializer, FridayTesisImamReadListSerializer
 from apps.friday_tesis import models
@@ -15,7 +16,8 @@ class FridayTesisImamReadView(generics.UpdateAPIView):
 
 
 class FridayTesisImamReadListView(generics.ListAPIView):
-    queryset = models.FridayTesisImamRead.objects.all()
+    queryset = models.FridayTesisImamRead.objects.all().annotate(
+        mosque=F('imam__profil__mosque__name'), region=F('imam__region__name'), district=F('imam__district__name'), imam_name=F('imam__profil__name'), imam_last_name=F('imam__profil__last_name'))
     serializer_class = FridayTesisImamReadListSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)

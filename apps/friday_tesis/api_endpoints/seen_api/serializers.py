@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField
 
 from apps.friday_tesis import models
 from apps.orders.models import States
@@ -23,9 +23,14 @@ class FridayTesisImamReadSerializer(ModelSerializer):
 
 
 class FridayTesisImamReadListSerializer(ModelSerializer):
+    mosque = StringRelatedField()
+    region = StringRelatedField()
+    district = StringRelatedField()
+    imam_name = StringRelatedField()
+    imam_last_name = StringRelatedField()
     class Meta:
         model = models.FridayTesisImamRead
-        fields = ('id', 'tesis', 'imam', 'state', 'requirement', 'created_at',)
+        fields = ('id', 'tesis', 'imam', 'mosque', 'region', 'district', 'imam_name', 'imam_last_name', 'state', 'requirement', 'created_at',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -36,9 +41,5 @@ class FridayTesisImamReadListSerializer(ModelSerializer):
             except:
                 result = None
             representation['result_id'] = result
-        try:
-            representation['imam_name'] = f"{instance.imam.profil.name} {instance.imam.profil.last_name}"
-        except:
-            representation['imam_name'] = instance.imam.username
         representation['tesis_title'] = instance.tesis.title
         return representation
