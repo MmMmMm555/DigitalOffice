@@ -40,6 +40,10 @@ class DirectionsListView(generics.ListAPIView):
             query = query.filter(creator=self.request.user)
         if start_date and finish_date:
             query = query.filter(created_at__range=[start_date, finish_date])
+        elif start_date:
+            query = query.filter(created_at__gte=start_date)
+        elif finish_date:
+            query = query.filter(created_at__lte=finish_date)
         return query
 
 
