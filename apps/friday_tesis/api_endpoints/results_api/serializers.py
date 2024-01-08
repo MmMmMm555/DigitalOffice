@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from datetime import date, timedelta
+from django.db import transaction
 
 from apps.friday_tesis.models import (FridayTesisImamResult,
                                       FridayTesisImamRead,
@@ -49,25 +50,23 @@ class FridayTesisImamResultSerializer(ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        result = FridayTesisImamResult.objects.create(
-            tesis=validated_data['tesis'],
-            imam=validated_data['imam'],
-            comment=validated_data.get('comment', 'None'),
-            file=validated_data.get('file'),
-            child=validated_data.get('child'),
-            man=validated_data.get('man'),
-            old_man=validated_data.get('old_man'),
-            old=validated_data.get('old'),
-        )
-        result.images.set(validated_data.get('images', []))
-        result.videos.set(validated_data.get('videos', []))
-        result.save()
-        seen = FridayTesisImamRead.objects.filter(
-            tesis=result.tesis, imam=self.context['request'].user.id).update(state="3")
-        if self.context['request'].user.role == '4':
-            result.imam = self.context['request'].user
+        with transaction.atomic():
+            result = FridayTesisImamResult.objects.create(
+                tesis=validated_data['tesis'],
+                imam=validated_data['imam'],
+                comment=validated_data.get('comment', 'None'),
+                file=validated_data.get('file'),
+                child=validated_data.get('child'),
+                man=validated_data.get('man'),
+                old_man=validated_data.get('old_man'),
+                old=validated_data.get('old'),
+            )
+            result.images.set(validated_data.get('images', []))
+            result.videos.set(validated_data.get('videos', []))
             result.save()
-        return result
+            seen = FridayTesisImamRead.objects.filter(
+                tesis=result.tesis, imam=self.context['request'].user.id).update(state="3")
+            return result
 
 
 class FridayTesisImamResultDetailSerializer(ModelSerializer):
