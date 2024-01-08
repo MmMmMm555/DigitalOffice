@@ -10,11 +10,11 @@ from apps.orders.models import States
 from apps.users.models import Role
 
 
-
 class DirectionFilesSerializer(ModelSerializer):
     class Meta:
         model = models.DirectionFiles
         fields = ('id', 'file',)
+
 
 class DirectionCreateSerializer(ModelSerializer):
     to_role = ListField(child=CharField())
@@ -60,7 +60,7 @@ class DirectionCreateSerializer(ModelSerializer):
     def create(self, validated_data):
         try:
             with transaction.atomic():
-        # creation instance
+                # creation instance
                 direction = super().create(validated_data)
                 direction = models.Directions.objects.get(id=direction.id)
         # getting instance role
@@ -73,28 +73,29 @@ class DirectionCreateSerializer(ModelSerializer):
         # filtering m2m fields
                 if not region_list:
                     models.DirectionsEmployeeRead.objects.bulk_create(
-                                [
-                                    models.DirectionsEmployeeRead(
-                                        direction=direction, employee=i)
-                                    for i in employee
-                                ]
-                            )
+                        [
+                            models.DirectionsEmployeeRead(
+                                direction=direction, employee=i)
+                            for i in employee
+                        ]
+                    )
                 else:
                     if region_list:
                         employee = employee.filter(region__in=region_list)
                     if district_list:
                         employee = employee.filter(district__in=district_list)
                     if employee_list:
-                        employee = employee.filter(profil__mosque__id__in=employee_list)
-                    
+                        employee = employee.filter(
+                            profil__mosque__id__in=employee_list)
+
                     employee_to_create = [
-                                models.DirectionsEmployeeRead(
-                                    direction=direction, employee=i)
-                                for i in employee
-                            ]
+                        models.DirectionsEmployeeRead(
+                            direction=direction, employee=i)
+                        for i in employee
+                    ]
                     models.DirectionsEmployeeRead.objects.bulk_create(
-                                employee_to_create)
-        
+                        employee_to_create)
+
         # if employee_list:
         #             models.DirectionsEmployeeRead.objects.bulk_create(
         #                 [
@@ -124,17 +125,14 @@ class DirectionCreateSerializer(ModelSerializer):
         #             ]
         #             models.DirectionsEmployeeRead.objects.bulk_create(
         #                 employee_to_create)
-        
-        
-        
-        
+
         # getting m2m require field values
                 employee_required = employee
                 employee_list_required = direction.required_to_employee.all()
                 district_list_required = direction.required_to_district.all()
                 region_list_required = direction.required_to_region.all()
 
-        #        
+        #
 
         #         # filtering m2m required fields
                 if employee_list_required:
@@ -200,6 +198,7 @@ class DirectionSingleSerializer(ModelSerializer):
     to_role = ListField(
         child=CharField(), read_only=True)
     file = DirectionFilesSerializer(many=True)
+
     class Meta:
         model = models.Directions
         fields = ('id',
@@ -271,11 +270,14 @@ class DirectionUpdateSerializer(ModelSerializer):
     def validate(self, attrs):
         if self.instance.direction_employee_result.all():
             raise ValidationError('you can not edit now')
+        else:
+            models.DirectionsEmployeeRead.objects.filter(
+                direction=self.instance).update(state=States.UNSEEN)
         return attrs
 
-    def save(self):
-        obj = models.Directions.objects.filter(
-            id=self.instance.id).update(**self.validated_data)
-        models.DirectionsEmployeeRead.objects.filter(
-            direction=self.instance).update(state=States.UNSEEN)
-        return obj
+    # def save(self):
+    #     obj = models.Directions.objects.filter(
+    #         id=self.instance.id).update(**self.validated_data)
+    #     models.DirectionsEmployeeRead.objects.filter(
+    #         direction=self.instance).update(state=States.UNSEEN)
+    #     return obj
