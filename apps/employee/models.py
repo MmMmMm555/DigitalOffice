@@ -54,6 +54,11 @@ class Social(models.TextChoices):
     WHATSAPP = '7'
 
 
+class Gender(models.TextChoices):
+    MALE = 'male'
+    FEMALE = 'female'
+
+
 class Graduation(models.Model):
     name = models.CharField(max_length=200, blank=False)
 
@@ -81,7 +86,8 @@ class Department(models.Model):
 
 class Position(models.Model):
     name = models.CharField(max_length=200, blank=False)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='position')
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, related_name='position')
 
 
 class Employee(models.Model):
@@ -91,10 +97,13 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50, blank=False)
     phone_number = PhoneNumberField(blank=False, unique=True)
     address = PlainLocationField(based_fields=['city'], zoom=7)
-    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
+    position = models.ForeignKey(
+        Position, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.ImageField(upload_to='images/profil_images/', default="images/default/default_user.jpg", validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
     birth_date = models.DateField()
+    gender = models.CharField(
+        max_length=50, choices=Gender.choices, default=Gender.MALE)
     education = models.CharField(
         max_length=50, choices=Education.choices, blank=True)
     nation = models.CharField(

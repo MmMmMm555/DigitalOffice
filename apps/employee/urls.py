@@ -11,8 +11,8 @@ urlpatterns = [
          name='employee_create'),
     path('employee/update/<int:pk>',
          views.EmployeeUpdateView.as_view(), name='employee_update'),
-    path('employee/delete/<int:pk>',
-         views.EmployeeDestroyView.as_view(), name='employee_delete'),
+    path('employee/<int:pk>',
+         views.EmployeeDetailView.as_view(), name='employee_dtail'),
 
     # path('activity', views.ActivityView.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})),
     # path('workactivity', views.WorkActivityView.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})),

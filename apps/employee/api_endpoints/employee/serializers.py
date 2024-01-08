@@ -29,6 +29,7 @@ class EmployeeSerializer(ModelSerializer):
                   'phone_number',
                   'address',
                   'image',
+                  'gender',
                   'position',
                   'nation',
                   'birth_date',
@@ -56,6 +57,7 @@ class EmployeeUpdateSerializer(ModelSerializer):
                   'phone_number',
                   'address',
                   'image',
+                  'gender',
                   'position',
                   'nation',
                   'birth_date',
@@ -68,7 +70,7 @@ class EmployeeUpdateSerializer(ModelSerializer):
                   'achievement',
                   )
         extra_kwargs = {
-            # "image": {"required": False},
+            "gender": {"required": False},
             "name": {"required": False},
             "surname": {"required": False},
             "last_name": {"required": False},
@@ -94,6 +96,7 @@ class EmployeeListSerializer(ModelSerializer):
                   'phone_number',
                   'address',
                   'image',
+                  'gender',
                   'nation',
                   'position',
                   'birth_date',
@@ -107,3 +110,36 @@ class EmployeeListSerializer(ModelSerializer):
                   'mosque_address',
                   'achievement',
                   'socialmedia',)
+
+
+class EmployeeDetailSerializer(ModelSerializer):
+    socialmedia = SocialMediaSerializer(many=True)
+    mosque_name = CharField(source='mosque.name', read_only=True)
+    mosque_address = CharField(source='mosque.address', read_only=True)
+    position = CharField(source='position.name', read_only=True)
+    department = CharField(source='position.department.name', read_only=True)
+    class Meta:
+        model = models.Employee
+        fields = ('id',
+                  'name',
+                  'surname',
+                  'last_name',
+                  'phone_number',
+                  'address',
+                  'image',
+                  'gender',
+                  'department',
+                  'position',
+                  'nation',
+                  'birth_date',
+                  'education',
+                  'graduated_univer',
+                  'graduated_year',
+                  'diploma_number',
+                  'academic_degree',
+                  'mosque',
+                  'achievement',
+                  'mosque_name',
+                  'mosque_address',
+                  'socialmedia',
+                  )
