@@ -34,14 +34,23 @@ class DirectionTypes(models.TextChoices):
     MISSION = '5'
 
 
+
+class DirectionFiles(BaseModel):
+    file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}")
+
+    class Meta:
+        verbose_name = "Fayl "
+        verbose_name_plural = "Fayllar "
+
+
 class Directions(BaseModel):
     creator = models.ForeignKey(User, on_delete=models.SET_NULL,
                                 null=True, blank=False, related_name='directions_creator',)
     title = models.CharField(max_length=1000)
     direction_type = models.CharField(
         max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
-    file = models.FileField(upload_to='files/direction', validators=[FileExtensionValidator(
-        allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}", blank=True)
+    file = models.ManyToManyField(DirectionFiles, blank=True)
     comments = models.TextField(blank=True)
     types = models.CharField(
         max_length=12, choices=Types.choices, default=Types.INFORMATION)

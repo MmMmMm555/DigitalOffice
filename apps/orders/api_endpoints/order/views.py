@@ -6,6 +6,7 @@ from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
 from .serializers import (DirectionCreateSerializer,
                           DirectionListSerializer,
                           ValidationError,
+                          DirectionFilesSerializer,
                           DirectionSingleSerializer,
                           DirectionUpdateSerializer,)
 from apps.orders import models
@@ -80,3 +81,17 @@ class DirectionSingleView(generics.RetrieveAPIView):
     #     if role == '1':
     #         return model
     #     return model
+
+
+class FileListView(generics.ListAPIView):
+    queryset = models.DirectionFiles.objects.all()
+    serializer_class = DirectionFilesSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    filterset_fields = ('id',)
+
+
+class FileView(generics.CreateAPIView):
+    queryset = models.DirectionFiles.objects.all()
+    serializer_class = DirectionFilesSerializer
+    permission_classes = (IsRegionAdmin | IsDistrictAdmin | IsSuperAdmin,)
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.FileUploadParser,)
