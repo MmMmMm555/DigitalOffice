@@ -24,7 +24,7 @@ class DirectionCreateView(generics.CreateAPIView):
 
 
 class DirectionsListView(generics.ListAPIView):
-    """ to_role boyicha filterlash uchun "api/v1/orders/list/?to_role=2" ko'rinishida filter yuboriladi """
+    """ to_role boyicha filterlash uchun "api/v1/orders/list/?to_role=2" ko'rinishida filter yuboriladi agar multpe filter tanlasa "api/v1/orders/list/?to_role=2&to_role=3" ko'rinishida yuboriladi """
     queryset = models.Directions.objects.all()
     serializer_class = DirectionListSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
