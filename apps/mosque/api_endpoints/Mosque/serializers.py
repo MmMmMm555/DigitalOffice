@@ -120,7 +120,6 @@ class MosqueListSerializer(MosqueSerializer):
 
 class MosqueSingleSerializer(ModelSerializer):
     employee = SerializerMethodField()
-
     class Meta:
         model = Mosque
         fields = [
@@ -182,7 +181,8 @@ class MosqueSingleSerializer(ModelSerializer):
         representation = super().to_representation(instance)
 
         images = instance.fire_images.all()
-
+        representation['region'] = {'id': instance.region.id, 'name': instance.region.name}
+        representation['district'] = {'id': instance.district.id, 'name': instance.district.name}
         representation['evacuation_road_image'] = FireDefenseImageSerializer(
             images.filter(type='1'), many=True, context=self.context).data
         representation['fire_safe_image'] = FireDefenseImageSerializer(

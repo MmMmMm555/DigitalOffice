@@ -5,6 +5,7 @@ from apps.friday_tesis import models
 from apps.users.models import Role
 from apps.orders.models import States
 from apps.users.models import User
+from apps.mosque.models import Mosque
 # from apps.common.regions import Regions, Districts
 
 from django.db import transaction
@@ -37,7 +38,7 @@ class FridayTesisDetailSerializer(ModelSerializer):
                   'attachment_comment',
                   'to_region',
                   'to_district',
-                  'to_imams',
+                  'to_mosque',
                   'date',
                   'image',
                   'video',
@@ -50,9 +51,9 @@ class FridayTesisDetailSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        if instance.to_imams:
-            representation['to_imams'] = User.objects.filter(
-                id__in=instance.to_imams.all()).values('id', 'profil__name', 'profil__last_name',)
+        if instance.to_mosque:
+            representation['to_mosque'] = Mosque.objects.filter(
+                id__in=instance.to_mosque.all()).values('id', 'name',)
         representation['waiting'] = models.FridayTesisImamRead.objects.filter(
             tesis=instance, state=States.UNSEEN).count()
         representation['accepted'] = models.FridayTesisImamRead.objects.filter(
@@ -74,7 +75,7 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   'attachment_comment',
                   'to_region',
                   'to_district',
-                  'to_imams',
+                  'to_mosque',
                   'date',
                   'created_at',
                   'image',
@@ -84,56 +85,50 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   )
 
     def create(self, validated_data):
-        try:
+        # try:
             with transaction.atomic():
-                thesis = models.FridayTesis.objects.create(
-                    title=validated_data.get('title', None),
-                    types=validated_data.get('types', None),
-                    file=validated_data.get('file', None),
-                    file_comment=validated_data.get('file_comment', None),
-                    attachment=validated_data.get('attachment', None),
-                    attachment_comment=validated_data.get(
-                        'attachment_comment', None),
-                    date=validated_data.get('date', None),
-                    image=validated_data.get('image', None),
-                    video=validated_data.get('video', None),
-                    comment=validated_data.get('comment', None),
-                    file_bool=validated_data.get('file_bool', None),
-                )
-
+                thesis = super().create(validated_data)
+                print(thesis)
+                # thesis = models.FridayTesis.objects.get(id=thesis.id)
+                #     title=validated_data.get('title', None),
+                #     types=validated_data.get('types', None),
+                #     file=validated_data.get('file', None),
+                #     file_comment=validated_data.get('file_comment', None),
+                #     attachment=validated_data.get('attachment', None),
+                #     attachment_comment=validated_data.get(
+                #         'attachment_comment', None),
+                #     date=validated_data.get('date', None),
+                #     image=validated_data.get('image', None),
+                #     video=validated_data.get('video', None),
+                #     comment=validated_data.get('comment', None),
+                #     file_bool=validated_data.get('file_bool', None),
+                # )
                 imams = User.objects.filter(role=Role.IMAM)
-
-                for i in imams:
-                    models.FridayTesisImamRead.objects.create(
-                        tesis=thesis,
-                        imam=i,
-                    )
-
+                notifications_to_create = [models.FridayTesisImamRead(
+                    tesis=thesis,
+                    imam=i,
+                ) for i in imams]
+                models.FridayTesisImamRead.objects.bulk_create(
+                    notifications_to_create)
                 seen = models.FridayTesisImamRead.objects.filter(tesis=thesis)
 
-                imam_list = validated_data.get('to_imams')
-                district_list = validated_data.get('to_district')
-                region_list = validated_data.get('to_region')
+                mosque_list = thesis.to_mosque.all()
+                district_list = thesis.to_district.all()
+                region_list = thesis.to_region.all()
 
                 if region_list:
-                    imams = imams.filter(region__in=region_list)
-                    seen.filter(imam__in=imams).update(requirement=True)
+                    seen.filter(imam__in=imams.filter(
+                        region__in=region_list)).update(requirement=True)
                 if district_list:
-                    imams = imams.filter(district__in=district_list)
-                    seen.filter(imam__in=imams).update(requirement=True)
-                if imam_list:
-                    imams = imams.filter(username__in=imam_list)
-                    seen.filter(imam__in=imams).update(requirement=True)
-
-                thesis.to_imams.set(imams)
-                thesis.to_region.set(region_list)
-                thesis.to_district.set(district_list)
-                thesis.save()
+                    seen.filter(imam__in=imams.filter(
+                        district__in=district_list)).update(requirement=True)
+                if mosque_list:
+                    seen.filter(imam__in=imams.filter(
+                        profil__mosque__in=mosque_list)).update(requirement=True)
 
                 return thesis
-        except:
-            thesis.delete()
-            raise ValidationError('Something went wrong')
+        # except:
+        #     raise ValidationError('Something went wrong')
 
 
 class FridayTesisUpdateSerializer(ModelSerializer):
@@ -148,7 +143,7 @@ class FridayTesisUpdateSerializer(ModelSerializer):
                   'attachment_comment',
                   #   'to_region',
                   #   'to_district',
-                  #   'to_imams',
+                  #   'to_mosque',
                   'date',
                   'image',
                   'video',
@@ -160,14 +155,13 @@ class FridayTesisUpdateSerializer(ModelSerializer):
             'date': {'required': False},
         }
 
-    def save(self):
-        if self.instance.date <= date.today() or (self.instance.date == date.today() and int(datetime.now().hour) > 13):
+    def validate(self, attrs):
+        if self.instance.date <= date.today() or (self.instance.date == date.today() and int(datetime.now().hour) > 12):
             raise ValidationError('editable date passed')
-        obj = models.FridayTesis.objects.filter(
-            id=self.instance.id).update(**self.validated_data)
-        models.FridayTesisImamRead.objects.filter(
-        tesis=self.instance).update(state=States.UNSEEN)
-        return obj
+        else:
+            models.FridayTesisImamRead.objects.filter(
+                tesis=self.instance).update(state=States.UNSEEN)
+        return attrs
 
     # def update(self, instance, validated_data):
         # try:
@@ -189,7 +183,7 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         # imams = User.objects.filter(role='4')
         # print(instance.to_region)
         # print(validated_data.get('to_region'))
-        # imam_list = validated_data.get('to_imams', instance.to_imams)
+        # imam_list = validated_data.get('to_mosque', instance.to_mosque)
         # district_list = validated_data.get('to_district', instance.to_district)
         # region_list = validated_data.get('to_region', instance.to_region)
         # print(region_list)
@@ -208,11 +202,11 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         # seen = models.FridayTesisImamRead.objects.filter(tesis=instance, imam__in=imams,)
         # seen.update(requirement=True)
 
-        # instance.to_imams.clear()
+        # instance.to_mosque.clear()
         # instance.to_region.clear()
         # instance.to_district.clear()
 
-        # instance.to_imams.set(imams)
+        # instance.to_mosque.set(imams)
         # instance.to_region.set(region_list)
         # instance.to_district.set(district_list)
         # instance.save()

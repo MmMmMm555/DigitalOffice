@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.conf import settings
 
 from apps.users.models import User
+from apps.mosque.models import Mosque
 from apps.common.models import BaseModel
 from apps.common.validators import validate_file_size
 from apps.common.regions import Regions, Districts
@@ -36,7 +37,7 @@ class FridayTesis(BaseModel):
     date = models.DateField()
     to_region = models.ManyToManyField(Regions, blank=True)
     to_district = models.ManyToManyField(Districts, blank=True)
-    to_imams = models.ManyToManyField(User, blank=True)
+    to_mosque = models.ManyToManyField(Mosque, blank=True)
     image = models.BooleanField(default=False)
     video = models.BooleanField(default=False)
     comment = models.BooleanField(default=False)

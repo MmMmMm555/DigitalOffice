@@ -106,11 +106,11 @@ class Mosque(BaseModel):
     )
     mosque_heating_type = models.CharField(
         max_length=17, choices=MosqueHeatingTypeChoices.choices,
-        default=MosqueHeatingTypeChoices.CENTRAL,
+        blank=True,
     )
     mosque_heating_fuel = models.CharField(
         max_length=17, choices=MosqueHeatingFuelChoices.choices,
-        default=MosqueHeatingFuelChoices.NONE,
+        blank=True,
     )
 
     def __str__(self):
