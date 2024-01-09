@@ -196,7 +196,7 @@ class MosqueSingleSerializer(ModelSerializer):
             images.filter(type='4'), many=True, context=self.context).data
         representation['auto_fire_extinguisher_image'] = FireDefenseImageSerializer(
             images.filter(type='5'), many=True, context=self.context).data
-        representation['emergency_exit_door'] = FireDefenseImageSerializer(
+        representation['emergency_exit_door_image'] = FireDefenseImageSerializer(
             images.filter(type='6'), many=True, context=self.context).data
 
         return representation
