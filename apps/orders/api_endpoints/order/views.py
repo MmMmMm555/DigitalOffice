@@ -24,6 +24,7 @@ class DirectionCreateView(generics.CreateAPIView):
 
 
 class DirectionsListView(generics.ListAPIView):
+    """ to_role boyicha filterlash uchun "api/v1/orders/list/?to_role=2" ko'rinishida filter yuboriladi """
     queryset = models.Directions.objects.all()
     serializer_class = DirectionListSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
@@ -33,11 +34,14 @@ class DirectionsListView(generics.ListAPIView):
 
     def get_queryset(self):
         # today = date.today()
+        to_role = self.request.GET.get('to_role')
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
         query = models.Directions.objects.all()
         if self.request.user.role != Role.SUPER_ADMIN:
             query = query.filter(creator=self.request.user)
+        if to_role:
+            query = query.filter(to_role__contains=[to_role])
         if start_date and finish_date:
             query = query.filter(created_at__range=[start_date, finish_date])
         elif start_date:
