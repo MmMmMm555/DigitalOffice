@@ -25,7 +25,7 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('employee__profil_name', 'direction__title',)
     filterset_fields = ('direction', 'direction__direction_type',
-                        'created_at', 'state', 'requirement', 'employee',)
+                        'created_at', 'state', 'requirement', 'employee', 'employee__profil__mosque', 'employee__region', 'employee__district',)
 
     def get_queryset(self):
         if self.request.user.role == Role.SUPER_ADMIN:

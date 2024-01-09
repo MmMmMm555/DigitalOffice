@@ -109,7 +109,7 @@ class Employee(models.Model):
     nation = models.CharField(
         max_length=10, choices=Nation.choices, blank=True, default=Nation.UZBEK)
     graduated_univer = models.ManyToManyField(Graduation, blank=True)
-    graduated_year = models.DateField(default="1000-01-01")
+    graduated_year = models.DateField(default="2000-01-01")
     diploma_number = models.CharField(max_length=20, blank=True)
     academic_degree = models.CharField(
         max_length=50, choices=AcademicDegree.choices, blank=True)
