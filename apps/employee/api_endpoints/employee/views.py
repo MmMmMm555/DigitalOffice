@@ -1,13 +1,14 @@
-from apps.users.models import User
 from rest_framework import generics, parsers, permissions, filters, viewsets
 from apps.common.permissions import IsSuperAdmin
 from django_filters.rest_framework import DjangoFilterBackend
+from datetime import date
 
 from . import serializers
 from apps.employee import models
 
 
 class EmployeeListView(generics.ListAPIView):
+    """ hodimlarni yosh boyicha filter qilish uchun "start_age" va "finish_age" filterlariga qiymat yuboriladi, "start_age < finish_age" ! """
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = (IsSuperAdmin,)
@@ -16,6 +17,17 @@ class EmployeeListView(generics.ListAPIView):
     filterset_fields = ('id', 'birth_date', 'education',
                         'graduated_year', 'academic_degree', 'profile__role',)
 
+    def get_queryset(self):
+        start_age = self.request.GET.get('start_age')
+        finish_age = self.request.GET.get('finish_age')
+        query = self.queryset
+        if start_age and finish_age and start_age < finish_age:
+            current_year = date.today().year
+            print(current_year)
+            start_year = current_year-int(finish_age)
+            finish_year = current_year-int(start_age)
+            query = query.filter(birth_date__year__range=[start_year, finish_year])
+        return query
 
 class EmployeeCreateView(generics.CreateAPIView):
     queryset = models.Employee.objects.all()

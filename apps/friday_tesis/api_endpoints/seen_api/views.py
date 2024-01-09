@@ -23,7 +23,7 @@ class FridayTesisImamReadListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('imam__profil_name', 'tesis__title',)
     filterset_fields = ('tesis', 'created_at', 'state',
-                        'tesis__types', 'requirement', 'imam',)
+                        'tesis__types', 'requirement', 'imom__region', 'imom__district',)
 
     def get_queryset(self):
         if self.request.user.role == Role.SUPER_ADMIN:
