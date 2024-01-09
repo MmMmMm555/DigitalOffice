@@ -32,7 +32,7 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
     class Meta:
         model = models.DirectionsEmployeeRead
         fields = ('id', 'direction', 'employee', 'mosque', 'region', 'district', 'employee_name', 'employee_last_name',
-                  'state', 'requirement', 'created_at',)
+                  'state', 'requirement', 'created_at', 'updated_at',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
