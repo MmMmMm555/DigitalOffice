@@ -20,7 +20,7 @@ test_employee = [
         'graduated_year': date.today(),
         'diploma_number': "AB123456787654",
         'academic_degree': "2",
-        'mosque': Mosque.objects.get(id=1),
+        'mosque': Mosque.objects.get(id=27),
         'achievement': "1",
     },
     {
@@ -38,7 +38,7 @@ test_employee = [
         'graduated_year': date.today(),
         'diploma_number': "AB1234562347654",
         'academic_degree': "2",
-        'mosque': Mosque.objects.get(id=1),
+        'mosque': Mosque.objects.get(id=27),
         'achievement': "1",
     },
     {
@@ -56,7 +56,7 @@ test_employee = [
         'graduated_year': date.today(),
         'diploma_number': "AB1234568767654",
         'academic_degree': "2",
-        'mosque': Mosque.objects.get(id=1),
+        'mosque': Mosque.objects.get(id=27),
         'achievement': "1",
     },
     {
@@ -74,7 +74,7 @@ test_employee = [
         'graduated_year': date.today(),
         'diploma_number': "AB1234522227654",
         'academic_degree': "2",
-        'mosque': Mosque.objects.get(id=1),
+        'mosque': Mosque.objects.get(id=27),
         'achievement': "1",
     },
     {
@@ -92,7 +92,7 @@ test_employee = [
         'graduated_year': date.today(),
         'diploma_number': "AB12345555557654",
         'academic_degree': "2",
-        'mosque': Mosque.objects.get(id=1),
+        'mosque': Mosque.objects.get(id=27),
         'achievement': "1",
     },
     {
@@ -110,7 +110,7 @@ test_employee = [
         'graduated_year': date.today(),
         'diploma_number': "AB1234522000654",
         'academic_degree': "2",
-        'mosque': Mosque.objects.get(id=1),
+        'mosque': Mosque.objects.get(id=27),
         'achievement': "1",
     },
 ]
