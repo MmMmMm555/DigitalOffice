@@ -7,7 +7,8 @@ from apps.orders.models import (DirectionsEmployeeResult,
                                 Directions,
                                 ResultImages,
                                 ResultVideos,
-                                ResultFiles,)
+                                ResultFiles,
+                                Types,)
 
 
 class DirectionResultImagesSerializer(ModelSerializer):
@@ -58,14 +59,15 @@ class DirectionsEmployeeResultDetailSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        seen = DirectionsEmployeeRead.objects.filter(employee=instance.employee, direction=instance.direction).first()
+        seen = DirectionsEmployeeRead.objects.filter(
+            employee=instance.employee, direction=instance.direction).first()
         representation['state'] = seen.state if seen else States.UNSEEN
         representation['direction'] = {
-        'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_role': instance.direction.from_role, 'to_role': instance.direction.to_role}
+            'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_role': instance.direction.from_role, 'to_role': instance.direction.to_role}
         try:
             representation['from'] = f"{instance.employee.profil.mosque.region}, {instance.employee.profil.mosque.district}, {instance.employee.profil.mosque.name}"
             representation['employee'] = {
-            'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}", "role": instance.employee.role}
+                'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}", "role": instance.employee.role}
         except:
             representation['from'] = 'Nomalum'
             representation['employee'] = {'id': instance.employee.id}
@@ -79,18 +81,17 @@ class DirectionsEmployeeResultSerializer(ModelSerializer):
                   'comment', 'files', 'images', 'videos',)
 
     def validate(self, attrs):
-        # if not DirectionsEmployeeRead.objects.filter(direction=attrs.get('direction'), employee=attrs.get('employee')):
-        #     raise ValidationError({'detail': "you can not set result to this direction"})
-        direction_date = Directions.objects.get(
-            id=attrs.get('direction').id).to_date
+        direction_date = Directions.objects.filter(
+            id=attrs.get('direction').id, types=Types.IMPLEMENT).last()
+        direction_date = direction_date.to_date if direction_date else date.today()
         if direction_date < date.today():
             raise ValidationError({'detail': "time expired"})
         return attrs
 
     def create(self, validated_data):
         result = DirectionsEmployeeResult.objects.create(
-            direction=validated_data['direction'],
-            employee=validated_data['employee'],
+            direction=validated_data.get('direction'),
+            employee=validated_data.get('employee'),
             comment=validated_data.get('comment', 'None'),
         )
         result.images.set(validated_data.get('images', []))
