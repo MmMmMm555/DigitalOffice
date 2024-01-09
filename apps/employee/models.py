@@ -108,7 +108,7 @@ class Employee(models.Model):
         max_length=50, choices=Education.choices, blank=True)
     nation = models.CharField(
         max_length=10, choices=Nation.choices, blank=True, default=Nation.UZBEK)
-    graduated_univer = models.ManyToManyField(Graduation, blank=True)
+    graduated_univer = models.ForeignKey(Graduation, on_delete=models.SET_NULL, blank=True, null=True)
     graduated_year = models.DateField(default="2000-01-01")
     diploma_number = models.CharField(max_length=20, blank=True)
     academic_degree = models.CharField(
