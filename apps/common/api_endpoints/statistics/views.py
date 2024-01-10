@@ -31,7 +31,6 @@ def StatisticRegionApi(request):
 
 @api_view(['GET'])
 def StatisticRoleApi(request):
-    """hatosi bor"""
     all = Directions.objects.all().count()
     data = {'count_all': all}
     for i in ToRole:
