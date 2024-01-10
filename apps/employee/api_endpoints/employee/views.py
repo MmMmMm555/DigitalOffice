@@ -14,7 +14,7 @@ class EmployeeListView(generics.ListAPIView):
     permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'surname', 'last_name',)
-    filterset_fields = ('id', 'education',
+    filterset_fields = ('id', 'education', 'position', 'position__department',
                         'graduated_year', 'academic_degree', 'profile__role', 'mosque__region', 'mosque__district', 'graduated_univer',)
 
     def get_queryset(self):
