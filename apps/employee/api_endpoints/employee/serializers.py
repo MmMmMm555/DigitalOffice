@@ -83,7 +83,6 @@ class EmployeeUpdateSerializer(ModelSerializer):
 
 
 class EmployeeListSerializer(ModelSerializer):
-    socialmedia = SocialMediaSerializer(many=True)
     mosque_name = CharField(source='mosque.name', read_only=True)
     mosque_address = CharField(source='mosque.address', read_only=True)
 
@@ -94,22 +93,15 @@ class EmployeeListSerializer(ModelSerializer):
                   'surname',
                   'last_name',
                   'phone_number',
-                  'address',
-                  'image',
-                  'gender',
-                  'nation',
                   'position',
-                  'birth_date',
                   'education',
                   'graduated_univer',
                   'graduated_year',
-                  'diploma_number',
                   'academic_degree',
                   'mosque',
                   'mosque_name',
                   'mosque_address',
-                  'achievement',
-                  'socialmedia',)
+                  )
 
 
 class EmployeeDetailSerializer(ModelSerializer):

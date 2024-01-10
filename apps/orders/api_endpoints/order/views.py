@@ -37,7 +37,7 @@ class DirectionsListView(generics.ListAPIView):
         to_role = self.request.GET.get('to_role')
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
-        query = models.Directions.objects.all()
+        query = self.queryset
         if self.request.user.role != Role.SUPER_ADMIN:
             query = query.filter(creator=self.request.user)
         if to_role:

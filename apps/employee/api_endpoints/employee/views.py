@@ -14,8 +14,8 @@ class EmployeeListView(generics.ListAPIView):
     permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'surname', 'last_name',)
-    filterset_fields = ('id', 'birth_date', 'education',
-                        'graduated_year', 'academic_degree', 'profile__role',)
+    filterset_fields = ('id', 'education',
+                        'graduated_year', 'academic_degree', 'profile__role', 'mosque__region', 'mosque__district', 'graduated_univer',)
 
     def get_queryset(self):
         start_age = self.request.GET.get('start_age')
@@ -23,7 +23,6 @@ class EmployeeListView(generics.ListAPIView):
         query = self.queryset
         if start_age and finish_age and start_age < finish_age:
             current_year = date.today().year
-            print(current_year)
             start_year = current_year-int(finish_age)
             finish_year = current_year-int(start_age)
             query = query.filter(birth_date__year__range=[start_year, finish_year])
