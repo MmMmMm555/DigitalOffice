@@ -1,5 +1,5 @@
 from rest_framework.generics import (CreateAPIView, ListAPIView,
-                        RetrieveUpdateAPIView, RetrieveAPIView, DestroyAPIView,)
+                        UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
 from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -57,7 +57,7 @@ class CommunityEventsDeleteAPIView(DestroyAPIView):
         return Response(status=403)
 
 
-class CommunityEventsUpdateAPIView(RetrieveUpdateAPIView):
+class CommunityEventsUpdateAPIView(UpdateAPIView):
     queryset = CommunityEvents.objects.all()
     serializer_class = CommunityEventsUpdateSerializer
     permission_classes = (IsSuperAdmin | IsImam | IsDeputy,)

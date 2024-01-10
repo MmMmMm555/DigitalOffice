@@ -1,7 +1,8 @@
 from rest_framework.generics import (
-    CreateAPIView, ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from apps.charity_promotion.models import CharityPromotion
 from apps.common.permissions import IsImam, IsDeputy, IsSuperAdmin
@@ -43,7 +44,7 @@ class CharityPromotionDetailView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class CharityPromotionUpdateView(RetrieveUpdateAPIView):
+class CharityPromotionUpdateView(UpdateAPIView):
     queryset = CharityPromotion.objects.all()
     serializer_class = CharityPromotionUpdateSerializer
     permission_classes = (IsImam|IsDeputy|IsSuperAdmin,)
@@ -54,3 +55,9 @@ class CharityPromotionDeleteView(DestroyAPIView):
     queryset = CharityPromotion.objects.all()
     serializer_class = CharityPromotionDetailSerializer
     permission_classes = (IsImam|IsDeputy|IsSuperAdmin,)
+    
+    def perform_destroy(self, instance):
+        if instance.imam == self.request.user:
+            instance.delete()
+        else:
+            return Response({'message': 'You are not allowed to delete'}, status=403)

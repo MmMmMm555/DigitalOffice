@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    CreateAPIView, RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -45,7 +45,7 @@ class MavludDetailAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class MavludUpdateAPIView(RetrieveUpdateAPIView):
+class MavludUpdateAPIView(UpdateAPIView):
     queryset = Mavlud.objects.all()
     serializer_class = MavludUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)

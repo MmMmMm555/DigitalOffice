@@ -5,7 +5,7 @@ from apps.mavlud.api_endpoints.mavlud_crud import views
 
 urlpatterns = [
     # mavlud apis
-    path('create/', views.MavludCreateAPIView.as_view(),
+    path('create', views.MavludCreateAPIView.as_view(),
          name='mavlud_create'),
     path('list/', views.MavludListAPIView.as_view(),
          name='mavlud_list'),

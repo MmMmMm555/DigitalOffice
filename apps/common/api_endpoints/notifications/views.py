@@ -1,4 +1,3 @@
-from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view
 
 from apps.orders.models import DirectionsEmployeeRead
@@ -6,8 +5,6 @@ from apps.friday_tesis.models import FridayTesisImamRead, States
 from rest_framework.response import Response
 
 
-# class NotificationApi(GenericAPIView):
-# queryset = DirectionsEmployeeRead.objects.all()
 @api_view(['GET'])
 def NotificationApi(request):
     directions = DirectionsEmployeeRead.objects.filter(
@@ -16,4 +13,4 @@ def NotificationApi(request):
         state=States.UNSEEN, imam=request.user).values('id', 'tesis__title', 'created_at',)
     data = {'count': directions.count()+friday_tesis.count(),
             'directions': directions, 'friday_tesis': friday_tesis, }
-    return Response(data=data,)
+    return Response(data=data)

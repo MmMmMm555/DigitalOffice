@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    CreateAPIView, RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -45,7 +45,7 @@ class IndividualConversationDetailView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class IndividualConversationUpdateView(RetrieveUpdateAPIView):
+class IndividualConversationUpdateView(UpdateAPIView):
     queryset = IndividualConversation.objects.all()
     serializer_class = IndividualConversationUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)

@@ -1,5 +1,5 @@
 from rest_framework.generics import (CreateAPIView, ListAPIView,
-                        RetrieveUpdateAPIView, RetrieveAPIView, DestroyAPIView,)
+                        UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -57,7 +57,7 @@ class BookDeleteAPIView(DestroyAPIView):
         return Response(status=403)
 
 
-class BookUpdateAPIView(RetrieveUpdateAPIView):
+class BookUpdateAPIView(UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookUpdateSerializer
     permission_classes = (IsSuperAdmin | IsImam | IsDeputy,)

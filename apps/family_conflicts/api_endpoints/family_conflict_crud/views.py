@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    CreateAPIView, RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -44,7 +44,7 @@ class FamilyConflictDetailAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class FamilyConflictUpdateAPIView(RetrieveUpdateAPIView):
+class FamilyConflictUpdateAPIView(UpdateAPIView):
     queryset = FamilyConflict.objects.all()
     serializer_class = FamilyConflictUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)

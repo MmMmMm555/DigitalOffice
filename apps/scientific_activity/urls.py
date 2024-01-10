@@ -22,8 +22,8 @@ urlpatterns = [
     path('article/delete/<int:pk>', ArticleDeleteAPIView.as_view(), name='delete'),
 
     # article images apis
-    path('article_image/create', ArticleImageCreateApiView.as_view(), name='image_create'),
-    path('article_image/list/', ArticleImageListApiView.as_view(), name='image_list'),
+    path('article/image/create', ArticleImageCreateApiView.as_view(), name='image_create'),
+    path('article/image/list/', ArticleImageListApiView.as_view(), name='image_list'),
 
 
     # book apis
@@ -34,6 +34,6 @@ urlpatterns = [
     path('book/delete/<int:pk>', BookDeleteAPIView.as_view(), name='delete'),
 
     # # book images apis
-    path('book_image/create', BookImageCreateApiView.as_view(), name='image_create'),
-    path('book_image/list/', BookImageListApiView.as_view(), name='image_list'),
+    path('book/image/create', BookImageCreateApiView.as_view(), name='image_create'),
+    path('book/image/list/', BookImageListApiView.as_view(), name='image_list'),
 ]

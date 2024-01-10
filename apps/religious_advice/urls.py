@@ -5,7 +5,7 @@ from apps.religious_advice.api_endpoints.religious_advice_crud import views
 
 urlpatterns = [
     # religiousAdvice apis
-    path('create/', views.ReligiousAdviceCreateAPIView.as_view(),
+    path('create', views.ReligiousAdviceCreateAPIView.as_view(),
          name='religiousAdvice_create'),
     path('list/', views.ReligiousAdviceListAPIView.as_view(),
          name='religiousAdvice_list'),

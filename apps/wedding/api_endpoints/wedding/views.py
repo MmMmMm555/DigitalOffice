@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    CreateAPIView, RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -46,7 +46,7 @@ class WeddingDetailAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class WeddingUpdateAPIView(RetrieveUpdateAPIView):
+class WeddingUpdateAPIView(UpdateAPIView):
     queryset = Wedding.objects.all()
     serializer_class = WeddingUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)

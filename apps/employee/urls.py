@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from apps.employee.api_endpoints.employee import views
-from apps.employee.api_endpoints.department.views import DepartmentAPIView
+from apps.employee.api_endpoints.department.views import DepartmentAPIView, PositionAPIView
 from apps.employee.api_endpoints.universities.views import GraduationAPIView
 
 
@@ -21,7 +21,12 @@ urlpatterns = [
     path('socialmedia/<int:pk>',
          views.SocialMediaView.as_view({'put': 'update', 'delete': 'destroy'})),
 
+    # departments api
     path('department', DepartmentAPIView.as_view(
         {'get': 'list'}), name='department_list'),
+    path('position', PositionAPIView.as_view(
+        {'get': 'list'}), name='position_list'),
+    
+    # universities api
     path('university', GraduationAPIView.as_view(), name='university_list'),
 ]

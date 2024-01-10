@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    CreateAPIView, RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -47,7 +47,7 @@ class OrganizationDetailAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class OrganizationUpdateAPIView(RetrieveUpdateAPIView):
+class OrganizationUpdateAPIView(UpdateAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)

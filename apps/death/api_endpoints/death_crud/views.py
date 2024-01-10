@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    CreateAPIView, RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView,)
+    CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -39,7 +39,7 @@ class DeathListAPIView(ListAPIView):
         return []
 
 
-class DeathUpdateAPIView(RetrieveUpdateAPIView):
+class DeathUpdateAPIView(UpdateAPIView):
     queryset = Death.objects.all()
     serializer_class = DeathUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)

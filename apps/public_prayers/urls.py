@@ -6,7 +6,7 @@ from apps.public_prayers.api_endpoints.prayers_api.views import PrayersListAPIVi
 
 urlpatterns = [
     # public prayers apis
-    path('create/', views.PublicPrayersCreateAPIView.as_view(),
+    path('create', views.PublicPrayersCreateAPIView.as_view(),
          name='public_prayers_create'),
     path('list/', views.PublicPrayersListAPIView.as_view(),
          name='public_prayers_list'),

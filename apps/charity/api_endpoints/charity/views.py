@@ -1,6 +1,7 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .serializers import (CharityCreateSerializer, 
                           CharityImageSerializer, 
@@ -22,7 +23,7 @@ class CharityCreateView(CreateAPIView):
         serializer.save()
 
 
-class CharityUpdateView(RetrieveUpdateAPIView):
+class CharityUpdateView(UpdateAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityUpdateSerializer
     parser_classes = (FormParser,)
@@ -67,7 +68,13 @@ class CharityDetailView(RetrieveAPIView):
     serializer_class = CharityDetailSerializer
     permission_classes = (IsAuthenticated,)
 
-class CharityDetailView(RetrieveAPIView):
+class CharityDeleteView(DestroyAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityDetailSerializer
     permission_classes = (IsAuthenticated,)
+    
+    def perform_destroy(self, instance):
+        if instance.imam == self.request.user:
+            instance.delete()
+        else:
+            return Response({'message': 'You are not allowed to delete'}, status=403)

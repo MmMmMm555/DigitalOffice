@@ -5,7 +5,7 @@ from apps.neighborhood.api_endpoints.neighbourhood_crud import views
 
 urlpatterns = [
     # neighborhood apis
-    path('create/', views.NeighborhoodCreateAPIView.as_view(),
+    path('create', views.NeighborhoodCreateAPIView.as_view(),
          name='neighborhood_create'),
     path('list/', views.NeighborhoodListAPIView.as_view(),
          name='neighborhood_list'),

@@ -5,7 +5,7 @@ from apps.organizations.api_endpoints.organizations_crud import views
 
 urlpatterns = [
     # organization apis
-    path('create/', views.OrganizationCreateAPIView.as_view(),
+    path('create', views.OrganizationCreateAPIView.as_view(),
          name='organization_create'),
     path('list/', views.OrganizationListAPIView.as_view(),
          name='organization_list'),
