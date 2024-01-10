@@ -15,7 +15,7 @@ class UsersListView(generics.ListAPIView):
     search_fields = ('email', 'profil__name', 'profil__surname', 'username',)
 
 
-class UsersDetailView(generics.RetrieveAPIView):
+class UsersDetailView(generics.RetrieveDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UsersDetailSerializer
     permission_classes = (IsSuperAdmin,)
