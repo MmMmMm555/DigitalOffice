@@ -12,7 +12,7 @@ urlpatterns = [
     path('employee/update/<int:pk>',
          views.EmployeeUpdateView.as_view(), name='employee_update'),
     path('employee/<int:pk>',
-         views.EmployeeDetailView.as_view(), name='employee_dtail'),
+         views.EmployeeDetailView.as_view(), name='employee_detail'),
 
     # path('activity', views.ActivityView.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})),
     # path('workactivity', views.WorkActivityView.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})),
@@ -26,7 +26,7 @@ urlpatterns = [
         {'get': 'list'}), name='department_list'),
     path('position', PositionAPIView.as_view(
         {'get': 'list'}), name='position_list'),
-    
+
     # universities api
     path('university', GraduationAPIView.as_view(), name='university_list'),
 ]

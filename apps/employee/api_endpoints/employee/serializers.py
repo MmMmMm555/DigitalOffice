@@ -106,10 +106,11 @@ class EmployeeListSerializer(ModelSerializer):
 
 class EmployeeDetailSerializer(ModelSerializer):
     socialmedia = SocialMediaSerializer(many=True)
-    mosque_name = CharField(source='mosque.name', read_only=True)
-    mosque_address = CharField(source='mosque.address', read_only=True)
-    position = CharField(source='position.name', read_only=True)
-    department = CharField(source='position.department.name', read_only=True)
+    # mosque_name = CharField(source='mosque.name', read_only=True)
+    # mosque_address = CharField(source='mosque.address', read_only=True)
+    # position = CharField(source='position.name', read_only=True)
+    # department = CharField(source='position.department.name', read_only=True)
+
     class Meta:
         model = models.Employee
         fields = ('id',
@@ -120,7 +121,6 @@ class EmployeeDetailSerializer(ModelSerializer):
                   'address',
                   'image',
                   'gender',
-                  'department',
                   'position',
                   'nation',
                   'birth_date',
@@ -131,7 +131,26 @@ class EmployeeDetailSerializer(ModelSerializer):
                   'academic_degree',
                   'mosque',
                   'achievement',
-                  'mosque_name',
-                  'mosque_address',
+                  #   'mosque_name',
+                  #   'mosque_address',
                   'socialmedia',
                   )
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['mosque'] = None
+        representation['department'] = None
+        representation['position'] = None
+        representation['graduated_univer'] = None
+        if instance.mosque:
+            representation['mosque'] = {
+                'id': instance.mosque.id, 'name': instance.mosque.name, 'address': instance.mosque.address}
+        if instance.graduated_univer:
+            representation['graduated_univer'] = {
+                'id': instance.graduated_univer.id, 'name': instance.graduated_univer.name}
+        if instance.position:
+            representation['department'] = {
+                'id': instance.position.department.id, 'name': instance.position.department.name}
+            representation['position'] = {
+                'id': instance.position.id, 'name': instance.position.name}
+        return representation

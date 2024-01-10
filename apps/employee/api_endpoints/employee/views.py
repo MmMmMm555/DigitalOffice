@@ -37,7 +37,7 @@ class EmployeeCreateView(generics.CreateAPIView):
     permission_classes = (IsSuperAdmin,)
 
 
-class EmployeeUpdateView(generics.RetrieveUpdateAPIView):
+class EmployeeUpdateView(generics.UpdateAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeUpdateSerializer
     parser_classes = (parsers.FormParser, parsers.MultiPartParser,)
