@@ -5,7 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import DirectionsEmployeeReadSerializer, DirectionsEmployeeReadListSerializer
 # DirectionsUnseenCount
 from apps.orders import models
-from apps.common.permissions import IsSuperAdmin, IsImam
+from apps.common.permissions import IsSuperAdmin, IsImam, IsDistrictAdmin, IsRegionAdmin
 from apps.users.models import Role
 from django.db.models import F
 
@@ -21,7 +21,7 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
     queryset = models.DirectionsEmployeeRead.objects.all().annotate(
         mosque=F('employee__profil__mosque__name'), region=F('employee__region__name'), district=F('employee__district__name'), employee_name=F('employee__profil__name'), employee_last_name=F('employee__profil__last_name'))
     serializer_class = DirectionsEmployeeReadListSerializer
-    permission_classes = (IsSuperAdmin | IsImam,)
+    permission_classes = (IsSuperAdmin | IsImam | IsDistrictAdmin | IsDistrictAdmin | IsRegionAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('employee__profil_name', 'direction__title',)
     filterset_fields = ('direction', 'direction__direction_type',
@@ -33,8 +33,8 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
         query = self.queryset
-        # if self.request.user.role != Role.SUPER_ADMIN:
-        #     query = query.filter(employee=self.request.user)
+        if self.request.user.role != Role.SUPER_ADMIN:
+            query = query.filter(employee=self.request.user)
         if to_role:
             query = query.filter(direction__to_role__contains=[to_role])
         if start_date and finish_date:

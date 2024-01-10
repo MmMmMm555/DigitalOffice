@@ -8,14 +8,14 @@ from apps.orders.models import States
 class FridayTesisImamReadSerializer(ModelSerializer):
     class Meta:
         model = models.FridayTesisImamRead
-        fields = ('state',)
+        fields = ('id',)
 
     def save(self):
         tesis = self.instance
         imam = self.context.get('request').user
         if tesis.imam == imam:
             if tesis:
-                tesis.state = self.validated_data['state']
+                tesis.state = States.ACCEPTED
                 tesis.save()
                 return tesis
             raise ValidationError('query not found')

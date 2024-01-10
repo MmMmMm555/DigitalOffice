@@ -8,14 +8,14 @@ from apps.orders.models import States
 class DirectionsEmployeeReadSerializer(ModelSerializer):
     class Meta:
         model = models.DirectionsEmployeeRead
-        fields = ('state',)
+        fields = ('id',)
 
     def save(self):
         direction = self.instance
         employee = self.context.get('request').user
         if direction.employee == employee:
             if direction:
-                direction.state = self.validated_data['state']
+                direction.state = States.ACCEPTED
                 direction.save()
                 return direction
             raise ValidationError('query not found')
