@@ -11,6 +11,6 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view()),
     path('register/', RegisterView.as_view()),
     path('account/list/', UsersListView.as_view()),
-    path('account/detail/<int:pk>', UsersDetailView.as_view()),
+    path('account/<int:pk>', UsersDetailView.as_view()),
     path('self_profile/', UserSelfView.as_view()),
 ]
