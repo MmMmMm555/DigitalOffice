@@ -10,7 +10,7 @@ urlpatterns = [
     path('login/', LoginObtainTokenPairView.as_view()),
     path('login/refresh/', TokenRefreshView.as_view()),
     path('register/', RegisterView.as_view()),
-    path('account/list/', UsersListView.as_view()),
-    path('account/<int:pk>', UsersDetailView.as_view()),
+    path('accounts/', UsersListView.as_view()),
+    path('accounts/<int:pk>', UsersDetailView.as_view()),
     path('self_profile/', UserSelfView.as_view()),
 ]
