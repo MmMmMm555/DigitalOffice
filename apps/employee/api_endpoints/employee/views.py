@@ -25,8 +25,10 @@ class EmployeeListView(generics.ListAPIView):
             current_year = date.today().year
             start_year = current_year-int(finish_age)
             finish_year = current_year-int(start_age)
-            query = query.filter(birth_date__year__range=[start_year, finish_year])
+            query = query.filter(birth_date__year__range=[
+                                 start_year, finish_year])
         return query
+
 
 class EmployeeCreateView(generics.CreateAPIView):
     queryset = models.Employee.objects.all()
