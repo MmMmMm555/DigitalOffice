@@ -60,7 +60,7 @@ class Directions(BaseModel):
     to_role = ArrayField(models.CharField(
         max_length=18, choices=ToRole.choices, default=ToRole.IMAM, blank=True, null=True), default=list, blank=True)
 
-    to_region = models.ManyToManyField(Regions, related_name='direction')
+    to_region = models.ManyToManyField(Regions, related_name='direction', blank=True)
     to_district = models.ManyToManyField(
         Districts, related_name='direction', blank=True)
     to_employee = models.ManyToManyField(
