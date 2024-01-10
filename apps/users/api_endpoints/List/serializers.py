@@ -11,11 +11,11 @@ class UsersListSerializer(serializers.ModelSerializer):
         source='region.name', read_only=True)
     district_name = serializers.CharField(
         source='district.name', read_only=True)
-
+    mosque = serializers.CharField(source='profil.mosque.name', read_only=True)
     class Meta:
         model = User
         fields = ('id', 'username', 'name', 'last_name', 'role',
-                  'email', 'profil', 'region', 'region_name', 'district', 'district_name',)
+                  'email', 'profil', 'region', 'region_name', 'district', 'district_name', 'mosque',)
 
 
 class UsersDetailSerializer(serializers.ModelSerializer):
