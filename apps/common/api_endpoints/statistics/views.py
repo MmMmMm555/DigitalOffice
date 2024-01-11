@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 
 from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, Directions, ToRole
 from apps.common.regions import Regions
@@ -10,10 +10,15 @@ from apps.friday_tesis.models import FridayTesisImamRead, FridayTesisImamResult
 # for orders
 @api_view(['GET'])
 def StatisticDirectionTypeApi(request):
-    all = Directions.objects.all().count()
+    start_date = request.GET.get('start_date')
+    finish_date = request.GET.get('finish_date')
+    query = Directions.objects.all()
+    if start_date and finish_date:
+        query = query.filter(created_at__range=[start_date, finish_date])
+    all = query.count()
     data = {'count_all': all}
     for i in DirectionTypes:
-        directions = Directions.objects.filter(direction_type=i).count()
+        directions = query.filter(direction_type=i).count()
         to_add = {'count': directions, "protsent": float(
             f"{(directions/all)*100:10.1f}")}
         data[i.value] = to_add
@@ -22,10 +27,15 @@ def StatisticDirectionTypeApi(request):
 
 @api_view(['GET'])
 def StatisticRegionApi(request):
-    all = Directions.objects.all().count()
+    start_date = request.GET.get('start_date')
+    finish_date = request.GET.get('finish_date')
+    query = Directions.objects.all()
+    if start_date and finish_date:
+        query = query.filter(created_at__range=[start_date, finish_date])
+    all = query.count()
     data = {'count_all': all}
     for i in Regions.objects.all().values('id', 'name'):
-        directions = Directions.objects.filter(to_region=i['id']).count()
+        directions = query.filter(to_region=i['id']).count()
         to_add = {'count': directions, "protsent": float(
             f"{(directions/all)*100:10.1f}")}
         data[i['name']] = to_add
@@ -34,10 +44,15 @@ def StatisticRegionApi(request):
 
 @api_view(['GET'])
 def StatisticRoleApi(request):
-    all = Directions.objects.all().count()
+    start_date = request.GET.get('start_date')
+    finish_date = request.GET.get('finish_date')
+    query = Directions.objects.all()
+    if start_date and finish_date:
+        query = query.filter(created_at__range=[start_date, finish_date])
+    all = query.count()
     data = {'count_all': all}
     for i in ToRole:
-        directions = Directions.objects.filter(to_role__contains=[i]).count()
+        directions = query.filter(to_role__contains=[i]).count()
         to_add = {'count': directions, }
         data[i.value] = to_add
     return Response(data=data)
@@ -45,10 +60,15 @@ def StatisticRoleApi(request):
 
 @api_view(['GET'])
 def StatisticStateApi(request):
-    all = FridayTesisImamRead.objects.all().count()
+    start_date = request.GET.get('start_date')
+    finish_date = request.GET.get('finish_date')
+    query = DirectionsEmployeeRead.objects.all()
+    if start_date and finish_date:
+        query = query.filter(created_at__range=[start_date, finish_date])
+    all = query.count()
     data = {'count_all': all}
     for i in States:
-        directions = DirectionsEmployeeRead.objects.filter(state=i).count()
+        directions = query.filter(state=i).count()
         to_add = {'count': directions, "protsent": float(
             f"{(directions/all)*100:10.1f}")}
         data[i.value] = to_add
@@ -58,19 +78,25 @@ def StatisticStateApi(request):
 # for thesis
 @api_view(['GET'])
 def StatisticThesisStateApi(request):
-    all = FridayTesisImamRead.objects.all().count()
-    data = {'count_all': all}
-    for i in States:
-        thesis = FridayTesisImamRead.objects.filter(state=i).count()
-        to_add = {'count': thesis, "protsent": float(
-            f"{(thesis/all)*100:10.1f}")}
-        data[i.value] = to_add
-    return Response(data=data)
+    start_date = request.GET.get('start_date')
+    finish_date = request.GET.get('finish_date')
+    query = FridayTesisImamRead.objects.all()
+    if start_date and finish_date:
+        query = query.filter(created_at__range=[start_date, finish_date])
+    all = query.aggregate(
+        unseen=Count('state', filter=Q(state=States.UNSEEN)), accepted=Count('state', filter=Q(state=States.ACCEPTED)), done=Count('state', filter=Q(state=States.DONE)),)
+    all['count_all'] = sum(all.values())
+    return Response(data=all)
 
 
 @api_view(['GET'])
 def StatisticThesisAgeApi(request):
-    all = FridayTesisImamResult.objects.all().aggregate(child=Sum(
+    start_date = request.GET.get('start_date')
+    finish_date = request.GET.get('finish_date')
+    query = FridayTesisImamResult.objects.all()
+    if start_date and finish_date:
+            query = query.filter(created_at__range=[start_date, finish_date])
+    all = query.aggregate(child=Sum(
         'child'), man=Sum('man'), old_man=Sum('old_man'), old=Sum('old'))
     all['count_all'] = sum(all.values())
     return Response(data=all)
