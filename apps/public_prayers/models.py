@@ -19,7 +19,7 @@ class PublicPrayers(BaseModel):
         Prayers, related_name='prayers')
 
     def __str__(self):
-        return str(self.id)+": "+self.imam.username+" - "+self.prayer.name+" - "+self.created_at.strftime("%Y-%m-%d")
+        return str(self.id)+": "+self.imam.username+" - "+self.created_at.strftime("%Y-%m-%d")
 
     class Meta:
         verbose_name = 'Jamoat namozi '

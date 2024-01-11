@@ -34,7 +34,7 @@ class PublicPrayersListSerializer(ModelSerializer):
     prayer = PrayersSerializer(many=True)
     class Meta:
         model = PublicPrayers
-        fields = ('id', 'imam', 'prayer',)
+        fields = ('id', 'imam', 'prayer', 'created_at',)
 
 
     def to_representation(self, instance):

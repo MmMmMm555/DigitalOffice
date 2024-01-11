@@ -26,7 +26,7 @@ class PublicPrayersListAPIView(ListAPIView):
     serializer_class = PublicPrayersListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
-    filterset_fields = ('id', 'imam', 'prayer',)
+    filterset_fields = ('id', 'imam', 'prayer', 'created_at',)
 
     def get_queryset(self):
         user_role = self.request.user.role
