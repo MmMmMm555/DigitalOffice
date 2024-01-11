@@ -26,7 +26,7 @@ class CharityPromotionImages(models.Model):
         verbose_name_plural = 'Hayriya aksiya rasmilari '
     
     def __str__(self):
-        return self.charity_promotion.imam.username+" "+self.image.url
+        return self.image.url
 
 
 class CharityPromotion(BaseModel):
