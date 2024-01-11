@@ -37,7 +37,7 @@ class Images(models.Model):
         verbose_name_plural = 'Hayriya rasmilari '
     
     def __str__(self):
-        return f"{self.id}-{self.image.url}"
+        return self.image.url
 
 class Charity(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imam_charity')
