@@ -9,18 +9,22 @@ from apps.employee import models
 
 class EmployeeListView(generics.ListAPIView):
     """ hodimlarni yosh boyicha filter qilish uchun "start_age" va "finish_age" filterlariga qiymat yuboriladi, "start_age < finish_age" ! """
+    """  "graduated_year"  boyicha filter bor 'yyyy' formatda qiymat yuboriladi sample: "api/v1/employee/employee/list?graduated_year=1000" """
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'surname', 'last_name',)
     filterset_fields = ('id', 'education', 'position', 'position__department',
-                        'graduated_year', 'academic_degree', 'profile__role', 'mosque__region', 'mosque__district', 'graduated_univer',)
+                        'academic_degree', 'profile__role', 'mosque__region', 'mosque__district', 'graduated_univer',)
 
     def get_queryset(self):
+        graduated_year = self.request.GET.get('graduated_year')
         start_age = self.request.GET.get('start_age')
         finish_age = self.request.GET.get('finish_age')
         query = self.queryset
+        if graduated_year:
+            query = query.filter(graduated_year__year=graduated_year)
         if start_age and finish_age and start_age < finish_age:
             current_year = date.today().year
             start_year = current_year-int(finish_age)
