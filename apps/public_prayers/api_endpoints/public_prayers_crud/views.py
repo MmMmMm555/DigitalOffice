@@ -6,6 +6,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.common.permissions import IsImam, IsDeputy
 from apps.public_prayers.models import PublicPrayers
+from apps.users.models import Role
 from .serializers import (PublicPrayersSerializer, PublicPrayersListSerializer,
                           PublicPrayersUpdateSerializer, PublicPrayersDetailSerializer,)
 
@@ -29,15 +30,14 @@ class PublicPrayersListAPIView(ListAPIView):
 
     def get_queryset(self):
         user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return PublicPrayers.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return PublicPrayers.objects.all()
-        elif user_role == '2':
-            return PublicPrayers.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return PublicPrayers.objects.filter(imam__district=self.request.user.district)
-        return []
+        query = self.queryset
+        if user_role == Role.IMAM or user_role == Role.SUB_IMAM:
+            return query.filter(imam=self.request.user)
+        elif user_role == Role.REGION_ADMIN:
+            return query.filter(imam__region=self.request.user.region)
+        elif user_role == Role.DISTRICT_ADMIN:
+            return query.filter(imam__district=self.request.user.district)
+        return query
 
 
 class PublicPrayersDetailAPIView(RetrieveAPIView):

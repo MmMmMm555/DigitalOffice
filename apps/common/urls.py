@@ -5,8 +5,9 @@ from apps.common.api_endpoints.notifications.views import NotificationApi
 from apps.common.api_endpoints.statistics.views import (StatisticDirectionTypeApi,
                                                         StatisticRegionApi,
                                                         StatisticStateApi,
-                                                    StatisticRoleApi,)
-
+                                                        StatisticRoleApi,
+                                                        StatisticThesisStateApi,
+                                                        StatisticThesisAgeApi,)
 
 urlpatterns = [
     # regions api
@@ -15,10 +16,17 @@ urlpatterns = [
 
     # notifications api
     path('notifications/', NotificationApi, name='districts_list'),
-   
-    # statistics api
-    path('statistics/direction_type', StatisticDirectionTypeApi, name='statistics_direction_type'),
-    path('statistics/region', StatisticRegionApi, name='statistics_region'),
-    path('statistics/state', StatisticStateApi, name='statistics_state'),
-    path('statistics/role', StatisticRoleApi, name='statistics_role'),
+
+    # statistics order api
+    path('statistics/order/direction_type',
+         StatisticDirectionTypeApi, name='statistics_direction_type'),
+    path('statistics/order/region', StatisticRegionApi, name='statistics_region'),
+    path('statistics/order/state', StatisticStateApi, name='statistics_state'),
+    path('statistics/order/role', StatisticRoleApi, name='statistics_role'),
+
+    # statistics tesis api
+    path('statistics/thesis/state',
+         StatisticThesisStateApi, name='statistics_thesis_state'),
+    path('statistics/thesis/age', StatisticThesisAgeApi,
+         name='statistics_thesis_role'),
 ]

@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
 from django.db.models import Count, Q
 from rest_framework.permissions import IsAuthenticated
+from apps.users.models import Role
 
 from apps.mosque.api_endpoints.Mosque.serializers import (MosqueSerializer,
                                                           MosqueListSerializer,
@@ -30,7 +31,7 @@ class MosqueListView(generics.ListAPIView):
     queryset = Mosque.objects.all().annotate(employee_count=Count(
         'employee', filter=Q(employee__profile__role__in=['4', '5'])), has_imam=Count('employee', filter=Q(employee__profile__role='4')))
     serializer_class = MosqueListSerializer
-    permission_classes = (IsSuperAdmin,)
+    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('name', 'address',)
     filterset_fields = (
         'id',
@@ -67,10 +68,15 @@ class MosqueListView(generics.ListAPIView):
 
     def get_queryset(self):
         has_imam = self.request.GET.get('has_imam', None)
+        user_role = self.request.user.role
+        query = self.queryset
         if has_imam:
-            return self.queryset.filter(has_imam=0)
-        return self.queryset
-
+            query = query.filter(has_imam=0)
+        if user_role == Role.REGION_ADMIN:
+            return query.filter(region=self.request.user.region)
+        elif user_role == Role.DISTRICT_ADMIN:
+            return query.filter(district=self.request.user.district)
+        return query
 
 
 class MosqueRetrieveView(generics.RetrieveAPIView):

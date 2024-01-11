@@ -1,10 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import Count, Sum
 
 from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, Directions, ToRole
 from apps.common.regions import Regions
+from apps.friday_tesis.models import FridayTesisImamRead, FridayTesisImamResult
 
 
+# for orders
 @api_view(['GET'])
 def StatisticDirectionTypeApi(request):
     all = Directions.objects.all().count()
@@ -35,14 +38,14 @@ def StatisticRoleApi(request):
     data = {'count_all': all}
     for i in ToRole:
         directions = Directions.objects.filter(to_role__contains=[i]).count()
-        to_add = {'count': directions,}
+        to_add = {'count': directions, }
         data[i.value] = to_add
     return Response(data=data)
 
 
 @api_view(['GET'])
 def StatisticStateApi(request):
-    all = DirectionsEmployeeRead.objects.all().count()
+    all = FridayTesisImamRead.objects.all().count()
     data = {'count_all': all}
     for i in States:
         directions = DirectionsEmployeeRead.objects.filter(state=i).count()
@@ -50,3 +53,24 @@ def StatisticStateApi(request):
             f"{(directions/all)*100:10.1f}")}
         data[i.value] = to_add
     return Response(data=data)
+
+
+# for thesis
+@api_view(['GET'])
+def StatisticThesisStateApi(request):
+    all = FridayTesisImamRead.objects.all().count()
+    data = {'count_all': all}
+    for i in States:
+        thesis = FridayTesisImamRead.objects.filter(state=i).count()
+        to_add = {'count': thesis, "protsent": float(
+            f"{(thesis/all)*100:10.1f}")}
+        data[i.value] = to_add
+    return Response(data=data)
+
+
+@api_view(['GET'])
+def StatisticThesisAgeApi(request):
+    all = FridayTesisImamResult.objects.all().aggregate(child=Sum(
+        'child'), man=Sum('man'), old_man=Sum('old_man'), old=Sum('old'))
+    all['count_all'] = sum(all.values())
+    return Response(data=all)
