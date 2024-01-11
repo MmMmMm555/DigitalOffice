@@ -29,12 +29,14 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
 
     def get_queryset(self):
         to_role = self.request.GET.get('to_role')
-        print(to_role)
+        user_role = self.request.user.role
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
         query = self.queryset
-        if self.request.user.role != Role.SUPER_ADMIN:
-            query = query.filter(employee=self.request.user)
+        if user_role == Role.REGION_ADMIN:
+            query = query.filter(employee__region=self.request.user.region)
+        elif user_role == Role.DISTRICT_ADMIN:
+            query = query.filter(employee__district=self.request.user.district)
         if to_role:
             query = query.filter(direction__to_role__contains=[to_role])
         if start_date and finish_date:

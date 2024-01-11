@@ -5,6 +5,7 @@ from django.db.models import Count, Sum, Q
 from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, Directions, ToRole
 from apps.common.regions import Regions
 from apps.friday_tesis.models import FridayTesisImamRead, FridayTesisImamResult
+from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
 
 
 # for orders
@@ -95,8 +96,39 @@ def StatisticThesisAgeApi(request):
     finish_date = request.GET.get('finish_date')
     query = FridayTesisImamResult.objects.all()
     if start_date and finish_date:
-            query = query.filter(created_at__range=[start_date, finish_date])
+        query = query.filter(created_at__range=[start_date, finish_date])
     all = query.aggregate(child=Sum(
         'child'), man=Sum('man'), old_man=Sum('old_man'), old=Sum('old'))
     all['count_all'] = sum(all.values())
     return Response(data=all)
+
+
+# for mosques
+@api_view(['GET'])
+def StatisticMosqueTopApi(request):
+    query = Mosque.objects.all().order_by(
+        '-capacity').values('name', 'capacity')[:10]
+    return Response(data=query)
+
+
+@api_view(['GET'])
+def StatisticMosqueTypeApi(request):
+    query = Mosque.objects.all().aggregate(all_count=Count('id'), jome=Count('id', filter=Q(mosque_type=MosqueTypeChoices.JOME)),
+                                           neighborhood=Count('id', filter=Q(mosque_type=MosqueTypeChoices.NEIGHBORHOOD)))
+    return Response(data=query)
+
+
+@api_view(['GET'])
+def StatisticMosqueStatusApi(request):
+    query = Mosque.objects.all().aggregate(all_count=Count('id'), good=Count('id', filter=Q(mosque_status=MosqueStatusChoices.GOOD)),
+                                           repair=Count('id', filter=Q(mosque_status=MosqueStatusChoices.REPAIR)), reconstruction=Count('id', filter=Q(mosque_status=MosqueStatusChoices.RECONSTRUCTION)))
+    return Response(data=query)
+
+
+@api_view(['GET'])
+def StatisticMosqueRegionApi(request):
+    all = Mosque.objects.all()
+    data = {'count_all': all.aggregate(all_count=Count('id'))['all_count']}
+    for i in Regions.objects.all().values('id', 'name'):
+        data[i['name']] = all.aggregate(region=Count('id', filter=Q(region=i['id'])))['region']
+    return Response(data=data)

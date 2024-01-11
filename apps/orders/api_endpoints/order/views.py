@@ -10,6 +10,7 @@ from .serializers import (DirectionCreateSerializer,
                           DirectionSingleSerializer,
                           DirectionUpdateSerializer,)
 from apps.orders import models
+from django.db.models import F
 
 
 class DirectionCreateView(generics.CreateAPIView):
@@ -25,7 +26,8 @@ class DirectionCreateView(generics.CreateAPIView):
 
 class DirectionsListView(generics.ListAPIView):
     """ to_role boyicha filterlash uchun "api/v1/orders/list/?to_role=2" ko'rinishida filter yuboriladi agar multpe filter tanlasa "api/v1/orders/list/?to_role=2&to_role=3" ko'rinishida yuboriladi """
-    queryset = models.Directions.objects.all()
+    queryset = models.Directions.objects.all().annotate(
+        from_region=F('creator__region__name'), from_district=F('creator__district__name'))
     serializer_class = DirectionListSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('title',)
@@ -98,4 +100,5 @@ class FileView(generics.CreateAPIView):
     queryset = models.DirectionFiles.objects.all()
     serializer_class = DirectionFilesSerializer
     permission_classes = (IsRegionAdmin | IsDistrictAdmin | IsSuperAdmin,)
-    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.FileUploadParser,)
+    parser_classes = (parsers.FormParser,
+                      parsers.MultiPartParser, parsers.FileUploadParser,)

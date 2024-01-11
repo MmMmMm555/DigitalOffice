@@ -7,7 +7,12 @@ from apps.common.api_endpoints.statistics.views import (StatisticDirectionTypeAp
                                                         StatisticStateApi,
                                                         StatisticRoleApi,
                                                         StatisticThesisStateApi,
-                                                        StatisticThesisAgeApi,)
+                                                        StatisticThesisAgeApi,
+                                                        StatisticMosqueTopApi,
+                                                        StatisticMosqueTypeApi,
+                                                        StatisticMosqueStatusApi,
+                                                        StatisticMosqueRegionApi,
+                                                        )
 
 urlpatterns = [
     # regions api
@@ -29,4 +34,14 @@ urlpatterns = [
          StatisticThesisStateApi, name='statistics_thesis_state'),
     path('statistics/thesis/age', StatisticThesisAgeApi,
          name='statistics_thesis_role'),
+
+    # statistics thesis api
+    path('statistics/mosque/top',
+         StatisticMosqueTopApi, name='statistics_mosque_top'),
+    path('statistics/mosque/type',
+         StatisticMosqueTypeApi, name='statistics_mosque_type'),
+    path('statistics/mosque/status',
+         StatisticMosqueStatusApi, name='statistics_mosque_status'),
+    path('statistics/mosque/region',
+         StatisticMosqueRegionApi, name='statistics_mosque_region'),
 ]

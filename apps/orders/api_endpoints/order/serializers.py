@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, ValidationError, CharField, ListField
+from rest_framework.serializers import ModelSerializer, ValidationError, CharField, ListField, StringRelatedField
 from django.db import transaction
 from datetime import date, timedelta
 
@@ -67,10 +67,13 @@ class DirectionCreateSerializer(ModelSerializer):
                 to_role = direction.to_role
         # getting m2m field values
                 employee = User.objects.filter(role__in=to_role)
+                print(to_role)
+                print(employee)
                 employee_list = direction.to_employee.all()
                 district_list = direction.to_district.all()
                 region_list = direction.to_region.all()
         # filtering m2m fields
+                print(region_list)
                 if not region_list:
                     models.DirectionsEmployeeRead.objects.bulk_create(
                         [
@@ -87,12 +90,13 @@ class DirectionCreateSerializer(ModelSerializer):
                     if employee_list:
                         employee = employee.filter(
                             profil__mosque__id__in=employee_list)
-
+                    print(employee)
                     employee_to_create = [
                         models.DirectionsEmployeeRead(
                             direction=direction, employee=i)
                         for i in employee
                     ]
+                    print(employee_to_create)
                     models.DirectionsEmployeeRead.objects.bulk_create(
                         employee_to_create)
 
@@ -166,7 +170,6 @@ class DirectionCreateSerializer(ModelSerializer):
         #         direction.to_region.set(region_list)
 
         #         # saving direction
-                direction.save()
                 return direction
         except:
             raise ValidationError('Something went wrong')
@@ -175,12 +178,16 @@ class DirectionCreateSerializer(ModelSerializer):
 class DirectionListSerializer(ModelSerializer):
     to_role = ListField(
         child=CharField(), read_only=True)
+    from_region = StringRelatedField(read_only=True)
+    from_district = StringRelatedField(read_only=True)
 
     class Meta:
         model = models.Directions
         fields = ('id',
                   'title',
                   'created_at',
+                  'from_region',
+                  'from_district',
                   'to_region',
                   'to_district',
                   'required_to_region',
