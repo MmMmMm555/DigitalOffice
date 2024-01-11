@@ -5,7 +5,8 @@ from apps.users.models import User
 
 
 class Prayers(models.Model):
-    name = models.CharField(max_length=255, blank=False)
+    label = models.CharField(max_length=255, blank=False)
+    name = models.SlugField(max_length=255, blank=False)
 
     def __str__(self) -> str:
         return f"{self.id} {self.name}"
