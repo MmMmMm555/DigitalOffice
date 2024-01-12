@@ -39,8 +39,6 @@ class FridayTesisListView(generics.ListAPIView):
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
         query = models.FridayTesis.objects.all()
-        if self.request.user.role != Role.SUPER_ADMIN:
-            query = query.filter(creator=self.request.user)
         if start_date and finish_date:
             query = query.filter(created_at__range=[start_date, finish_date])
         elif start_date:

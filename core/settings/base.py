@@ -306,6 +306,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://45.12.236.79',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://raqamli-idora.netlify.app/",
+]
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 

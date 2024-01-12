@@ -130,5 +130,9 @@ def StatisticMosqueRegionApi(request):
     all = Mosque.objects.all()
     data = {'count_all': all.aggregate(all_count=Count('id'))['all_count']}
     for i in Regions.objects.all().values('id', 'name'):
-        data[i['name']] = all.aggregate(region=Count('id', filter=Q(region=i['id'])))['region']
+        data[i['name']] = all.aggregate(region=Count(
+            'id', filter=Q(region=i['id'])))['region']
     return Response(data=data)
+
+
+# for employee
