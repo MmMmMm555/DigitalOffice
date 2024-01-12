@@ -54,7 +54,7 @@ class DirectionsEmployeeResultDetailView(RetrieveAPIView):
 class DirectionsEmployeeResultUpdateView(RetrieveUpdateAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultUpdateSerializer
-    parser_classes = (FormParser,)
+    parser_classes = (FormParser, MultiPartParser,)
     permission_classes = (IsImam | IsRegionAdmin | IsDistrictAdmin | IsDeputy,)
 
     def perform_update(self, serializer):
