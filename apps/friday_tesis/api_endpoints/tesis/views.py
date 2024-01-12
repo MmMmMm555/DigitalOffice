@@ -59,4 +59,4 @@ class FridayTesisDeleteView(generics.DestroyAPIView):
 class FridayTesisDetailView(generics.RetrieveAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisDetailSerializer
-    permission_classes = (IsSuperAdmin|IsImam,)
+    permission_classes = (IsSuperAdmin | IsImam,)

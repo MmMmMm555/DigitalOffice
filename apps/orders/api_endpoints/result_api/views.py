@@ -39,9 +39,10 @@ class DirectionsEmployeeResultListView(ListAPIView):
                         'direction__direction_type', 'employee', 'created_at',)
 
     def get_queryset(self):
+        query = DirectionsEmployeeResult.objects.all()
         if self.request.user.role == Role.SUPER_ADMIN:
-            return DirectionsEmployeeResult.objects.all()
-        return DirectionsEmployeeResult.objects.filter(employee=self.request.user)
+            return query
+        return query.filter(employee=self.request.user)
 
 
 class DirectionsEmployeeResultDetailView(RetrieveAPIView):

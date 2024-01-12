@@ -112,3 +112,8 @@ class DirectionsEmployeeResultUpdateSerializer(ModelSerializer):
             'employee': {'required': False},
             'direction': {'required': False},
             }
+
+    def validate(self, attrs):
+        if attrs.get('employee') != self.context.get('request').user:
+            raise ValidationError({'detail': "you can't update the result"})
+        return attrs

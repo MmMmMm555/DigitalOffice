@@ -65,7 +65,7 @@ class FridayTesisImamResultSerializer(ModelSerializer):
             result.images.set(validated_data.get('images', []))
             result.videos.set(validated_data.get('videos', []))
             result.save()
-            seen = FridayTesisImamRead.objects.filter(
+            FridayTesisImamRead.objects.filter(
                 tesis=result.tesis, imam=self.context['request'].user.id).update(state=States.DONE)
             return result
 
@@ -93,3 +93,26 @@ class FridayTesisImamResultDetailSerializer(ModelSerializer):
             representation['from'] = 'Nomalum'
             representation['imam'] = {'id': instance.imam.id}
         return representation
+
+
+class FridayTesisImamResultSerializer(ModelSerializer):
+    class Meta:
+        model = FridayTesisImamResult
+        fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child',
+                  'man', 'old_man', 'old', 'images', 'videos',)
+        extra_kwargs = {
+            'child': {'required': False},
+            'man': {'required': False},
+            'old_man': {'required': False},
+            'old': {'required': False},
+            'tesis': {'required': False},
+            'imam': {'required': False},
+        }
+        
+    def validate(self, attrs):
+        if attrs.get('imam') != self.context.get('request').user:
+            raise ValidationError({'detail': "you can't update the result"})
+        tesis_date = FridayTesis.objects.get(id=attrs.get('tesis').id).date
+        if tesis_date+timedelta(days=1) < date.today():
+            raise ValidationError("time expired")
+        return attrs

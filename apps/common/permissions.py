@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-
+from apps.users.models import Role
 
 
 class IsOwnerRead(BasePermission):
@@ -9,24 +9,24 @@ class IsOwnerRead(BasePermission):
 
 class IsSuperAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == '1'
+        return request.user.role == Role.SUPER_ADMIN
 
 
 class IsRegionAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == '2'
+        return request.user.role == Role.REGION_ADMIN
 
 
 class IsDistrictAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == '3'
+        return request.user.role == Role.DISTRICT_ADMIN
 
 
 class IsImam(BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == '4'
+        return request.user.role == Role.IMAM
 
 
 class IsDeputy(BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == '5'
+        return request.user.role == Role.SUB_IMAM
