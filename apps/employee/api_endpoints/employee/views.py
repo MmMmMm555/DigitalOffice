@@ -26,7 +26,6 @@ class EmployeeListView(generics.ListAPIView):
         profile = self.request.GET.get('has_account')
         finish_age = self.request.GET.get('finish_age')
         query = models.Employee.objects.all()
-        print(profile)
         if graduated_year:
             query = query.filter(graduated_year__year=graduated_year)
         if profile:
@@ -36,7 +35,6 @@ class EmployeeListView(generics.ListAPIView):
             elif profile == 'true':
                 query = query.filter(profile__role__in=[
                                      Role.SUB_IMAM, Role.SUPER_ADMIN, Role.IMAM, Role.REGION_ADMIN, Role.DISTRICT_ADMIN,])
-        print(len(query))
         if start_age and finish_age and start_age < finish_age:
             current_year = date.today().year
             start_year = current_year-int(finish_age)
