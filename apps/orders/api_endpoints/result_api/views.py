@@ -1,13 +1,15 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .serializers import (DirectionResultVideosSerializer,
                           DirectionResultImagesSerializer,
                           DirectionResultFilesSerializer,
                           DirectionsEmployeeResultSerializer,
                           DirectionsEmployeeResultListSerializer,
-                          DirectionsEmployeeResultDetailSerializer,)
+                          DirectionsEmployeeResultDetailSerializer,
+                          DirectionsEmployeeResultUpdateSerializer,)
 from apps.orders.models import (DirectionsEmployeeResult,
                                 ResultImages,
                                 ResultFiles,
@@ -20,7 +22,7 @@ class DirectionsEmployeeResultView(CreateAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultSerializer
     permission_classes = (IsImam | IsRegionAdmin |
-                          IsDistrictAdmin | IsDeputy | IsSuperAdmin,)
+                      IsDistrictAdmin | IsDeputy,)
     parser_classes = (FormParser, MultiPartParser,)
 
     def perform_create(self, serializer):
@@ -31,8 +33,10 @@ class DirectionsEmployeeResultListView(ListAPIView):
     queryset = DirectionsEmployeeResult.objects.all().select_related('direction_name')
     serializer_class = DirectionsEmployeeResultListSerializer
     permission_classes = (IsAuthenticated,)
-    search_fields = ('employee__profil__name', 'employee__profil__last_name', 'employee__profil__mosque__name',)
-    filterset_fields = ('id', 'direction', 'direction__direction_type', 'employee', 'created_at',)
+    search_fields = ('employee__profil__name',
+                     'employee__profil__last_name', 'employee__profil__mosque__name',)
+    filterset_fields = ('id', 'direction',
+                        'direction__direction_type', 'employee', 'created_at',)
 
     def get_queryset(self):
         if self.request.user.role == Role.SUPER_ADMIN:
@@ -44,6 +48,17 @@ class DirectionsEmployeeResultDetailView(RetrieveAPIView):
     queryset = DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeResultDetailSerializer
     permission_classes = (IsAuthenticated,)
+
+
+class DirectionsEmployeeResultUpdateView(RetrieveUpdateAPIView):
+    queryset = DirectionsEmployeeResult.objects.all()
+    serializer_class = DirectionsEmployeeResultUpdateSerializer
+    parser_classes = (FormParser,)
+    permission_classes = (IsImam | IsRegionAdmin | IsDistrictAdmin | IsDeputy,)
+
+    def perform_update(self, serializer):
+        if self.request.user == self.get_object().employee:
+            serializer.save(employee=self.request.user)
 
 
 class ResultImageView(CreateAPIView):

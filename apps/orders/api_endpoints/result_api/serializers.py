@@ -101,3 +101,14 @@ class DirectionsEmployeeResultSerializer(ModelSerializer):
         DirectionsEmployeeRead.objects.filter(
             direction=result.direction, employee=self.context['request'].user.id).update(state=States.DONE)
         return result
+
+
+class DirectionsEmployeeResultUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = DirectionsEmployeeResult
+        fields = ('id', 'direction', 'employee',
+                  'comment', 'files', 'images', 'videos',)
+        extra_kwargs = {
+            'employee': {'required': False},
+            'direction': {'required': False},
+            }
