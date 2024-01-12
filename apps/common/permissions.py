@@ -2,11 +2,6 @@ from rest_framework.permissions import BasePermission
 from apps.users.models import Role
 
 
-class IsOwnerRead(BasePermission):
-    def has_permission(self, request, view, obj):
-        return request.user.id == obj.imam.id
-
-
 class IsSuperAdmin(BasePermission):
     def has_permission(self, request, view):
         return request.user.role == Role.SUPER_ADMIN

@@ -1,6 +1,5 @@
 from drf_yasg import openapi
 from apps.employee.models import AcademicDegree
-from apps.common.regions import Regions
 
 region = openapi.Parameter(name="region", in_=openapi.IN_FORM, type='array', items=AcademicDegree.choices, description="regions_choice")
 district = openapi.Parameter(name="district", in_=openapi.IN_QUERY, type='array', items=AcademicDegree.choices, description="district_choice")

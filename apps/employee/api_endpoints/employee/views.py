@@ -1,15 +1,17 @@
 from rest_framework import generics, parsers, permissions, filters, viewsets
-from apps.common.permissions import IsSuperAdmin
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import date
+from django.db.models import Q
 
 from . import serializers
+from apps.common.permissions import IsSuperAdmin, Role
 from apps.employee import models
 
 
 class EmployeeListView(generics.ListAPIView):
     """ hodimlarni yosh boyicha filter qilish uchun "start_age" va "finish_age" filterlariga qiymat yuboriladi, "start_age < finish_age" ! """
     """  "graduated_year"  boyicha filter bor 'yyyy' formatda qiymat yuboriladi sample: "api/v1/employee/employee/list?graduated_year=1000" """
+    """ xodimga akkaunt ulangan mi yo'qmi bilish uchun 'has_account' ga true false valuelarni jo'natasiz true da akkaunt ulanganlar false da ulanmagan xodimlar listini qaytaradi """
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = (IsSuperAdmin,)
@@ -21,10 +23,20 @@ class EmployeeListView(generics.ListAPIView):
     def get_queryset(self):
         graduated_year = self.request.GET.get('graduated_year')
         start_age = self.request.GET.get('start_age')
+        profile = self.request.GET.get('has_account')
         finish_age = self.request.GET.get('finish_age')
-        query = self.queryset
+        query = models.Employee.objects.all()
+        print(profile)
         if graduated_year:
             query = query.filter(graduated_year__year=graduated_year)
+        if profile:
+            if profile == 'false':
+                query = query.exclude(profile__role__in=[
+                                      Role.SUB_IMAM, Role.SUPER_ADMIN, Role.IMAM, Role.REGION_ADMIN, Role.DISTRICT_ADMIN,])
+            elif profile == 'true':
+                query = query.filter(profile__role__in=[
+                                     Role.SUB_IMAM, Role.SUPER_ADMIN, Role.IMAM, Role.REGION_ADMIN, Role.DISTRICT_ADMIN,])
+        print(len(query))
         if start_age and finish_age and start_age < finish_age:
             current_year = date.today().year
             start_year = current_year-int(finish_age)

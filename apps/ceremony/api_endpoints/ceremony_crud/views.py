@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
-from apps.common.permissions import IsImam, IsDeputy
+from apps.common.permissions import IsImam, IsDeputy, Role
 from apps.ceremony.models import Ceremony
 from .serializers import (CeremonySerializer, CeremonyListSerializer,
                           CeremonyUpdateSerializer, CeremonyDetailSerializer,)
@@ -28,16 +28,15 @@ class CeremonyListAPIView(ListAPIView):
     filterset_fields = ('id', 'imam', 'date', 'types',)
 
     def get_queryset(self):
+        query = Ceremony.objects.all()
         user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Ceremony.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Ceremony.objects.all()
-        elif user_role == '2':
-            return Ceremony.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Ceremony.objects.filter(imam__district=self.request.user.district)
-        return []
+        if user_role == Role.IMAM or user_role == Role.SUB_IMAM:
+            query = query.filter(imam=self.request.user)
+        elif user_role == Role.REGION_ADMIN:
+            query = query.filter(imam__region=self.request.user.region)
+        elif user_role == Role.DISTRICT_ADMIN:
+            query = query.filter(imam__district=self.request.user.district)
+        return query
 
 
 class CeremonyDetailAPIView(RetrieveAPIView):
