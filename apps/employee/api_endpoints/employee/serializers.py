@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, CharField
 
 from apps.employee import models
+from apps.employee.api_endpoints.department.serializers import DepartmentSerializer, Position
 
 
 # class WorkActivitySerializer(ModelSerializer):
@@ -109,7 +110,7 @@ class EmployeeDetailSerializer(ModelSerializer):
     # mosque_name = CharField(source='mosque.name', read_only=True)
     # mosque_address = CharField(source='mosque.address', read_only=True)
     # position = CharField(source='position.name', read_only=True)
-    # department = CharField(source='position.department.name', read_only=True)
+    # department = DepartmentSerializer(many=True)
 
     class Meta:
         model = models.Employee
@@ -150,7 +151,7 @@ class EmployeeDetailSerializer(ModelSerializer):
                 'id': instance.graduated_univer.id, 'name': instance.graduated_univer.name}
         if instance.position:
             representation['department'] = {
-                'id': instance.position.department.id, 'name': instance.position.department.name}
+                'id': instance.position.department.id, 'name': instance.position.department.name, 'position': Position.objects.filter(department=instance.position.department.id).values('id', 'name')}
             representation['position'] = {
                 'id': instance.position.id, 'name': instance.position.name}
         return representation
