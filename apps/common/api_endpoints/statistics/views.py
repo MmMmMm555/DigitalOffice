@@ -37,12 +37,13 @@ def StatisticRegionApi(request):
     all = query.aggregate(all_count=Count('id'))['all_count']
     data = {'count_all': all}
     for i in Regions.objects.all().values('id', 'name'):
+        print(i)
         directions = query.aggregate(count=Count(
             'to_region', filter=Q(to_region__id=i['id'])))['count']
         to_add = {'count': directions, "protsent": float(
             f"{(directions/all)*100:10.1f}")}
         data[i['name']] = to_add
-    return Response(data=data)
+    return Response(data=Regions.objects.all().values('id', 'name'))
 
 
 @api_view(['GET'])
