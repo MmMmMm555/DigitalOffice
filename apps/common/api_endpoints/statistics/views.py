@@ -43,7 +43,7 @@ def StatisticRegionApi(request):
         to_add = {'count': directions, "protsent": float(
             f"{(directions/all)*100:10.1f}")}
         data[i['name']] = to_add
-    return Response(data=Regions.objects.all().values('id', 'name'))
+    return Response(data=data)
 
 
 @api_view(['GET'])
