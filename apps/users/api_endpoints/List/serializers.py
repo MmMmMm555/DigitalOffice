@@ -25,3 +25,13 @@ class UsersDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'role',
                   'email', 'profil', 'region', 'district',)
         depth = 1
+
+
+class UsersUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'role',
+                  'email', 'profil', 'region', 'district',)
+        extra_kwargs = {
+            'username': {'required': False},
+        }

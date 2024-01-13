@@ -8,7 +8,7 @@ from apps.users.models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        required=True,  
+        required=False,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
@@ -37,14 +37,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        
+
         user = User.objects.create(
-                    username = validated_data.get('username'),
-                    email = validated_data.get('email'),
-                    role = validated_data.get('role'),
-                    region = validated_data.get('region'),
-                    district = validated_data.get('district'),
-                    profil = validated_data.get('profil'),
+            username=validated_data.get('username'),
+            email=validated_data.get('email'),
+            role=validated_data.get('role'),
+            region=validated_data.get('region'),
+            district=validated_data.get('district'),
+            profil=validated_data.get('profil'),
         )
 
         user.set_password(validated_data.get('password'))

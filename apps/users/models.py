@@ -28,13 +28,10 @@ class User(AbstractUser):
     role = models.CharField(
         max_length=18, choices=Role.choices, default=Role.IMAM, blank=True, null=True)
 
-    def create_user(self, username, email, password=None):
+    def create_user(self, username, password=None):
         if username is None:
             raise TypeError('Users must have a username.')
-        if email is None:
-            raise TypeError('Users must have an email address.')
         user = User.objects.create(
-            email=email,
             username=username,
             password=make_password(password))
         return user
