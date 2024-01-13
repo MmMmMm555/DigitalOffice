@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
 from apps.users.api_endpoints.Login.views import LoginObtainTokenPairView
 from apps.users.api_endpoints.Register.views import RegisterView
-from apps.users.api_endpoints.List.views import UsersListView, UsersDetailView, UsersUpdateView
+from apps.users.api_endpoints.List.views import (UsersListView, UsersDetailView, UsersUpdateView, SelfProfileUpdateView)
 from apps.users.api_endpoints.self_profile.views import UserSelfView
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('accounts/<int:pk>', UsersDetailView.as_view()),
     path('update/<int:pk>', UsersUpdateView.as_view()),
     path('self_profile/', UserSelfView.as_view()),
+    path('self_profile/update/<int:pk>', SelfProfileUpdateView.as_view()),
 ]

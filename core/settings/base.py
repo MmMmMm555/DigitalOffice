@@ -116,6 +116,7 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.JSONParser",
     ],
+    "DEFAULT_PERMISSION_CLASS": "rest_framework.permissions.IsAuthenticated",
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
     "DATE_FORMAT": "%Y-%m-%d",
 }

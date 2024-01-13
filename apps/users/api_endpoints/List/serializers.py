@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 
 from apps.users.models import User
+from apps.employee.models import Employee
 
 
 class UsersListSerializer(serializers.ModelSerializer):
@@ -48,3 +49,25 @@ class UsersUpdateSerializer(serializers.ModelSerializer):
             instance.set_password(password)
             instance.save()
         return super().update(instance, validated_data)
+
+
+class SelfProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('id',
+                  'name',
+                  'surname',
+                  'last_name',
+                  'phone_number',
+                  'address',
+                  'image',
+                  'birth_date',
+                  )
+        extra_kwargs = {
+            'name': {'required': False},
+            'surname': {'required': False},
+            'last_name': {'required': False},
+            'phone_number': {'required': False},
+            'address': {'required': False},
+            'birth_date': {'required': False},
+        }

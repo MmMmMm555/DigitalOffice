@@ -107,10 +107,6 @@ class EmployeeListSerializer(ModelSerializer):
 
 class EmployeeDetailSerializer(ModelSerializer):
     socialmedia = SocialMediaSerializer(many=True)
-    # mosque_name = CharField(source='mosque.name', read_only=True)
-    # mosque_address = CharField(source='mosque.address', read_only=True)
-    # position = CharField(source='position.name', read_only=True)
-    # department = DepartmentSerializer(many=True)
 
     class Meta:
         model = models.Employee
