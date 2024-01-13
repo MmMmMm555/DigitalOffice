@@ -1,7 +1,6 @@
 from django.urls import path
 from apps.orders.api_endpoints.order.views import (DirectionCreateView,
                                                    DirectionsListView,
-                                                   DirectionDeleteView,
                                                    DirectionSingleView,
                                                    DirectionUpdateView,
                                                    FileListView,
@@ -24,7 +23,6 @@ urlpatterns = [
     path('create/', DirectionCreateView.as_view(), name='direction_create'),
     path('list/', DirectionsListView.as_view(), name='direction_list'),
     path('update/<int:pk>', DirectionUpdateView.as_view(), name='direction_update'),
-    path('delete/<int:pk>', DirectionDeleteView.as_view(), name='direction_delete'),
     path('detail/<int:pk>', DirectionSingleView.as_view(), name='direction_detail'),
     path('file/create', FileView.as_view(), name='file_create'),
     path('file/list', FileListView.as_view(), name='file_list'),

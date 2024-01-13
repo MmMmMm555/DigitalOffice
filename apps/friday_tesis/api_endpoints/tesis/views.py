@@ -1,8 +1,7 @@
-from rest_framework import generics, parsers, permissions, filters, response
+from rest_framework import generics, parsers, filters, serializers
 
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.users.models import Role
-
 
 from apps.common.permissions import IsSuperAdmin, IsImam
 from .serializers import (FridayTesisSerializer, FridayTesisCreateSerializer,
@@ -48,13 +47,13 @@ class FridayTesisListView(generics.ListAPIView):
         return query
 
 
-class FridayTesisDeleteView(generics.DestroyAPIView):
-    queryset = models.FridayTesis.objects.all()
-    serializer_class = FridayTesisSerializer
-    permission_classes = (permissions.IsAuthenticated, IsSuperAdmin,)
-
-
-class FridayTesisDetailView(generics.RetrieveAPIView):
+class FridayTesisDetailView(generics.RetrieveDestroyAPIView):
     queryset = models.FridayTesis.objects.all()
     serializer_class = FridayTesisDetailSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
+
+    def perform_destroy(self, instance):
+        if self.request.user.role == Role.SUPER_ADMIN:
+            instance.delete()
+        else:
+            raise serializers.ValidationError({'detail': 'you are not allowed to delete'})

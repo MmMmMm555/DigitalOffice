@@ -1,5 +1,6 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import (CreateAPIView, ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView)
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ValidationError
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.users.models import Role
@@ -81,3 +82,5 @@ class FridayTesisResultUpdateView(RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         if self.request.user == self.get_object().imam:
             serializer.save(imam=self.request.user)
+        else:
+            raise ValidationError({'detail': 'you are not allowed to update'})

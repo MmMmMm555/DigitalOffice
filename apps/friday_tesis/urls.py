@@ -2,7 +2,6 @@ from django.urls import path
 from apps.friday_tesis.api_endpoints.tesis.views import (FridayTesisCreateView,
                                                          FridayTesisListView,
                                                          FridayTesisUpdateView,
-                                                         FridayTesisDeleteView,
                                                          FridayTesisDetailView)
 from apps.friday_tesis.api_endpoints.seen_api.views import (FridayTesisImamReadView,
                                                             FridayTesisImamReadListView)
@@ -19,7 +18,6 @@ urlpatterns = [
     # tesis apis
     path('create/', FridayTesisCreateView.as_view(), name='tesis_create'),
     path('update/<int:pk>/', FridayTesisUpdateView.as_view(), name='tesis_update'),
-    path('delete/<int:pk>/', FridayTesisDeleteView.as_view(), name='tesis_delete'),
     path('detail/<int:pk>/', FridayTesisDetailView.as_view(), name='tesis_detail'),
     path('list/', FridayTesisListView.as_view(), name='tesis_list'),
 

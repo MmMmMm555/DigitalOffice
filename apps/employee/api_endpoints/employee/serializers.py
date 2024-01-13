@@ -2,6 +2,7 @@ from rest_framework.serializers import ModelSerializer, CharField
 
 from apps.employee import models
 from apps.employee.api_endpoints.department.serializers import DepartmentSerializer, Position
+from location_field.models.plain import PlainLocationField
 
 
 # class WorkActivitySerializer(ModelSerializer):

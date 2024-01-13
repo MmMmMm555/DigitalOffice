@@ -35,7 +35,6 @@ class DirectionsListView(generics.ListAPIView):
                         'required_to_district', 'from_role', 'types', 'direction_type', 'from_date', 'to_date', )
 
     def get_queryset(self):
-        # today = date.today()
         to_role = self.request.GET.get('to_role')
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
@@ -53,13 +52,6 @@ class DirectionsListView(generics.ListAPIView):
         return query
 
 
-class DirectionDeleteView(generics.DestroyAPIView):
-    queryset = models.Directions.objects.all()
-    serializer_class = DirectionListSerializer
-    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
-    lookup_field = 'pk'
-
-
 class DirectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = models.Directions.objects.all()
     serializer_class = DirectionUpdateSerializer
@@ -69,24 +61,17 @@ class DirectionUpdateView(generics.RetrieveUpdateAPIView):
     lookup_field = 'pk'
 
 
-class DirectionSingleView(generics.RetrieveAPIView):
+class DirectionSingleView(generics.RetrieveDestroyAPIView):
     queryset = models.Directions.objects.all()
     serializer_class = DirectionSingleSerializer
     permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'pk'
-
-    # def get_queryset(self):
-    #     role = self.request.user.role
-    #     district = self.request.user.district
-    #     region = self.request.user.region
-    #     model = models.Directions.objects.all()
-    #     if role == '3':
-    #         return model.filter(from_role=role, to_district=district)
-    #     if role == '2':
-    #         return model.filter(from_role=role, to_region=region)
-    #     if role == '1':
-    #         return model
-    #     return model
+    
+    def perform_destroy(self, instance):
+        if self.request.user.role in [Role.SUPER_ADMIN, Role.REGION_ADMIN, Role.DISTRICT_ADMIN]:
+            instance.delete()
+        else:
+            raise ValidationError({'detail': 'you are not allowed to delete'})
 
 
 class FileListView(generics.ListAPIView):
