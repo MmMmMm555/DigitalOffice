@@ -176,7 +176,7 @@ class MosqueSingleSerializer(ModelSerializer):
         ]
 
     def get_employee(self, obj):
-        return obj.employee.all().values('id', 'name', 'last_name',)
+        return obj.employee.all().values('id', 'name', 'last_name', 'profile__role',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
