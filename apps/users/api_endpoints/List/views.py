@@ -5,7 +5,7 @@ from apps.users.api_endpoints.List.serializers import UsersListSerializer, Users
 from apps.users.models import User
 from apps.common.permissions import IsSuperAdmin
 from apps.users.models import Role
-from rest_framework.parsers import FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 
 
 class UsersListView(generics.ListAPIView):
@@ -27,5 +27,5 @@ class UsersDetailView(generics.RetrieveDestroyAPIView):
 class UsersUpdateView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UsersUpdateSerializer
-    parser_classes = (FormParser,)
+    parser_classes = (FormParser, MultiPartParser,)
     permission_classes = (IsSuperAdmin,)
