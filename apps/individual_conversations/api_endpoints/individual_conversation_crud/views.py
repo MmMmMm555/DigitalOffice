@@ -8,6 +8,7 @@ from apps.common.permissions import IsImam, IsDeputy
 from apps.individual_conversations.models import IndividualConversation
 from .serializers import (IndividualConversationSerializer, IndividualConversationListSerializer,
                           IndividualConversationUpdateSerializer, IndividualConversationDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class IndividualConversationCreateView(CreateAPIView):
@@ -20,23 +21,11 @@ class IndividualConversationCreateView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class IndividualConversationListView(ListAPIView):
+class IndividualConversationListView(FilerQueryByRole, ListAPIView):
     queryset = IndividualConversation.objects.all()
     serializer_class = IndividualConversationListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'type', 'created_at',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return IndividualConversation.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return IndividualConversation.objects.all()
-        elif user_role == '2':
-            return IndividualConversation.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return IndividualConversation.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class IndividualConversationDetailView(RetrieveAPIView):

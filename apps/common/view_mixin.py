@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import F
-
+from apps.users.models import Role
 
 class ViewCountMixin:
     """Work only with retrieve views"""
@@ -22,3 +22,19 @@ class ViewCountMixin:
     def get(self, request, *args, **kwargs):
         self._count_view()
         return super().get(request, *args, **kwargs)
+
+class FilerQueryByRole:
+    
+    def get_queryset(self):
+        # instance = self.get_object()
+        # model_name = instance.__class__.__name__
+        # print(model_name)
+        query = self.queryset
+        user_role = self.request.user.role
+        if user_role in [Role.IMAM, Role.SUB_IMAM]:
+            query = query.filter(imam=self.request.user)
+        elif user_role == Role.REGION_ADMIN:
+            query = query.filter(imam__region=self.request.user.region)
+        elif user_role == Role.DISTRICT_ADMIN:
+            query = query.filter(imam__district=self.request.user.district)
+        return query

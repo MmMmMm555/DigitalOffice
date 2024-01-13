@@ -8,6 +8,7 @@ from apps.common.permissions import IsImam, IsDeputy
 from apps.neighborhood.models import Neighborhood
 from .serializers import (NeighborhoodSerializer, NeighborhoodListSerializer,
                           NeighborhoodUpdateSerializer, NeighborhoodDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class NeighborhoodCreateAPIView(CreateAPIView):
@@ -20,24 +21,12 @@ class NeighborhoodCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class NeighborhoodListAPIView(ListAPIView):
+class NeighborhoodListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
     filterset_fields = ('id', 'imam', 'date', 'participants', 'types',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Neighborhood.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Neighborhood.objects.all()
-        elif user_role == '2':
-            return Neighborhood.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Neighborhood.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class NeighborhoodDetailAPIView(RetrieveAPIView):

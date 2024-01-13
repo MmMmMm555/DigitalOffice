@@ -8,6 +8,7 @@ from .serializers import (DeathSerializer, DeathDetailSerializer,
                           DeathListSerializer, DeathUpdateSerializer,)
 from apps.death.models import Death
 from apps.common.permissions import IsImam, IsDeputy
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class DeathCreateAPIView(CreateAPIView):
@@ -20,23 +21,11 @@ class DeathCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class DeathListAPIView(ListAPIView):
+class DeathListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Death.objects.all()
     serializer_class = DeathListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'created_at',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Death.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Death.objects.all()
-        elif user_role == '2':
-            return Death.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Death.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class DeathUpdateAPIView(UpdateAPIView):

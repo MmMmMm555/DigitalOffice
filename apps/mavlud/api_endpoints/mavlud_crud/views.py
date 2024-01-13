@@ -7,6 +7,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from apps.common.permissions import IsImam, IsDeputy
 from apps.mavlud.models import Mavlud
 from .serializers import (MavludSerializer, MavludListSerializer, MavludUpdateSerializer, MavludDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class MavludCreateAPIView(CreateAPIView):
@@ -19,24 +20,12 @@ class MavludCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class MavludListAPIView(ListAPIView):
+class MavludListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Mavlud.objects.all()
     serializer_class = MavludListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
     filterset_fields = ('id', 'imam', 'date',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Mavlud.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Mavlud.objects.all()
-        elif user_role == '2':
-            return Mavlud.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Mavlud.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class MavludDetailAPIView(RetrieveAPIView):

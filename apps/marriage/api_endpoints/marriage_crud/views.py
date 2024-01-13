@@ -7,6 +7,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from apps.common.permissions import IsImam, IsDeputy
 from apps.marriage.models import Marriage
 from .serializers import (MarriageSerializer, MarriageListSerializer, MarriageUpdateSerializer, MarriageDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class MarriageCreateAPIView(CreateAPIView):
@@ -19,23 +20,11 @@ class MarriageCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class MarriageListAPIView(ListAPIView):
+class MarriageListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Marriage.objects.all()
     serializer_class = MarriageListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'mahr',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Marriage.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Marriage.objects.all()
-        elif user_role == '2':
-            return Marriage.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Marriage.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class MarriageDetailAPIView(RetrieveAPIView):

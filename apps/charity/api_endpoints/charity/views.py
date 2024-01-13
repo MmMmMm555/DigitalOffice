@@ -9,6 +9,7 @@ from .serializers import (CharityCreateSerializer,
                           CharityDetailSerializer)
 from apps.charity.models import Charity, Images
 from apps.common.permissions import IsImam, IsDeputy, IsSuperAdmin
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class CharityCreateView(CreateAPIView):
@@ -31,23 +32,12 @@ class CharityUpdateView(UpdateAPIView):
     lookup_field = 'pk'
 
 
-class CharityListView(ListAPIView):
+class CharityListView(FilerQueryByRole, ListAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityCreateSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'types',
                         'help_type', 'from_who', 'date',)
-
-    def get_queryset(self):
-        if self.request.user.role in ['4', '5']:
-            return Charity.objects.filter(imam=self.request.user)
-        elif self.request.user.role in ['1']:
-            return Charity.objects.all()
-        elif self.request.user.role in ['2']:
-            return Charity.objects.filter(imam__region=self.request.user.region)
-        elif self.request.user.role in ['3']:
-            return Charity.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class CharityImageCreateView(CreateAPIView):

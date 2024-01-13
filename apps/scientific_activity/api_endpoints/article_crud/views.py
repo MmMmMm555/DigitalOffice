@@ -8,6 +8,7 @@ from .serializers import (ArticleSerializer, ArticleListSerializer,
 from apps.scientific_activity.models import Article
 from apps.common.permissions import IsImam, IsDeputy, IsSuperAdmin
 from rest_framework.response import Response
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class ArticleCreateAPIView(CreateAPIView):
@@ -20,22 +21,11 @@ class ArticleCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class ArticleListAPIView(ListAPIView):
+class ArticleListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'type', 'date', 'created_at',)
-
-    def get_queryset(self):
-        if self.request.user.role in ['4', '5']:
-            return Article.objects.filter(imam=self.request.user)
-        elif self.request.user.role in ['1']:
-            return Article.objects.all()
-        elif self.request.user.role in ['2']:
-            return Article.objects.filter(imam__region=self.request.user.region)
-        elif self.request.user.role in ['3']:
-            return Article.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class ArticleDetailAPIView(RetrieveAPIView):

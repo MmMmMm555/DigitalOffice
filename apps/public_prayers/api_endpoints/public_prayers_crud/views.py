@@ -9,6 +9,7 @@ from apps.public_prayers.models import PublicPrayers
 from apps.users.models import Role
 from .serializers import (PublicPrayersSerializer, PublicPrayersListSerializer,
                           PublicPrayersUpdateSerializer, PublicPrayersDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class PublicPrayersCreateAPIView(CreateAPIView):
@@ -21,23 +22,12 @@ class PublicPrayersCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class PublicPrayersListAPIView(ListAPIView):
+class PublicPrayersListAPIView(FilerQueryByRole, ListAPIView):
     queryset = PublicPrayers.objects.all()
     serializer_class = PublicPrayersListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
     filterset_fields = ('id', 'imam', 'prayer', 'created_at',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        query = self.queryset
-        if user_role == Role.IMAM or user_role == Role.SUB_IMAM:
-            return query.filter(imam=self.request.user)
-        elif user_role == Role.REGION_ADMIN:
-            return query.filter(imam__region=self.request.user.region)
-        elif user_role == Role.DISTRICT_ADMIN:
-            return query.filter(imam__district=self.request.user.district)
-        return query
 
 
 class PublicPrayersDetailAPIView(RetrieveAPIView):

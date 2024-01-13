@@ -8,6 +8,7 @@ from apps.common.permissions import IsImam, IsDeputy
 from apps.organizations.models import Organization
 from .serializers import (OrganizationSerializer, OrganizationListSerializer,
                           OrganizationUpdateSerializer, OrganizationDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class OrganizationCreateAPIView(CreateAPIView):
@@ -20,25 +21,13 @@ class OrganizationCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class OrganizationListAPIView(ListAPIView):
+class OrganizationListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
     filterset_fields = ('id', 'imam', 'date', 'participant_type',
                     'institution_type', 'participant_type',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Organization.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Organization.objects.all()
-        elif user_role == '2':
-            return Organization.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Organization.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class OrganizationDetailAPIView(RetrieveAPIView):

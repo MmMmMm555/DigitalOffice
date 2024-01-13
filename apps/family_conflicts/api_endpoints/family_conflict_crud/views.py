@@ -7,6 +7,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from apps.common.permissions import IsImam, IsDeputy
 from apps.family_conflicts.models import FamilyConflict
 from .serializers import FamilyConflictSerializer, FamilyConflictListSerializer, FamilyConflictUpdateSerializer
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class FamilyConflictCreateAPIView(CreateAPIView):
@@ -19,23 +20,11 @@ class FamilyConflictCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class FamilyConflictListAPIView(ListAPIView):
+class FamilyConflictListAPIView(FilerQueryByRole, ListAPIView):
     queryset = FamilyConflict.objects.all()
     serializer_class = FamilyConflictListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'created_at', 'causes', 'types', 'results',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return FamilyConflict.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return FamilyConflict.objects.all()
-        elif user_role == '2':
-            return FamilyConflict.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return FamilyConflict.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class FamilyConflictDetailAPIView(RetrieveAPIView):

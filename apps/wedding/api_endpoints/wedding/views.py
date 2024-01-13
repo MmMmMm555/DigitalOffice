@@ -1,13 +1,14 @@
 from rest_framework.generics import (
     CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.common.permissions import IsImam, IsDeputy
 from apps.wedding.models import Wedding
 from .serializers import (WeddingSerializer, WeddingListSerializer,
                           WeddingUpdateSerializer, WeddingDetailSerializer,)
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class WeddingCreateAPIView(CreateAPIView):
@@ -20,24 +21,12 @@ class WeddingCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class WeddingListAPIView(ListAPIView):
+class WeddingListAPIView(FilerQueryByRole, ListAPIView):
     queryset = Wedding.objects.all()
     serializer_class = WeddingListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
     filterset_fields = ('id', 'imam', 'date', 'types',)
-
-    def get_queryset(self):
-        user_role = self.request.user.role
-        if user_role == '4' or user_role == '5':
-            return Wedding.objects.filter(imam=self.request.user)
-        elif user_role == '1':
-            return Wedding.objects.all()
-        elif user_role == '2':
-            return Wedding.objects.filter(imam__region=self.request.user.region)
-        elif user_role == '3':
-            return Wedding.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class WeddingDetailAPIView(RetrieveAPIView):
@@ -57,7 +46,7 @@ class WeddingUpdateAPIView(UpdateAPIView):
         if instance.imam == self.request.user:
             serializer.save(imam=self.request.user)
         else:
-            return Response({'message': 'You are not allowed to update'}, status=403)
+            raise ValidationError({'detail': 'You are not allowed to update'})
 
 
 class WeddingDeleteAPIView(DestroyAPIView):
@@ -69,4 +58,4 @@ class WeddingDeleteAPIView(DestroyAPIView):
         if instance.imam == self.request.user:
             instance.delete()
         else:
-            return Response({'message': 'You are not allowed to delete'}, status=403)
+            raise ValidationError({'detail': 'You are not allowed to delete'})

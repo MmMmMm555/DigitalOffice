@@ -8,6 +8,7 @@ from .serializers import (CommunityEventsSerializer, CommunityEventsListSerializ
 from apps.community_events.models import CommunityEvents
 from apps.common.permissions import IsImam, IsDeputy, IsSuperAdmin
 from rest_framework.response import Response
+from apps.common.view_mixin import FilerQueryByRole
 
 
 class CommunityEventsCreateAPIView(CreateAPIView):
@@ -20,22 +21,11 @@ class CommunityEventsCreateAPIView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class CommunityEventListAPIView(ListAPIView):
+class CommunityEventListAPIView(FilerQueryByRole, ListAPIView):
     queryset = CommunityEvents.objects.all()
     serializer_class = CommunityEventsListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'type', 'date', 'created_at',)
-
-    def get_queryset(self):
-        if self.request.user.role in ['4', '5']:
-            return CommunityEvents.objects.filter(imam=self.request.user)
-        elif self.request.user.role in ['1']:
-            return CommunityEvents.objects.all()
-        elif self.request.user.role in ['2']:
-            return CommunityEvents.objects.filter(imam__region=self.request.user.region)
-        elif self.request.user.role in ['3']:
-            return CommunityEvents.objects.filter(imam__district=self.request.user.district)
-        return []
 
 
 class CommunityEventsDetailAPIView(RetrieveAPIView):
