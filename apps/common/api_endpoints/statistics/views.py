@@ -6,7 +6,7 @@ from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, D
 from apps.common.regions import Regions
 from apps.friday_tesis.models import FridayTesisImamRead, FridayTesisImamResult
 from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
-from apps.employee.models import Employee, Graduation
+from apps.employee.models import Employee, Graduation, Education
 
 
 # for orders
@@ -145,3 +145,13 @@ def StatisticEmployeeUniversityApi(request):
         data[i['name']] = all.aggregate(university=Count(
             'id', filter=Q(graduated_univer=i['id'])))['university']
     return Response(data=data)
+
+
+# @api_view(['GET'])
+# def StatisticEmployeeUniversityApi(request):
+#     all = Employee.objects.all().exclude(graduated_univer=None)
+#     data = {'count_all': all.aggregate(all_count=Count('id'))['all_count']}
+#     for i in Graduation.objects.all().values('id', 'name'):
+#         data[i['name']] = all.aggregate(university=Count(
+#             'id', filter=Q(graduated_univer=i['id'])))['university']
+#     return Response(data=data)

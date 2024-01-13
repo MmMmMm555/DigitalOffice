@@ -8,7 +8,7 @@ from .serializers import (ResultVideosSerializer,
                           FridayTesisImamResultSerializer,
                           FridayTesisImamResultListSerializer,
                           FridayTesisImamResultDetailSerializer,
-                          FridayTesisImamResultSerializer,)
+                          FridayTesisImamResultUpdateSerializer,)
 from apps.friday_tesis.models import (FridayTesisImamResult,
                                       ResultImages,
                                       ResultVideos,)
@@ -74,7 +74,7 @@ class FridayTesisResultDetailView(RetrieveAPIView):
 
 class FridayTesisResultUpdateView(RetrieveUpdateAPIView):
     queryset = FridayTesisImamResult.objects.all()
-    serializer_class = FridayTesisImamResultSerializer
+    serializer_class = FridayTesisImamResultUpdateSerializer
     parser_classes = (FormParser, MultiPartParser,)
     permission_classes = (IsImam,)
 

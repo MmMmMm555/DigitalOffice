@@ -95,7 +95,7 @@ class FridayTesisImamResultDetailSerializer(ModelSerializer):
         return representation
 
 
-class FridayTesisImamResultSerializer(ModelSerializer):
+class FridayTesisImamResultUpdateSerializer(ModelSerializer):
     class Meta:
         model = FridayTesisImamResult
         fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child',
