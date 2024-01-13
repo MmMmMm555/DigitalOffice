@@ -34,10 +34,11 @@ def StatisticRegionApi(request):
     query = Directions.objects.all()
     if start_date and finish_date:
         query = query.filter(created_at__range=[start_date, finish_date])
-    all = query.count()
+    all = query.aggregate(all_count=Count('id'))['all_count']
     data = {'count_all': all}
     for i in Regions.objects.all().values('id', 'name'):
-        directions = query.filter(to_region=i['id']).count()
+        directions = query.aggregate(count=Count(
+            'id', filter=Q(to_region=i['id'])))['count']
         to_add = {'count': directions, "protsent": float(
             f"{(directions/all)*100:10.1f}")}
         data[i['name']] = to_add
