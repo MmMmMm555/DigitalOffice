@@ -34,6 +34,7 @@ class AcademicDegree(models.TextChoices):
     MASTER = '2'
     PhD = '3'
     DsC = '4'
+    NONE = '5'
 
 
 class Nation(models.TextChoices):
@@ -105,14 +106,14 @@ class Employee(models.Model):
     gender = models.CharField(
         max_length=50, choices=Gender.choices, default=Gender.MALE)
     education = models.CharField(
-        max_length=50, choices=Education.choices, blank=True)
+        max_length=50, choices=Education.choices, default=Education.NONE, blank=True)
     nation = models.CharField(
         max_length=10, choices=Nation.choices, blank=True, default=Nation.UZBEK)
     graduated_univer = models.ForeignKey(Graduation, on_delete=models.SET_NULL, blank=True, null=True)
     graduated_year = models.DateField(default="2000-01-01")
     diploma_number = models.CharField(max_length=20, blank=True)
     academic_degree = models.CharField(
-        max_length=50, choices=AcademicDegree.choices, blank=True)
+        max_length=50, choices=AcademicDegree.choices, default=AcademicDegree.NONE, blank=True)
     achievement = models.CharField(
         max_length=50, choices=Achievement.choices, blank=True)
     mosque = models.ForeignKey(

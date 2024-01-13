@@ -6,7 +6,7 @@ from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, D
 from apps.common.regions import Regions
 from apps.friday_tesis.models import FridayTesisImamRead, FridayTesisImamResult
 from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
-from apps.employee.models import Employee, Graduation, Education
+from apps.employee.models import Employee, Graduation, Education, AcademicDegree
 
 
 # for orders
@@ -149,11 +149,23 @@ def StatisticEmployeeUniversityApi(request):
     return Response(data=data)
 
 
-# @api_view(['GET'])
-# def StatisticEmployeeUniversityApi(request):
-#     all = Employee.objects.all().exclude(graduated_univer=None)
-#     data = {'count_all': all.aggregate(all_count=Count('id'))['all_count']}
-#     for i in Graduation.objects.all().values('id', 'name'):
-#         data[i['name']] = all.aggregate(university=Count(
-#             'id', filter=Q(graduated_univer=i['id'])))['university']
-#     return Response(data=data)
+@api_view(['GET'])
+def StatisticEmployeeEducationApi(request):
+    all = Employee.objects.all().aggregate(
+        all_count=Count('id'), 
+        medium_special=Count('id', filter=Q(education=Education.MEDIUM_SPECIAL)), 
+        high=Count('id', filter=Q(education=Education.HIGH)), 
+        none=Count('id', filter=Q(education=Education.NONE)),)
+    return Response(data=all)
+
+
+@api_view(['GET'])
+def StatisticEmployeeAcademicDegreeApi(request):
+    all = Employee.objects.all().aggregate(
+        all_count=Count('id'), 
+        bachelor=Count('id', filter=Q(education=AcademicDegree.BACHELOR)), 
+        master=Count('id', filter=Q(education=AcademicDegree.MASTER)), 
+        phd=Count('id', filter=Q(education=AcademicDegree.PhD)), 
+        dsc=Count('id', filter=Q(education=AcademicDegree.DsC)),
+        none=Count('id', filter=Q(education=AcademicDegree.NONE)))
+    return Response(data=all)
