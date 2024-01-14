@@ -39,7 +39,7 @@ class FridayTesisListView(generics.ListAPIView):
         finish_date = self.request.GET.get('finish_date')
         query = models.FridayTesis.objects.all()
         if start_date and finish_date:
-            query = query.filter(created_at__range=[start_date, finish_date])
+            query = query.filter(created_at__gte=start_date, created_at__lte=finish_date)
         elif start_date:
             query = query.filter(created_at__gte=start_date)
         elif finish_date:
