@@ -10,10 +10,10 @@ from apps.users.models import User
 class Marriage(BaseModel):
     imam = models.ForeignKey(User, on_delete=models.CASCADE, related_name='marriage')
     date = models.DateField()
-    marriage_image = models.FileField(upload_to='files/marriage_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+    marriage_image = models.FileField(upload_to='image/marriage_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     marriage_document = models.FileField(upload_to='files/marriage_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     fhdyo_document = models.FileField(upload_to='files/fhdyo_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES)], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
-    fhdyo_image = models.FileField(upload_to='files/fhdyo_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
+    fhdyo_image = models.FileField(upload_to='images/fhdyo_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     mahr = models.FloatField(default=0)
     comment = models.TextField(blank=True, null=True)
 

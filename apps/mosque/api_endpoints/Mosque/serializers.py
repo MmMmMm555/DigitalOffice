@@ -1,4 +1,5 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField, IntegerField
+from rest_framework.serializers import (
+    ModelSerializer, SerializerMethodField, IntegerField, StringRelatedField)
 
 from apps.mosque.models import Mosque, FireDefenseImages
 
@@ -64,12 +65,14 @@ class MosqueSerializer(ModelSerializer):
 class MosqueListSerializer(MosqueSerializer):
     employee_count = IntegerField(read_only=True)
     has_imam = IntegerField(read_only=True)
+    imam = StringRelatedField(read_only=True)
 
     class Meta:
         model = Mosque
         fields = (
             'id',
             'name',
+            'imam',
             'address',
             'employee_count',
             'has_imam',

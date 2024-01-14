@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F
 from rest_framework.permissions import IsAuthenticated
 from apps.users.models import Role
 
@@ -29,7 +29,7 @@ class MosqueUpdateView(generics.RetrieveUpdateAPIView):
 class MosqueListView(generics.ListAPIView):
     """Agar imomi yo'q masjidlar listi kerak bolsa "api/v1/mosque/list/?has_imam=false" qilib filter jo'natiladi"""
     queryset = Mosque.objects.all().annotate(employee_count=Count(
-        'employee', filter=Q(employee__profile__role__in=['4', '5'])), has_imam=Count('employee', filter=Q(employee__profile__role='4')))
+        'employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
     serializer_class = MosqueListSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('name', 'address',)

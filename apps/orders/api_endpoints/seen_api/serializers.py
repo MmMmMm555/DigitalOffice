@@ -45,7 +45,7 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
                 result = None
             representation['result_id'] = result
         representation['direction'] = {
-            'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_date': instance.direction.from_date, 'to_date': instance.direction.to_date}
+            'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_date': instance.direction.from_date, 'to_date': instance.direction.to_date, 'from_role': instance.direction.from_role}
         return representation
 
 
