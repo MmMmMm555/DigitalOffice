@@ -5,7 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import DirectionsEmployeeReadSerializer, DirectionsEmployeeReadListSerializer
 # DirectionsUnseenCount
 from apps.orders import models
-from apps.common.permissions import IsSuperAdmin, IsImam, IsDistrictAdmin, IsRegionAdmin
+from apps.common.permissions import IsSuperAdmin, IsImam, IsDistrictAdmin, IsRegionAdmin, IsDeputy
 from apps.users.models import Role
 from django.db.models import F
 
@@ -13,7 +13,7 @@ from django.db.models import F
 class DirectionEmployeeReadView(generics.UpdateAPIView):
     queryset = models.DirectionsEmployeeRead.objects.all()
     serializer_class = DirectionsEmployeeReadSerializer
-    permission_classes = (IsImam,)
+    permission_classes = (IsImam | IsDistrictAdmin | IsRegionAdmin | IsDeputy,)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
 
 
@@ -21,7 +21,8 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
     queryset = models.DirectionsEmployeeRead.objects.all().annotate(
         mosque=F('employee__profil__mosque__name'), region=F('employee__region__name'), district=F('employee__district__name'), employee_name=F('employee__profil__name'), employee_last_name=F('employee__profil__last_name'))
     serializer_class = DirectionsEmployeeReadListSerializer
-    permission_classes = (IsSuperAdmin | IsImam | IsDistrictAdmin | IsDistrictAdmin | IsRegionAdmin,)
+    permission_classes = (IsSuperAdmin | IsImam |
+                          IsDistrictAdmin | IsDistrictAdmin | IsRegionAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('employee__profil_name', 'direction__title',)
     filterset_fields = ('direction', 'direction__direction_type',

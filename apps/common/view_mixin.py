@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.db.models import F
 from apps.users.models import Role
 
+
 class ViewCountMixin:
     """Work only with retrieve views"""
 
@@ -15,7 +16,8 @@ class ViewCountMixin:
         key = f"{prefix}:{model_name}:{instance.pk}:{self.request.fingerprint}"
         data = cache.get(key)
         if not data:
-            setattr(instance, self.view_count_field, F(self.view_count_field) + 1)
+            setattr(instance, self.view_count_field,
+                    F(self.view_count_field) + 1)
             instance.save(update_fields=[self.view_count_field])
             cache.set(key, True, settings.VIEW_COUNT_MIN_VIEW_PERIOD)
 
@@ -23,12 +25,10 @@ class ViewCountMixin:
         self._count_view()
         return super().get(request, *args, **kwargs)
 
+
 class FilerQueryByRole:
-    
+
     def get_queryset(self):
-        # instance = self.get_object()
-        # model_name = instance.__class__.__name__
-        # print(model_name)
         query = self.queryset
         user_role = self.request.user.role
         if user_role in [Role.IMAM, Role.SUB_IMAM]:

@@ -1,5 +1,4 @@
 from rest_framework import generics, parsers, permissions
-from datetime import date
 
 from apps.users.models import Role
 from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
