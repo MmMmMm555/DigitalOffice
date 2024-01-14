@@ -83,7 +83,8 @@ class DirectionsEmployeeResultSerializer(ModelSerializer):
     def validate(self, attrs):
         direction_date = Directions.objects.filter(
             id=attrs.get('direction').id, types=Types.IMPLEMENT).last()
-        if direction_date:
+        print(direction_date)
+        if direction_date != None:
             direction_date = direction_date.to_date if direction_date else date.today()
             if direction_date < date.today():
                 raise ValidationError({'detail': "time expired"})

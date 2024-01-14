@@ -1,7 +1,7 @@
 from django.urls import path
 from apps.common.api_endpoints.regions.views import RegionListView
 from apps.common.api_endpoints.districts.views import DistrictListView
-from apps.common.api_endpoints.notifications.views import NotificationApi
+from apps.common.api_endpoints.notifications.views import Notifications
 from apps.common.api_endpoints.statistics.views import (StatisticDirectionTypeApi,
                                                         StatisticRegionApi,
                                                         StatisticStateApi,
@@ -23,7 +23,7 @@ urlpatterns = [
     path('districts/', DistrictListView.as_view(), name='districts_list'),
 
     # notifications api
-    path('notifications/', NotificationApi, name='districts_list'),
+    path('notifications/', Notifications.as_view(), name='districts_list'),
 
     # statistics order api
     path('statistics/order/direction_type',

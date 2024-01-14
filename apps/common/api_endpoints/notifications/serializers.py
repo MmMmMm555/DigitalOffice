@@ -11,6 +11,11 @@ class ThesisNotification(ModelSerializer):
     class Meta:
         model = FridayTesisImamRead
         fields = ('tesis', 'title', 'created_at',)
+    
+        def to_representation(self, instance):
+            data = super().to_representation(instance)
+            data['all_count'] = instance.all_count
+            return data
 
 
 class OrderNotification(ModelSerializer):
@@ -19,4 +24,4 @@ class OrderNotification(ModelSerializer):
     direction_type = CharField(source='direction.direction_type')
     class Meta:
         model = DirectionsEmployeeRead
-        fields = ('tesis', 'title', 'direction_type', 'from_role', 'created_at',)
+        fields = ('direction', 'title', 'direction_type', 'from_role', 'created_at',)
