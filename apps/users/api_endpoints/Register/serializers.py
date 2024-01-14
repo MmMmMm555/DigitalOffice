@@ -1,9 +1,10 @@
 from rest_framework import serializers
-
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
+from django.db.models import Q, Count
 
-from apps.users.models import User
+from apps.users.models import User, Role
+from apps.mosque.models import Mosque
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -33,7 +34,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."})
-
+        if attrs.get('role') == Role.IMAM and Mosque.objects.filter(employee=attrs.get('profil')).aggregate(has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM))) != 0:
+            raise serializers.ValidationError(
+                {"detail": "You can not choose role 'imam' for this profile"})
         return attrs
 
     def create(self, validated_data):
