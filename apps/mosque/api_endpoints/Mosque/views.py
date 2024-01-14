@@ -72,6 +72,8 @@ class MosqueListView(generics.ListAPIView):
         query = self.queryset
         if has_imam == 'false':
             query = query.filter(has_imam=0)
+        if has_imam == 'true':
+            query = query.exclude(has_imam=0)
         if user_role == Role.REGION_ADMIN:
             return query.filter(region=self.request.user.region)
         elif user_role == Role.DISTRICT_ADMIN:
