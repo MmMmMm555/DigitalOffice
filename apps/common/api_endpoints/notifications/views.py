@@ -1,4 +1,5 @@
 from rest_framework.decorators import api_view
+from django.db.models import F, Q
 
 from apps.orders.models import DirectionsEmployeeRead
 from apps.friday_tesis.models import FridayTesisImamRead, States
@@ -13,5 +14,4 @@ def NotificationApi(request):
         state=States.UNSEEN, imam=request.user).values('id', 'tesis__title', 'created_at',)
     data = {'count': directions.count()+friday_tesis.count(),
             'directions': directions, 'friday_tesis': friday_tesis, }
-    data = {}
     return Response(data=data)
