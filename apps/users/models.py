@@ -38,3 +38,8 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.username
+
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+        ordering = ['-id']

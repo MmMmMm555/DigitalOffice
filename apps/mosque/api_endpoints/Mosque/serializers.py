@@ -65,14 +65,12 @@ class MosqueSerializer(ModelSerializer):
 class MosqueListSerializer(MosqueSerializer):
     employee_count = IntegerField(read_only=True)
     has_imam = IntegerField(read_only=True)
-    imam = StringRelatedField(read_only=True)
 
     class Meta:
         model = Mosque
         fields = (
             'id',
             'name',
-            'imam',
             'address',
             'employee_count',
             'has_imam',
@@ -122,7 +120,6 @@ class MosqueListSerializer(MosqueSerializer):
 
 
 class MosqueSingleSerializer(ModelSerializer):
-    employee = SerializerMethodField()
 
     class Meta:
         model = Mosque
@@ -134,8 +131,6 @@ class MosqueSingleSerializer(ModelSerializer):
             'district',
             'location',
             'image',
-
-            'employee',
 
             'built_at',
             'registered_at',
@@ -185,6 +180,7 @@ class MosqueSingleSerializer(ModelSerializer):
         representation = super().to_representation(instance)
 
         images = instance.fire_images.all()
+        representation['employee'] = instance.employee.all().values('id', 'name', 'last_name', 'profile__role',)
         representation['region'] = {
             'id': instance.region.id, 'name': instance.region.name}
         representation['district'] = {
