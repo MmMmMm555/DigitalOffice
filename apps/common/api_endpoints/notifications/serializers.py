@@ -11,11 +11,6 @@ class ThesisNotification(ModelSerializer):
     class Meta:
         model = FridayTesisImamRead
         fields = ('tesis', 'title', 'created_at',)
-    
-        def to_representation(self, instance):
-            data = super().to_representation(instance)
-            data['all_count'] = instance.all_count
-            return data
 
 
 class OrderNotification(ModelSerializer):

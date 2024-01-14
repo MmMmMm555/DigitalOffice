@@ -9,9 +9,6 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import OrderNotification, ThesisNotification
 
 
-
-
-
 @api_view(['GET'])
 def NotificationApi(request):
     directions = DirectionsEmployeeRead.objects.filter(
@@ -23,12 +20,23 @@ def NotificationApi(request):
     return Response(data=data)
 
 
-class Notifications(ListAPIView):
+class ThesisNotifications(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = FridayTesisImamRead.objects.filter(
-        state=States.UNSEEN).annotate(all_count=Count('id'))
-    pagination_class = None
+    queryset = FridayTesisImamRead.objects.all()
     serializer_class = ThesisNotification
-    def get_queryset(self): 
-        query = self.queryset.filter(imam=self.request.user)
+
+    def get_queryset(self):
+        query = self.queryset.filter(
+            state=States.UNSEEN, imam=self.request.user)
+        return query
+
+
+class OrderNotifications(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = DirectionsEmployeeRead.objects.all()
+    serializer_class = OrderNotification
+
+    def get_queryset(self):
+        query = self.queryset.filter(
+            state=States.UNSEEN, employee=self.request.user)
         return query
