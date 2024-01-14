@@ -13,5 +13,5 @@ def NotificationApi(request):
     friday_tesis = FridayTesisImamRead.objects.filter(
         state=States.UNSEEN, imam=request.user).values('id', 'tesis__title', 'created_at',)
     data = {'count': directions.count()+friday_tesis.count(),
-            'directions': directions, 'friday_tesis': friday_tesis, }
+            'directions': directions, 'friday_tesis': friday_tesis,}
     return Response(data=data)

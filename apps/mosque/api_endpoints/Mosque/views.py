@@ -16,14 +16,14 @@ class MosqueCreateView(generics.CreateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueSerializer
     parser_classes = (FormParser, MultiPartParser,)
-    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
+    permission_classes = (IsSuperAdmin,)
 
 
 class MosqueUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Mosque.objects.all()
     serializer_class = MosqueUpdateSerializer
     parser_classes = (FormParser, MultiPartParser,)
-    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
+    permission_classes = (IsSuperAdmin,)
 
 
 class MosqueListView(generics.ListAPIView):
