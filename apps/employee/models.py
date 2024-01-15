@@ -97,7 +97,7 @@ class Employee(models.Model):
     surname = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     phone_number = PhoneNumberField(blank=False, unique=True)
-    address = PlainLocationField(based_fields=['city'], zoom=7)
+    address = models.CharField(max_length=200, blank=True)
     position = models.ForeignKey(
         Position, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.ImageField(upload_to='images/profil_images/', default="images/default/default_user.jpg", validators=[FileExtensionValidator(

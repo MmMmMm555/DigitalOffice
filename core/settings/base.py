@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 import environ
 
@@ -219,6 +220,13 @@ LOGIN_REDIRECT_URL = "admin/login/?next=/admin/"
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "uz"
+
+
+LANGUAGES = [
+    ('uz', _('Uzbek')),
+    # ('en', _('English')),
+    # Add other languages as needed
+]
 
 TIME_ZONE = "Asia/Tashkent"
 
