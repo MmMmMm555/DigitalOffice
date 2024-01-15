@@ -30,11 +30,9 @@ class EmployeeListView(generics.ListAPIView):
             query = query.filter(graduated_year__year=graduated_year)
         if profile:
             if profile == 'false':
-                query = query.exclude(profile__role__in=[
-                                      Role.SUB_IMAM, Role.SUPER_ADMIN, Role.IMAM, Role.REGION_ADMIN, Role.DISTRICT_ADMIN,])
+                query = query.exclude(profile__isnull=True)
             elif profile == 'true':
-                query = query.filter(profile__role__in=[
-                                     Role.SUB_IMAM, Role.SUPER_ADMIN, Role.IMAM, Role.REGION_ADMIN, Role.DISTRICT_ADMIN,])
+                query = query.filter(profile__isnull=False)
         if start_age and finish_age and start_age < finish_age:
             current_year = date.today().year
             start_year = current_year-int(finish_age)
