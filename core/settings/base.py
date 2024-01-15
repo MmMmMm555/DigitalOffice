@@ -119,7 +119,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASS": "rest_framework.permissions.IsAuthenticated",
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
-    "DATE_FORMAT": "%Y-%m-%d",
+    "DATE_FORMAT": "%Y-%m-%d",  
 }
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
