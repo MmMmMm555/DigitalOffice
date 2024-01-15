@@ -26,7 +26,6 @@ class EmployeeListView(generics.ListAPIView):
         profile = self.request.GET.get('has_account')
         finish_age = self.request.GET.get('finish_age')
         query = models.Employee.objects.all().annotate(account=F('profile__id'))
-        print(profile)
         if graduated_year:
             query = query.filter(graduated_year__year=graduated_year)
         if profile:
@@ -40,7 +39,6 @@ class EmployeeListView(generics.ListAPIView):
             finish_year = current_year-int(start_age)
             query = query.filter(birth_date__year__range=[
                                  start_year, finish_year])
-        print(query.values('account'))
         return query
 
 
