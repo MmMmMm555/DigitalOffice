@@ -3,33 +3,13 @@ from rest_framework.generics import (
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
-import django_filters
-from django.utils import timezone
 
 from apps.common.permissions import IsImam, IsDeputy
 from apps.public_prayers.models import PublicPrayers
-from apps.users.models import Role
 from .serializers import (PublicPrayersSerializer, PublicPrayersListSerializer,
                           PublicPrayersUpdateSerializer, PublicPrayersDetailSerializer,)
 from apps.common.view_mixin import FilerQueryByRole
-
-
-class CreatedAtDateFilter(django_filters.DateFilter):
-    def filter(self, queryset, value):
-        if value:
-            # Assuming your `created_at` field is in UTC
-            value = timezone.datetime.combine(
-                value, timezone.datetime.min.time(), tzinfo=timezone.utc)
-            return queryset.filter(created_at__gte=value, created_at__lt=value + timezone.timedelta(days=1))
-        return queryset
-
-
-class PublicPrayersFilterSet(django_filters.FilterSet):
-    created_at = CreatedAtDateFilter()
-
-    class Meta:
-        model = PublicPrayers
-        fields = ['id', 'imam', 'prayer', 'created_at']
+from apps.common.custom_filters import PublicPrayersFilterSet
 
 
 class PublicPrayersCreateAPIView(CreateAPIView):
