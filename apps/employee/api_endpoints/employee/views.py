@@ -1,7 +1,7 @@
 from rest_framework import generics, parsers, permissions, filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import date
-from django.db.models import Q
+from django.db.models import Q, F
 
 from . import serializers
 from apps.common.permissions import IsSuperAdmin, Role
@@ -12,7 +12,7 @@ class EmployeeListView(generics.ListAPIView):
     """ hodimlarni yosh boyicha filter qilish uchun "start_age" va "finish_age" filterlariga qiymat yuboriladi, "start_age < finish_age" ! """
     """  "graduated_year"  boyicha filter bor 'yyyy' formatda qiymat yuboriladi sample: "api/v1/employee/employee/list?graduated_year=1000" """
     """ xodimga akkaunt ulangan mi yo'qmi bilish uchun 'has_account' ga true false valuelarni jo'natasiz true da akkaunt ulanganlar false da ulanmagan xodimlar listini qaytaradi """
-    queryset = models.Employee.objects.all()
+    queryset = models.Employee.objects.all().annotate(account=F('profile__id'))
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
@@ -25,12 +25,13 @@ class EmployeeListView(generics.ListAPIView):
         start_age = self.request.GET.get('start_age')
         profile = self.request.GET.get('has_account')
         finish_age = self.request.GET.get('finish_age')
-        query = models.Employee.objects.all()
+        query = models.Employee.objects.all().annotate(account=F('profile__id'))
+        print(profile)
         if graduated_year:
             query = query.filter(graduated_year__year=graduated_year)
         if profile:
             if profile == 'false':
-                query = query.exclude(profile__isnull=True)
+                query = query.filter(profile__isnull=True)
             elif profile == 'true':
                 query = query.filter(profile__isnull=False)
         if start_age and finish_age and start_age < finish_age:
@@ -39,6 +40,7 @@ class EmployeeListView(generics.ListAPIView):
             finish_year = current_year-int(start_age)
             query = query.filter(birth_date__year__range=[
                                  start_year, finish_year])
+        print(query.values('account'))
         return query
 
 

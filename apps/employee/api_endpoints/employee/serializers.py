@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, CharField
+from rest_framework.serializers import ModelSerializer, CharField, IntegerField
 
 from apps.employee import models
 from apps.employee.api_endpoints.department.serializers import DepartmentSerializer, Position
@@ -88,11 +88,13 @@ class EmployeeUpdateSerializer(ModelSerializer):
 
 class EmployeeListSerializer(ModelSerializer):
     mosque_name = CharField(source='mosque.name', read_only=True)
+    account = IntegerField(read_only=True)
     mosque_address = CharField(source='mosque.address', read_only=True)
 
     class Meta:
         model = models.Employee
         fields = ('id',
+                  'account',
                   'name',
                   'surname',
                   'last_name',
