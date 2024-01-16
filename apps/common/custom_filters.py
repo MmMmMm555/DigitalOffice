@@ -1,5 +1,6 @@
 import django_filters
 from django.utils import timezone
+from apps.public_prayers.models import PublicPrayers
 
 
 class CreatedAtDateFilter(django_filters.DateFilter):

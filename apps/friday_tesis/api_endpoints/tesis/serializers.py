@@ -85,50 +85,32 @@ class FridayTesisCreateSerializer(ModelSerializer):
                   )
 
     def create(self, validated_data):
-        # try:
-            with transaction.atomic():
-                thesis = super().create(validated_data)
-                print(thesis)
-                # thesis = models.FridayTesis.objects.get(id=thesis.id)
-                #     title=validated_data.get('title', None),
-                #     types=validated_data.get('types', None),
-                #     file=validated_data.get('file', None),
-                #     file_comment=validated_data.get('file_comment', None),
-                #     attachment=validated_data.get('attachment', None),
-                #     attachment_comment=validated_data.get(
-                #         'attachment_comment', None),
-                #     date=validated_data.get('date', None),
-                #     image=validated_data.get('image', None),
-                #     video=validated_data.get('video', None),
-                #     comment=validated_data.get('comment', None),
-                #     file_bool=validated_data.get('file_bool', None),
-                # )
-                imams = User.objects.filter(role=Role.IMAM)
-                notifications_to_create = [models.FridayTesisImamRead(
-                    tesis=thesis,
-                    imam=i,
-                ) for i in imams]
-                models.FridayTesisImamRead.objects.bulk_create(
-                    notifications_to_create)
-                seen = models.FridayTesisImamRead.objects.filter(tesis=thesis)
+        with transaction.atomic():
+            thesis = super().create(validated_data)
+            imams = User.objects.filter(role=Role.IMAM)
+            notifications_to_create = [models.FridayTesisImamRead(
+                tesis=thesis,
+                imam=i,
+            ) for i in imams]
+            models.FridayTesisImamRead.objects.bulk_create(
+                notifications_to_create)
+            seen = models.FridayTesisImamRead.objects.filter(tesis=thesis)
 
-                mosque_list = thesis.to_mosque.all()
-                district_list = thesis.to_district.all()
-                region_list = thesis.to_region.all()
+            mosque_list = thesis.to_mosque.all()
+            district_list = thesis.to_district.all()
+            region_list = thesis.to_region.all()
 
-                if region_list:
-                    seen.filter(imam__in=imams.filter(
-                        region__in=region_list)).update(requirement=True)
-                if district_list:
-                    seen.filter(imam__in=imams.filter(
-                        district__in=district_list)).update(requirement=True)
-                if mosque_list:
-                    seen.filter(imam__in=imams.filter(
-                        profil__mosque__in=mosque_list)).update(requirement=True)
+            if region_list:
+                seen.filter(imam__in=imams.filter(
+                    region__in=region_list)).update(requirement=True)
+            if district_list:
+                seen.filter(imam__in=imams.filter(
+                    district__in=district_list)).update(requirement=True)
+            if mosque_list:
+                seen.filter(imam__in=imams.filter(
+                    profil__mosque__in=mosque_list)).update(requirement=True)
 
-                return thesis
-        # except:
-        #     raise ValidationError('Something went wrong')
+            return thesis
 
 
 class FridayTesisUpdateSerializer(ModelSerializer):
