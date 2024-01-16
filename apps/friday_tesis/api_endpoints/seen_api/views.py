@@ -23,11 +23,11 @@ class FridayTesisImamReadListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('imam__profil_name', 'tesis__title',)
     filterset_fields = ('tesis', 'created_at', 'state',
-                        'tesis__types', 'requirement', 'imam', 'imam__region', 'imam__district',)
+                        'tesis__types', 'requirement', 'imam', 'imam__region', 'imam__profil__mosque', 'imam__district',)
 
     def get_queryset(self):
         query = models.FridayTesisImamRead.objects.all().annotate(
-        mosque=F('imam__profil__mosque__name'), region=F('imam__region__name'), district=F('imam__district__name'), imam_name=F('imam__profil__name'), imam_last_name=F('imam__profil__last_name'))
+            mosque=F('imam__profil__mosque__name'), region=F('imam__region__name'), district=F('imam__district__name'), imam_name=F('imam__profil__name'), imam_last_name=F('imam__profil__last_name'))
         if self.request.user.role == Role.SUPER_ADMIN:
             return query
         return query.filter(imam=self.request.user)
