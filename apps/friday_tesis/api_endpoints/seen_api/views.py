@@ -20,9 +20,8 @@ class FridayTesisImamReadListView(generics.ListAPIView):
     #     mosque=F('imam__profil__mosque__name'), region=F('imam__region__name'), district=F('imam__district__name'), imam_name=F('imam__profil__name'), imam_last_name=F('imam__profil__last_name'))
     serializer_class = FridayTesisImamReadListSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('imam__profil_name', 'tesis__title',)
-    filterset_fields = ('tesis', 'created_at', 'state',
+    filterset_fields = ('tesis', 'state',
                         'tesis__types', 'requirement', 'imam', 'imam__region', 'imam__profil__mosque', 'imam__district',)
 
     def get_queryset(self):
