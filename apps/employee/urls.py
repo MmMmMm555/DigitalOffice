@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 
 from apps.employee.api_endpoints.employee import views
 from apps.employee.api_endpoints.department.views import DepartmentAPIView, PositionAPIView
@@ -29,4 +29,6 @@ urlpatterns = [
 
     # universities api
     path('university', GraduationAPIView.as_view(), name='university_list'),
+    
+    path('excel', views.EmployeeExcelData.as_view(), name='university_list'),
 ]

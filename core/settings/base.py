@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from import_export.formats.base_formats import XLSX, CSV, JSON
 from datetime import timedelta
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
@@ -89,6 +90,7 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "django_filters",
     'debug_toolbar',
+    'import_export',
 ]
 
 REST_FRAMEWORK = {
@@ -119,7 +121,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASS": "rest_framework.permissions.IsAuthenticated",
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
-    "DATE_FORMAT": "%Y-%m-%d",  
+    "DATE_FORMAT": "%Y-%m-%d",
 }
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
@@ -225,7 +227,6 @@ LANGUAGE_CODE = "uz"
 LANGUAGES = [
     ('uz', _('Uzbek')),
     # ('en', _('English')),
-    # Add other languages as needed
 ]
 
 TIME_ZONE = "Asia/Tashkent"
@@ -309,6 +310,10 @@ LOCATION_FIELD = {
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
+
+# import export files
+
+EXPORT_FORMATS = [XLSX, CSV, JSON]
 
 # cors
 CORS_ALLOWED_ORIGINS = [

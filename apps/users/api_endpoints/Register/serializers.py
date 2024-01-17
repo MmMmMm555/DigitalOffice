@@ -34,9 +34,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."})
-        if attrs.get('role') == Role.IMAM and Mosque.objects.filter(employee=attrs.get('profil')).aggregate(has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM))) != 0:
-            raise serializers.ValidationError(
-                {"detail": "You can not choose role 'imam' for this profile"})
+        # if attrs.get('role') == Role.IMAM and Mosque.objects.filter(employee=attrs.get('profil')).aggregate(has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM))) != 0:
+        #     raise serializers.ValidationError(
+        #         {"detail": "You can not choose role 'imam' for this profile"})
         return attrs
 
     def create(self, validated_data):

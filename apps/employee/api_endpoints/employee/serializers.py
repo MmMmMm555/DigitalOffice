@@ -88,13 +88,11 @@ class EmployeeUpdateSerializer(ModelSerializer):
 
 class EmployeeListSerializer(ModelSerializer):
     mosque_name = CharField(source='mosque.name', read_only=True)
-    account = IntegerField(read_only=True)
     mosque_address = CharField(source='mosque.address', read_only=True)
 
     class Meta:
         model = models.Employee
         fields = ('id',
-                  'account',
                   'name',
                   'surname',
                   'last_name',
