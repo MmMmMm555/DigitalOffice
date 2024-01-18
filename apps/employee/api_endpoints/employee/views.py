@@ -81,76 +81,32 @@ class EmployeeExcelData(generics.ListAPIView):
     filterset_fields = ('id', 'education', 'position', 'position__department',
                         'academic_degree', 'profile__role', 'mosque__region', 'mosque__district', 'graduated_univer',)
 
-    def get(self, request):
-        data = EmployeeResource().export(queryset=super().get_queryset())
+    def list(self, request):
+        print(self.request.GET.get('id'))
+        print('xxxxxxxxxxxxx', self.filterset_fields)
+        query = self.queryset
+        for i in self.filterset_fields:
+            print(request.GET.get(i))
+            print(i)
+            filter = i
+            if request.GET.get(i):
+                query = query.filter(**{filter: request.GET.get(i)})
+        data = EmployeeResource().export(queryset=query)
         response = HttpResponse(data.xlsx, content_type='xlsx')
         response['Content-Disposition'] = "attachment; filename=data.xlsx"
         return response
-
-    def get_queryset(self):
-        graduated_year = self.request.GET.get('graduated_year')
-        start_age = self.request.GET.get('start_age')
-        profile = self.request.GET.get('has_account')
-        finish_age = self.request.GET.get('finish_age')
-        query = self.queryset
-        if graduated_year:
-            query = query.filter(graduated_year__year=graduated_year)
-        if profile:
-            if profile == 'false':
-                query = query.filter(profile__isnull=True)
-            elif profile == 'true':
-                query = query.filter(profile__isnull=False)
-        if start_age and finish_age and start_age < finish_age:
-            current_year = date.today().year
-            start_year = current_year-int(finish_age)
-            finish_year = current_year-int(start_age)
-            query = query.filter(birth_date__year__range=[
-                                 start_year, finish_year])
-        return query
-
-
-
+    # def get(self, request, *args, **kwargs):
+    #     return self.get_queryset()
     # def get(self, request):
-        # graduated_year = request.GET.get('graduated_year')
-        # start_age = request.GET.get('start_age')
-        # profile = request.GET.get('has_account')
-        # finish_age = request.GET.get('finish_age')
-        # if graduated_year:
-        #     query = query.filter(graduated_year__year=graduated_year)
-        # if profile:
-        #     if profile == 'false':
-        #         query = query.filter(profile__isnull=True)
-        #     elif profile == 'true':
-        #         query = query.filter(profile__isnull=False)
-        # if start_age and finish_age and start_age < finish_age:
-        #     current_year = date.today().year
-        #     start_year = current_year-int(finish_age)
-        #     finish_year = current_year-int(start_age)
-        #     query = query.filter(birth_date__year__range=[
-        #         start_year, finish_year])
-        # data = EmployeeResource().export(queryset=self.queryset)
-        # response = HttpResponse(data.xlsx, content_type='xlsx')
-        # response['Content-Disposition'] = "attachment; filename=data.xlsx"
-        # return response
+    #     print(self.get_queryset(request))
+    #     return self.get_queryset(request)
 
-    # def get(self, request):
-    #     query = self.get_queryset()
-    #     data = EmployeeResource().export(queryset=query)
-    #     response = HttpResponse(data.xlsx, content_type='xlsx')
-    #     response['Content-Disposition'] = "attachment; filename=data.xlsx"
-    #     return response
-
-    # permission_classes =  (IsSuperAdmin,)
-    # filterset_fields = ('id', 'education', 'position', 'position__department',)
-    # def get(self, request):
-    #     query = models.Employee.objects.all()
-    #     # filters here
-
+    # def get_queryset(self):
     #     graduated_year = self.request.GET.get('graduated_year')
     #     start_age = self.request.GET.get('start_age')
     #     profile = self.request.GET.get('has_account')
     #     finish_age = self.request.GET.get('finish_age')
-    #     query = models.Employee.objects.all()
+    #     query = self.queryset
     #     if graduated_year:
     #         query = query.filter(graduated_year__year=graduated_year)
     #     if profile:
@@ -163,8 +119,5 @@ class EmployeeExcelData(generics.ListAPIView):
     #         start_year = current_year-int(finish_age)
     #         finish_year = current_year-int(start_age)
     #         query = query.filter(birth_date__year__range=[
-    #                             start_year, finish_year])
-    #     data = EmployeeResource().export(queryset=query)
-    #     response = HttpResponse(data.xlsx, content_type='xlsx')
-    #     response['Content-Disposition'] = "attachment; filename=data.xlsx"
-    #     return response
+    #                              start_year, finish_year])
+    #     return query

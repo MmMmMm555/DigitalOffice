@@ -121,8 +121,8 @@ class Employee(models.Model):
 
     class Meta:
         ordering = ['-id',]
-        verbose_name = 'Hodim '
-        verbose_name_plural = 'Hodimlar '
+        verbose_name = 'Xodim '
+        verbose_name_plural = 'Xodimlar '
 
     def __str__(self) -> str:
         return f"{self.id} - {self.name}"
