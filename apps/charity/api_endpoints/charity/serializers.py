@@ -1,8 +1,7 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.charity.models import Charity, Images
-from rest_framework import serializers
-
+from apps.common.related_serializers import UserRelatedSerializer
 
 class CharityImageSerializer(ModelSerializer):
     class Meta:
@@ -32,20 +31,16 @@ class CharityUpdateSerializer(ModelSerializer):
 
     def validate(self, attrs):
         if self.context['request'].user == attrs.get('imam'):
-            raise serializers.ValidationError('you dont have access to change')
+            raise ValidationError('you dont have access to change')
         return attrs
 
 
 class CharityDetailSerializer(ModelSerializer):
     images = CharityImageSerializer(many=True)
+    imam = UserRelatedSerializer(many=False, read_only=True)
 
     class Meta:
         model = Charity
         fields = ('id', 'imam', 'types', 'help_type', 'from_who', 'images',
                   'summa', 'comment', 'date', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['imam'] = {
-            'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
-        return representation
+        read_only_fields = fields

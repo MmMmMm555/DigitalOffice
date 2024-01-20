@@ -25,7 +25,7 @@ class CommunityEventListAPIView(FilerQueryByRole, ListAPIView):
     queryset = CommunityEvents.objects.all()
     serializer_class = CommunityEventsListSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('id', 'imam', 'type', 'date', 'created_at',)
+    filterset_fields = ('id', 'imam', 'types', 'date', 'created_at',)
 
 
 class CommunityEventsDetailAPIView(RetrieveAPIView):

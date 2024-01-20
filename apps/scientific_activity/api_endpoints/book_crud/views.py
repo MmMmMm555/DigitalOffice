@@ -22,14 +22,14 @@ class BookCreateAPIView(CreateAPIView):
 
 
 class BookListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.only('id', 'imam', 'name', 'direction', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = BookListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'direction', 'date', 'created_at',)
 
 
 class BookDetailAPIView(RetrieveAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = BookDetailSerializer
     permission_classes = (IsAuthenticated,)
 

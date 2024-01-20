@@ -3,8 +3,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import (CharityCreateSerializer, 
-                          CharityImageSerializer, 
+from .serializers import (CharityCreateSerializer,
+                          CharityImageSerializer,
                           CharityUpdateSerializer,
                           CharityDetailSerializer)
 from apps.charity.models import Charity, Images
@@ -28,7 +28,7 @@ class CharityUpdateView(UpdateAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityUpdateSerializer
     parser_classes = (FormParser,)
-    permission_classes = (IsImam|IsDeputy,)
+    permission_classes = (IsImam | IsDeputy,)
     lookup_field = 'pk'
 
 
@@ -44,25 +44,27 @@ class CharityImageCreateView(CreateAPIView):
     queryset = Images.objects.all()
     serializer_class = CharityImageSerializer
     parser_classes = (MultiPartParser,)
-    permission_classes = (IsImam|IsDeputy,)
+    permission_classes = (IsImam | IsDeputy,)
+
 
 class CharityImageListView(ListAPIView):
     queryset = Images.objects.all()
     serializer_class = CharityImageSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('id',)  
+    filterset_fields = ('id',)
 
 
 class CharityDetailView(RetrieveAPIView):
-    queryset = Charity.objects.all()
+    queryset = Charity.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = CharityDetailSerializer
     permission_classes = (IsAuthenticated,)
+
 
 class CharityDeleteView(DestroyAPIView):
     queryset = Charity.objects.all()
     serializer_class = CharityDetailSerializer
     permission_classes = (IsAuthenticated,)
-    
+
     def perform_destroy(self, instance):
         if instance.imam == self.request.user:
             instance.delete()

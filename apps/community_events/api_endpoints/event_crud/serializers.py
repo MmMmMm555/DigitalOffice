@@ -7,7 +7,7 @@ from apps.community_events.api_endpoints.images_api.serializers import ImageSeri
 class CommunityEventsSerializer(ModelSerializer):
     class Meta:
         model = CommunityEvents
-        fields = ('id', 'imam', 'type', 'comment', 'images', 'date',)
+        fields = ('id', 'imam', 'types', 'comment', 'images', 'date',)
 
 
 class CommunityEventsDetailSerializer(ModelSerializer):
@@ -15,7 +15,7 @@ class CommunityEventsDetailSerializer(ModelSerializer):
 
     class Meta:
         model = CommunityEvents
-        fields = ('id', 'imam', 'type', 'comment', 'images', 'date',)
+        fields = ('id', 'imam', 'types', 'comment', 'images', 'date',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -30,7 +30,7 @@ class CommunityEventsDetailSerializer(ModelSerializer):
 class CommunityEventsListSerializer(ModelSerializer):
     class Meta:
         model = CommunityEvents
-        fields = ('id', 'imam', 'type', 'comment', 'images', 'date',)
+        fields = ('id', 'imam', 'types', 'comment', 'images', 'date',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -45,7 +45,7 @@ class CommunityEventsListSerializer(ModelSerializer):
 class CommunityEventsUpdateSerializer(ModelSerializer):
     class Meta:
         model = CommunityEvents
-        fields = ('id', 'imam', 'type', 'images', 'comment', 'date',)
+        fields = ('id', 'imam', 'types', 'images', 'comment', 'date',)
         extra_kwargs = {
             'imam': {'required': False},
             'comment': {'required': False},

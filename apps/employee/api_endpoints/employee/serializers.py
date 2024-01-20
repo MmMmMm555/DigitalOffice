@@ -1,10 +1,7 @@
-from rest_framework.serializers import ModelSerializer, CharField, IntegerField
+from rest_framework.serializers import ModelSerializer, CharField
 
 from apps.employee import models
-from apps.employee.api_endpoints.department.serializers import DepartmentSerializer, Position
-from location_field.models.plain import PlainLocationField
-from datetime import date
-from rest_framework import serializers
+from apps.employee.api_endpoints.department.serializers import Position
 
 
 # class WorkActivitySerializer(ModelSerializer):

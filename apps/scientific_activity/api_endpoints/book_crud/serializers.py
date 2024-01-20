@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.scientific_activity.models import Book
 from apps.scientific_activity.api_endpoints.book_images_api.serializers import BookImageSerializer
-
+from apps.common.related_serializers import UserRelatedSerializer
 
 class BookSerializer(ModelSerializer):
     class Meta:
@@ -12,34 +12,19 @@ class BookSerializer(ModelSerializer):
 
 class BookDetailSerializer(ModelSerializer):
     images = BookImageSerializer(many=True)
-
+    imam = UserRelatedSerializer(many=False, read_only=True)
     class Meta:
         model = Book
         fields = ('id', 'imam', 'name', 'comment', 'images', 'direction', 'date', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation
+        read_only_fields = fields
 
 
 class BookListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
     class Meta:
         model = Book
         fields = ('id', 'imam', 'name', 'direction', 'date',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation
+        read_only_fields = fields
 
 
 class BookUpdateSerializer(ModelSerializer):

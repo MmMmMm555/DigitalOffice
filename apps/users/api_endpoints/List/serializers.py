@@ -19,6 +19,7 @@ class UsersListSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'name', 'last_name', 'role',
                   'email', 'profil', 'region', 'region_name', 'district', 'district_name', 'mosque',)
+        read_only_fields = fields
 
 
 class UsersDetailSerializer(serializers.ModelSerializer):
@@ -28,6 +29,7 @@ class UsersDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'role',
                   'email', 'profil', 'region', 'district',)
         depth = 1
+        read_only_fields = fields
 
 
 class UsersUpdateSerializer(serializers.ModelSerializer):
