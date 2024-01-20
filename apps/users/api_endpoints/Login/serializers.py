@@ -6,7 +6,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         if self.user.profil:
-            name = self.user.profil.name
+            name = self.user.profil.first_name
             last_name = self.user.profil.last_name
         else:
             name = None

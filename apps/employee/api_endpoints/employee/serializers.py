@@ -24,8 +24,8 @@ class EmployeeSerializer(ModelSerializer):
     class Meta:
         model = models.Employee
         fields = ('id',
-                  'name',
-                  'surname',
+                  'first_name',
+                  'middle_name',
                   'last_name',
                   'phone_number',
                   'address',
@@ -52,8 +52,8 @@ class EmployeeUpdateSerializer(ModelSerializer):
     class Meta:
         model = models.Employee
         fields = ('id',
-                  'name',
-                  'surname',
+                  'first_name',
+                  'middle_name',
                   'last_name',
                   'phone_number',
                   'address',
@@ -72,8 +72,8 @@ class EmployeeUpdateSerializer(ModelSerializer):
                   )
         extra_kwargs = {
             "gender": {"required": False},
-            "name": {"required": False},
-            "surname": {"required": False},
+            "first_name": {"required": False},
+            "middle_name": {"required": False},
             "last_name": {"required": False},
             "phone_number": {"required": False},
             "address": {"required": False},
@@ -90,8 +90,8 @@ class EmployeeListSerializer(ModelSerializer):
     class Meta:
         model = models.Employee
         fields = ('id',
-                  'name',
-                  'surname',
+                  'first_name',
+                  'middle_name',
                   'last_name',
                   'phone_number',
                   'position',
@@ -111,8 +111,8 @@ class EmployeeDetailSerializer(ModelSerializer):
     class Meta:
         model = models.Employee
         fields = ('id',
-                  'name',
-                  'surname',
+                  'first_name',
+                  'middle_name',
                   'last_name',
                   'phone_number',
                   'address',

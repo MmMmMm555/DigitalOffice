@@ -4,7 +4,7 @@ from django.db.models import Count, Sum, Q
 
 from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, Directions, ToRole
 from apps.common.regions import Regions
-from apps.friday_tesis.models import FridayTesisImamRead, FridayTesisImamResult
+from apps.friday_tesis.models import FridayThesisImamRead, FridayThesisImamResult
 from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
 from apps.employee.models import Employee, Graduation, Education, AcademicDegree
 
@@ -84,7 +84,7 @@ def StatisticStateApi(request):
 def StatisticThesisStateApi(request):
     start_date = request.GET.get('start_date')
     finish_date = request.GET.get('finish_date')
-    query = FridayTesisImamRead.objects.all()
+    query = FridayThesisImamRead.objects.all()
     if start_date and finish_date:
         query = query.filter(created_at__range=[start_date, finish_date])
     all = query.aggregate(
@@ -97,7 +97,7 @@ def StatisticThesisStateApi(request):
 def StatisticThesisAgeApi(request):
     start_date = request.GET.get('start_date')
     finish_date = request.GET.get('finish_date')
-    query = FridayTesisImamResult.objects.all()
+    query = FridayThesisImamResult.objects.all()
     if start_date and finish_date:
         query = query.filter(created_at__range=[start_date, finish_date])
     all = query.aggregate(child=Sum(

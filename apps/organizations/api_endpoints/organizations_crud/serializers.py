@@ -20,7 +20,7 @@ class OrganizationDetailSerializer(ModelSerializer):
         if imam:
             representation['imam'] = {
                 'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'name', '')} {getattr(imam.profil, 'last_name', '')}"
+                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
             }
         else:
             representation['imam'] = {'id': getattr(imam, 'id', None), }
@@ -39,7 +39,7 @@ class OrganizationListSerializer(ModelSerializer):
         if imam:
             representation['imam'] = {
                 'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'name', '')} {getattr(imam.profil, 'last_name', '')}"
+                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
             }
         else:
             representation['imam'] = {'id': getattr(imam, 'id', None), }

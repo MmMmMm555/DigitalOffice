@@ -11,9 +11,9 @@ from apps.mosque.models import Mosque
 from django.db import transaction
 
 
-class FridayTesisSerializer(ModelSerializer):
+class FridayThesisSerializer(ModelSerializer):
     class Meta:
-        model = models.FridayTesis
+        model = models.FridayThesis
         fields = ('id',
                   'title',
                   'types',
@@ -26,9 +26,9 @@ class FridayTesisSerializer(ModelSerializer):
         depth = 1
 
 
-class FridayTesisDetailSerializer(ModelSerializer):
+class FridayThesisDetailSerializer(ModelSerializer):
     class Meta:
-        model = models.FridayTesis
+        model = models.FridayThesis
         fields = ('id',
                   'title',
                   'types',
@@ -54,18 +54,18 @@ class FridayTesisDetailSerializer(ModelSerializer):
         if instance.to_mosque:
             representation['to_mosque'] = Mosque.objects.filter(
                 id__in=instance.to_mosque.all()).values('id', 'name',)
-        representation['waiting'] = models.FridayTesisImamRead.objects.filter(
+        representation['waiting'] = models.FridayThesisImamRead.objects.filter(
             tesis=instance, state=States.UNSEEN).count()
-        representation['accepted'] = models.FridayTesisImamRead.objects.filter(
+        representation['accepted'] = models.FridayThesisImamRead.objects.filter(
             tesis=instance, state=States.ACCEPTED).count()
-        representation['done'] = models.FridayTesisImamRead.objects.filter(
+        representation['done'] = models.FridayThesisImamRead.objects.filter(
             tesis=instance, state=States.DONE).count()
         return representation
 
 
-class FridayTesisCreateSerializer(ModelSerializer):
+class FridayThesisCreateSerializer(ModelSerializer):
     class Meta:
-        model = models.FridayTesis
+        model = models.FridayThesis
         fields = ('id',
                   'title',
                   'types',
@@ -88,13 +88,13 @@ class FridayTesisCreateSerializer(ModelSerializer):
         with transaction.atomic():
             thesis = super().create(validated_data)
             imams = User.objects.filter(role=Role.IMAM)
-            notifications_to_create = [models.FridayTesisImamRead(
+            notifications_to_create = [models.FridayThesisImamRead(
                 tesis=thesis,
                 imam=i,
             ) for i in imams]
-            models.FridayTesisImamRead.objects.bulk_create(
+            models.FridayThesisImamRead.objects.bulk_create(
                 notifications_to_create)
-            seen = models.FridayTesisImamRead.objects.filter(tesis=thesis)
+            seen = models.FridayThesisImamRead.objects.filter(tesis=thesis)
 
             mosque_list = thesis.to_mosque.all()
             district_list = thesis.to_district.all()
@@ -113,9 +113,9 @@ class FridayTesisCreateSerializer(ModelSerializer):
             return thesis
 
 
-class FridayTesisUpdateSerializer(ModelSerializer):
+class FridayThesisUpdateSerializer(ModelSerializer):
     class Meta:
-        model = models.FridayTesis
+        model = models.FridayThesis
         fields = ('id',
                   'title',
                   'types',
@@ -141,7 +141,7 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         if self.instance.date <= date.today() or (self.instance.date == date.today() and int(datetime.now().hour) > 12):
             raise ValidationError('editable date passed')
         else:
-            models.FridayTesisImamRead.objects.filter(
+            models.FridayThesisImamRead.objects.filter(
                 tesis=self.instance).update(state=States.UNSEEN)
         return attrs
 
@@ -160,7 +160,7 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         # instance.file_bool = validated_data.get('file_bool', instance.file_bool)
         # instance.save()
 
-        # models.FridayTesisImamRead.objects.filter(tesis=instance).update(seen=False)
+        # models.FridayThesisImamRead.objects.filter(tesis=instance).update(seen=False)
 
         # imams = User.objects.filter(role='4')
         # print(instance.to_region)
@@ -181,7 +181,7 @@ class FridayTesisUpdateSerializer(ModelSerializer):
         # if imam_list:
         #     imams = imams.filter(username__in=imam_list)
 
-        # seen = models.FridayTesisImamRead.objects.filter(tesis=instance, imam__in=imams,)
+        # seen = models.FridayThesisImamRead.objects.filter(tesis=instance, imam__in=imams,)
         # seen.update(requirement=True)
 
         # instance.to_mosque.clear()

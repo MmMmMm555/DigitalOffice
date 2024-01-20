@@ -1,14 +1,14 @@
 from django.urls import path
-from apps.friday_tesis.api_endpoints.tesis.views import (FridayTesisCreateView,
-                                                         FridayTesisListView,
-                                                         FridayTesisUpdateView,
-                                                         FridayTesisDetailView)
-from apps.friday_tesis.api_endpoints.seen_api.views import (FridayTesisImamReadView,
-                                                            FridayTesisImamReadListView)
-from apps.friday_tesis.api_endpoints.results_api.views import (FridayTesisImamResultView,
-                                                               FridayTesisImamResultListView,
-                                                               FridayTesisResultDetailView,
-                                                               FridayTesisResultUpdateView,
+from apps.friday_tesis.api_endpoints.tesis.views import (FridayThesisCreateView,
+                                                         FridayThesisListView,
+                                                         FridayThesisUpdateView,
+                                                         FridayThesisDetailView)
+from apps.friday_tesis.api_endpoints.seen_api.views import (FridayThesisImamReadView,
+                                                            FridayThesisImamReadListView)
+from apps.friday_tesis.api_endpoints.results_api.views import (FridayThesisImamResultView,
+                                                               FridayThesisImamResultListView,
+                                                               FridayThesisResultDetailView,
+                                                               FridayThesisResultUpdateView,
                                                                ResultVideoView,
                                                                ResultImageView,
                                                                ResultImageListView,
@@ -16,24 +16,24 @@ from apps.friday_tesis.api_endpoints.results_api.views import (FridayTesisImamRe
 
 urlpatterns = [
     # tesis apis
-    path('create/', FridayTesisCreateView.as_view(), name='tesis_create'),
-    path('update/<int:pk>/', FridayTesisUpdateView.as_view(), name='tesis_update'),
-    path('detail/<int:pk>/', FridayTesisDetailView.as_view(), name='tesis_detail'),
-    path('list/', FridayTesisListView.as_view(), name='tesis_list'),
+    path('create/', FridayThesisCreateView.as_view(), name='tesis_create'),
+    path('update/<int:pk>/', FridayThesisUpdateView.as_view(), name='tesis_update'),
+    path('detail/<int:pk>/', FridayThesisDetailView.as_view(), name='tesis_detail'),
+    path('list/', FridayThesisListView.as_view(), name='tesis_list'),
 
     # seen apis
-    path('seen/update/<int:pk>', FridayTesisImamReadView.as_view(),
+    path('seen/update/<int:pk>', FridayThesisImamReadView.as_view(),
          name='tesis_seen_update'),
-    path('seen/list', FridayTesisImamReadListView.as_view(),
+    path('seen/list', FridayThesisImamReadListView.as_view(),
          name='tesis_seen_list'),
 
     # result apis
-    path('result/create', FridayTesisImamResultView.as_view(), name='result_create'),
+    path('result/create', FridayThesisImamResultView.as_view(), name='result_create'),
     path('result/detail/<int:pk>',
-         FridayTesisResultDetailView.as_view(), name='result_detail'),
+         FridayThesisResultDetailView.as_view(), name='result_detail'),
     path('result/update/<int:pk>',
-         FridayTesisResultUpdateView.as_view(), name='result_update'),
-    path('result/list', FridayTesisImamResultListView.as_view(), name='result_list'),
+         FridayThesisResultUpdateView.as_view(), name='result_update'),
+    path('result/list', FridayThesisImamResultListView.as_view(), name='result_list'),
 
     # result image vs videos api
     path('result/image/create', ResultImageView.as_view(),

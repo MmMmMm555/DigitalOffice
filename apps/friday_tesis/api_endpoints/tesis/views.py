@@ -4,30 +4,30 @@ from django_filters.rest_framework import DjangoFilterBackend
 from apps.users.models import Role
 
 from apps.common.permissions import IsSuperAdmin, IsImam
-from .serializers import (FridayTesisSerializer, FridayTesisCreateSerializer,
-                          FridayTesisUpdateSerializer, FridayTesisDetailSerializer)
+from .serializers import (FridayThesisSerializer, FridayThesisCreateSerializer,
+                          FridayThesisUpdateSerializer, FridayThesisDetailSerializer)
 from apps.friday_tesis import models
 
 
-class FridayTesisCreateView(generics.CreateAPIView):
-    queryset = models.FridayTesis.objects.all()
-    serializer_class = FridayTesisCreateSerializer
+class FridayThesisCreateView(generics.CreateAPIView):
+    queryset = models.FridayThesis.objects.all()
+    serializer_class = FridayThesisCreateSerializer
     permission_classes = (IsSuperAdmin,)
     parser_classes = (parsers.MultiPartParser,
                       parsers.FormParser, parsers.FileUploadParser)
 
 
-class FridayTesisUpdateView(generics.RetrieveUpdateAPIView):
-    queryset = models.FridayTesis.objects.all()
-    serializer_class = FridayTesisUpdateSerializer
+class FridayThesisUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = models.FridayThesis.objects.all()
+    serializer_class = FridayThesisUpdateSerializer
     permission_classes = (IsSuperAdmin,)
     parser_classes = (parsers.MultiPartParser,
                       parsers.FormParser, parsers.FileUploadParser,)
 
 
-class FridayTesisListView(generics.ListAPIView):
-    queryset = models.FridayTesis.objects.all()
-    serializer_class = FridayTesisSerializer
+class FridayThesisListView(generics.ListAPIView):
+    queryset = models.FridayThesis.objects.all()
+    serializer_class = FridayThesisSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('title',)
@@ -37,7 +37,7 @@ class FridayTesisListView(generics.ListAPIView):
     def get_queryset(self):
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
-        query = models.FridayTesis.objects.all()
+        query = models.FridayThesis.objects.all()
         if start_date and finish_date:
             query = query.filter(created_at__gte=start_date, created_at__lte=finish_date)
         elif start_date:
@@ -47,9 +47,9 @@ class FridayTesisListView(generics.ListAPIView):
         return query
 
 
-class FridayTesisDetailView(generics.RetrieveDestroyAPIView):
-    queryset = models.FridayTesis.objects.all()
-    serializer_class = FridayTesisDetailSerializer
+class FridayThesisDetailView(generics.RetrieveDestroyAPIView):
+    queryset = models.FridayThesis.objects.all()
+    serializer_class = FridayThesisDetailSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
 
     def perform_destroy(self, instance):

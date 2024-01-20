@@ -33,7 +33,7 @@ urlpatterns = [
     path('statistics/order/state', StatisticStateApi, name='statistics_state'),
     path('statistics/order/role', StatisticRoleApi, name='statistics_role'),
 
-    # statistics tesis api
+    # statistics thesis api
     path('statistics/thesis/state',
          StatisticThesisStateApi, name='statistics_thesis_state'),
     path('statistics/thesis/age', StatisticThesisAgeApi,

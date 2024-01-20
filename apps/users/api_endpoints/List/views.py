@@ -16,7 +16,7 @@ class UsersListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter,)
     filterset_fields = ('id', 'role', 'region', 'district', 'profil__mosque',)
-    search_fields = ('email', 'profil__name', 'profil__surname', 'username',)
+    search_fields = ('email', 'profil__first_name', 'profil__middle_name', 'username',)
 
 
 class UsersDetailView(generics.RetrieveDestroyAPIView):

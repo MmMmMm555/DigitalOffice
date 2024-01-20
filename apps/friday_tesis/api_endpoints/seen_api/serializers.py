@@ -5,9 +5,9 @@ from apps.orders.models import States
 
 
 
-class FridayTesisImamReadSerializer(ModelSerializer):
+class FridayThesisImamReadSerializer(ModelSerializer):
     class Meta:
-        model = models.FridayTesisImamRead
+        model = models.FridayThesisImamRead
         fields = ('id',)
 
     def save(self):
@@ -22,14 +22,14 @@ class FridayTesisImamReadSerializer(ModelSerializer):
         raise ValidationError('you are not allowed to this action')
 
 
-class FridayTesisImamReadListSerializer(ModelSerializer):
+class FridayThesisImamReadListSerializer(ModelSerializer):
     mosque = StringRelatedField()
     region = StringRelatedField()
     district = StringRelatedField()
     imam_name = StringRelatedField()
     imam_last_name = StringRelatedField()
     class Meta:
-        model = models.FridayTesisImamRead
+        model = models.FridayThesisImamRead
         fields = ('id', 'tesis', 'imam', 'mosque', 'region', 'district', 'imam_name', 'imam_last_name', 'state', 'requirement', 'created_at',)
 
     def to_representation(self, instance):
@@ -37,7 +37,7 @@ class FridayTesisImamReadListSerializer(ModelSerializer):
         representation['result_id'] = None
         if instance.state == States.DONE:
             try:
-                result = models.FridayTesisImamResult.objects.filter(imam=instance.imam, tesis=instance.tesis).last().id
+                result = models.FridayThesisImamResult.objects.filter(imam=instance.imam, tesis=instance.tesis).last().id
             except:
                 result = None
             representation['result_id'] = result

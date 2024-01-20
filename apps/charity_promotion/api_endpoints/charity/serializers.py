@@ -41,7 +41,7 @@ class CharityPromotionDetailSerializer(ModelSerializer):
         representation = super().to_representation(instance)
         try:
             representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.name} {instance.imam.profil.last_name}"}
+                'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}"}
         except:
             representation['imam'] = None
         return representation

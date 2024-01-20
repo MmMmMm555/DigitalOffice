@@ -1,47 +1,49 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 from apps.users.models import User
 from apps.mosque.models import Mosque
 from apps.common.models import BaseModel
-from apps.common.validators import validate_file_size
+from apps.common.validators import validate_file_size, validate_image_size, validate_video_size
 from apps.common.regions import Regions, Districts
 
 
-# Create your models here.
-
-
 class States(models.TextChoices):
-    UNSEEN = "1"
-    ACCEPTED = "2"
-    DONE = "3"
+    UNSEEN = "unseen"
+    ACCEPTED = "accepted"
+    DONE = "done"
 
 
-class TesisType(models.TextChoices):
-    FRIDAY = "1"
-    HAYIT = "2"
+class ThesisType(models.TextChoices):
+    FRIDAY = "friday"
+    HAYIT = "hayit"
 
 
-class FridayTesis(BaseModel):
-    title = models.CharField(max_length=1000)
-    types = models.CharField(
-        max_length=6, choices=TesisType.choices, default=TesisType.FRIDAY)
-    # title_slug = models.SlugField(max_length=1000)
-    file = models.FileField(upload_to='files/fridaytesis', validators=[FileExtensionValidator(
+class FridayThesis(BaseModel):
+    title = models.CharField(verbose_name=_("title"), max_length=1000)
+    types = models.CharField(verbose_name=_("types"),
+                             max_length=6, choices=ThesisType.choices, default=ThesisType.FRIDAY)
+    file = models.FileField(verbose_name=_("file"), upload_to='files/fridaytesis', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
-    file_comment = models.TextField(blank=True, null=True)
-    attachment = models.FileField(upload_to='files/attachment', validators=[FileExtensionValidator(
+    file_comment = models.TextField(verbose_name=_(
+        "file_comment"), blank=True, null=True)
+    attachment = models.FileField(verbose_name=_("attachment"), upload_to='files/attachment', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
-    attachment_comment = models.TextField(blank=True, null=True)
-    date = models.DateField()
-    to_region = models.ManyToManyField(Regions, blank=True)
-    to_district = models.ManyToManyField(Districts, blank=True)
-    to_mosque = models.ManyToManyField(Mosque, blank=True)
-    image = models.BooleanField(default=False)
-    video = models.BooleanField(default=False)
-    comment = models.BooleanField(default=False)
-    file_bool = models.BooleanField(default=False)
+    attachment_comment = models.TextField(verbose_name=_(
+        "attachment_comment"), blank=True, null=True)
+    date = models.DateField(verbose_name=_("date"), )
+    to_region = models.ManyToManyField(
+        Regions, verbose_name=_("to_region"), blank=True)
+    to_district = models.ManyToManyField(
+        Districts, verbose_name=_("to_district"), blank=True)
+    to_mosque = models.ManyToManyField(
+        Mosque, verbose_name=_("to_mosque"), blank=True)
+    image = models.BooleanField(verbose_name=_("image"), default=False)
+    video = models.BooleanField(verbose_name=_("video"), default=False)
+    comment = models.BooleanField(verbose_name=_("comment"), default=False)
+    file_bool = models.BooleanField(verbose_name=_("file_bool"), default=False)
 
     def __str__(self) -> str:
         return f"{self.id}-{self.title}"
@@ -52,25 +54,15 @@ class FridayTesis(BaseModel):
         verbose_name_plural = 'Juma tezislari '
 
 
-# class FridayTesisRequireds(BaseModel):
-#     tesis = models.ForeignKey(FridayTesis, on_delete=models.CASCADE, related_name='tesisrequireds')
-#     to_region = models.ManyToManyField(Regions)
-#     to_district = models.ManyToManyField(Districts, blank=True)
-#     to_imams = models.ManyToManyField(User, blank=True)
-#     image = models.BooleanField(default=False)
-#     video = models.BooleanField(default=False)
-#     comment = models.BooleanField(default=False)
-#     file_bool = models.BooleanField(default=False)
-
-
-class FridayTesisImamRead(BaseModel):
+class FridayThesisImamRead(BaseModel):
     tesis = models.ForeignKey(
-        FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamread')
+        FridayThesis, verbose_name=_("tesis"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
     imam = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='fridaytesisimamread')
-    requirement = models.BooleanField(default=False)
-    state = models.CharField(
-        max_length=10, choices=States.choices, default=States.UNSEEN)
+        User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
+    requirement = models.BooleanField(
+        verbose_name=_("requirement"), default=False)
+    state = models.CharField(verbose_name=_("state"),
+                             max_length=10, choices=States.choices, default=States.UNSEEN)
 
     def __str__(self) -> str:
         return f"{self.id}-{self.imam.username} seen:{self.state}  required:{self.requirement}"
@@ -78,34 +70,37 @@ class FridayTesisImamRead(BaseModel):
     class Meta:
         ordering = ['-created_at',]
         unique_together = ('tesis', 'imam',)
-        verbose_name = 'Juma tezisi imom oqigan '
-        verbose_name_plural = 'Juma tezislari imom oqiganlar '
+        verbose_name = 'Juma tezisi bildirishnoma '
+        verbose_name_plural = 'Juma tezislari bildirishnoma '
 
 
 class ResultImages(BaseModel):
-    image = models.ImageField(upload_to='images/tesisresult', validators=[FileExtensionValidator(
-        allowed_extensions=settings.ALLOWED_IMAGE_TYPES)], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+    image = models.ImageField(verbose_name=_("image"), upload_to='images/tesisresult', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
 
 
 class ResultVideos(BaseModel):
-    video = models.FileField(upload_to='videos/tesisresult', validators=[FileExtensionValidator(
-        allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_file_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+    video = models.FileField(verbose_name=_("video"), upload_to='videos/tesisresult', validators=[FileExtensionValidator(
+        allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_video_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
 
 
-class FridayTesisImamResult(BaseModel):
+class FridayThesisImamResult(BaseModel):
     tesis = models.ForeignKey(
-        FridayTesis, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
+        FridayThesis, verbose_name=_("tesis"), on_delete=models.CASCADE, related_name='fridaytesisimamresult')
     imam = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='fridaytesisimamresult')
-    comment = models.TextField(blank=True, null=True)
-    child = models.PositiveIntegerField(default=0)
-    man = models.PositiveIntegerField(default=0)
-    old_man = models.PositiveIntegerField(default=0)
-    old = models.PositiveIntegerField(default=0)
-    file = models.FileField(upload_to='files/tesisresult', validators=[FileExtensionValidator(
+        User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='fridaytesisimamresult')
+    comment = models.TextField(verbose_name=_(
+        "comment"), blank=True, null=True)
+    child = models.PositiveIntegerField(verbose_name=_("child"), default=0)
+    man = models.PositiveIntegerField(verbose_name=_("man"), default=0)
+    old_man = models.PositiveIntegerField(verbose_name=_("old_man"), default=0)
+    old = models.PositiveIntegerField(verbose_name=_("old"), default=0)
+    file = models.FileField(verbose_name=_("file"), upload_to='files/tesisresult', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
-    images = models.ManyToManyField(ResultImages, blank=True)
-    videos = models.ManyToManyField(ResultVideos, blank=True)
+    images = models.ManyToManyField(
+        ResultImages, verbose_name=_("images"), blank=True)
+    videos = models.ManyToManyField(
+        ResultVideos, verbose_name=_("videos"), blank=True)
 
     def __str__(self) -> str:
         return self.imam.username

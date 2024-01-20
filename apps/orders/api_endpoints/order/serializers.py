@@ -1,13 +1,10 @@
 from rest_framework.serializers import ModelSerializer, ValidationError, CharField, ListField, StringRelatedField
 from django.db import transaction
-from datetime import date, timedelta
 
 from apps.orders import models
 from apps.users.models import User
-from apps.mosque.models import Mosque
 from apps.common.regions import Districts
 from apps.orders.models import States
-from apps.users.models import Role
 
 
 class DirectionFilesSerializer(ModelSerializer):
@@ -237,7 +234,7 @@ class DirectionSingleSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['creator'] = User.objects.filter(
-            id=instance.creator.id).values('id', 'profil__name', 'profil__last_name',)
+            id=instance.creator.id).values('id', 'profil__first_name', 'profil__last_name',)
         if instance.to_employee:
             representation['to_employee'] = instance.to_employee.all().values(
                 'id', 'name', 'district__name', 'region__name',)

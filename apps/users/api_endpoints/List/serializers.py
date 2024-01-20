@@ -6,7 +6,7 @@ from apps.employee.models import Employee
 
 
 class UsersListSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='profil.name', read_only=True)
+    name = serializers.CharField(source='profil.first_name', read_only=True)
     last_name = serializers.CharField(
         source='profil.last_name', read_only=True)
     region_name = serializers.CharField(
@@ -57,8 +57,8 @@ class SelfProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ('id',
-                  'name',
-                  'surname',
+                  'first_name',
+                  'middle_name',
                   'last_name',
                   'phone_number',
                   'address',
@@ -66,8 +66,8 @@ class SelfProfileUpdateSerializer(serializers.ModelSerializer):
                   'birth_date',
                   )
         extra_kwargs = {
-            'name': {'required': False},
-            'surname': {'required': False},
+            'first_name': {'required': False},
+            'middle_name': {'required': False},
             'last_name': {'required': False},
             'phone_number': {'required': False},
             'address': {'required': False},

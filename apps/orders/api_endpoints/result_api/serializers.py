@@ -41,7 +41,7 @@ class DirectionsEmployeeResultListSerializer(ModelSerializer):
             'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type}
         try:
             representation['employee'] = {
-                'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}"}
+                'id': instance.employee.id, 'name': f"{instance.employee.profil.first_name} {instance.employee.profil.last_name}"}
         except:
             representation['employee'] = {'id': instance.employee.id}
         return representation
@@ -67,7 +67,7 @@ class DirectionsEmployeeResultDetailSerializer(ModelSerializer):
         try:
             representation['from'] = f"{instance.employee.profil.mosque.region}, {instance.employee.profil.mosque.district}, {instance.employee.profil.mosque.name}"
             representation['employee'] = {
-                'id': instance.employee.id, 'name': f"{instance.employee.profil.name} {instance.employee.profil.last_name}", "role": instance.employee.role}
+                'id': instance.employee.id, 'name': f"{instance.employee.profil.first_name} {instance.employee.profil.last_name}", "role": instance.employee.role}
         except:
             representation['from'] = 'Nomalum'
             representation['employee'] = {'id': instance.employee.id}

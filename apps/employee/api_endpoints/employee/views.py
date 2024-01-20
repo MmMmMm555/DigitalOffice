@@ -17,7 +17,7 @@ class EmployeeListView(generics.ListAPIView):
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('name', 'surname', 'last_name',)
+    search_fields = ('first_name', 'middle_name', 'last_name',)
     filterset_fields = ('id', 'education', 'position', 'position__department',
                         'academic_degree', 'profile__role', 'mosque__region', 'mosque__district', 'graduated_univer',)
 

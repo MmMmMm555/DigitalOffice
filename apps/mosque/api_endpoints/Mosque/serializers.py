@@ -174,13 +174,13 @@ class MosqueSingleSerializer(ModelSerializer):
         ]
 
     def get_employee(self, obj):
-        return obj.employee.all().values('id', 'name', 'last_name', 'profile__role',)
+        return obj.employee.all().values('id', 'first_name', 'last_name', 'profile__role',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
 
         images = instance.fire_images.all()
-        representation['employee'] = instance.employee.all().values('id', 'name', 'last_name', 'profile__role',)
+        representation['employee'] = instance.employee.all().values('id', 'first_name', 'last_name', 'profile__role',)
         representation['region'] = {
             'id': instance.region.id, 'name': instance.region.name}
         representation['district'] = {

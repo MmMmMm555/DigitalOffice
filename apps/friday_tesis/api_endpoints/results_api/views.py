@@ -6,19 +6,19 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from apps.users.models import Role
 from .serializers import (ResultVideosSerializer,
                           ResultImagesSerializer,
-                          FridayTesisImamResultSerializer,
-                          FridayTesisImamResultListSerializer,
-                          FridayTesisImamResultDetailSerializer,
-                          FridayTesisImamResultUpdateSerializer,)
-from apps.friday_tesis.models import (FridayTesisImamResult,
+                          FridayThesisImamResultSerializer,
+                          FridayThesisImamResultListSerializer,
+                          FridayThesisImamResultDetailSerializer,
+                          FridayThesisImamResultUpdateSerializer,)
+from apps.friday_tesis.models import (FridayThesisImamResult,
                                       ResultImages,
                                       ResultVideos,)
 from apps.common.permissions import IsSuperAdmin, IsImam
 
 
-class FridayTesisImamResultView(CreateAPIView):
-    queryset = FridayTesisImamResult.objects.all()
-    serializer_class = FridayTesisImamResultSerializer
+class FridayThesisImamResultView(CreateAPIView):
+    queryset = FridayThesisImamResult.objects.all()
+    serializer_class = FridayThesisImamResultSerializer
     permission_classes = (IsImam,)
     parser_classes = (FormParser, MultiPartParser,)
 
@@ -26,14 +26,14 @@ class FridayTesisImamResultView(CreateAPIView):
         serializer.save(imam=self.request.user)
 
 
-class FridayTesisImamResultListView(ListAPIView):
-    queryset = FridayTesisImamResult.objects.all()
-    serializer_class = FridayTesisImamResultListSerializer
+class FridayThesisImamResultListView(ListAPIView):
+    queryset = FridayThesisImamResult.objects.all()
+    serializer_class = FridayThesisImamResultListSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
     filterset_fields = ('id', 'tesis', 'imam', 'created_at',)
 
     def get_queryset(self):
-        query = FridayTesisImamResult.objects.all()
+        query = FridayThesisImamResult.objects.all()
         if self.request.user.role == Role.SUPER_ADMIN:
             return query
         return query.filter(imam=self.request.user)
@@ -67,15 +67,15 @@ class ResultVideoView(CreateAPIView):
     parser_classes = (FormParser, MultiPartParser,)
 
 
-class FridayTesisResultDetailView(RetrieveAPIView):
-    queryset = FridayTesisImamResult.objects.all()
-    serializer_class = FridayTesisImamResultDetailSerializer
+class FridayThesisResultDetailView(RetrieveAPIView):
+    queryset = FridayThesisImamResult.objects.all()
+    serializer_class = FridayThesisImamResultDetailSerializer
     permission_classes = (IsAuthenticated,)
 
 
-class FridayTesisResultUpdateView(RetrieveUpdateAPIView):
-    queryset = FridayTesisImamResult.objects.all()
-    serializer_class = FridayTesisImamResultUpdateSerializer
+class FridayThesisResultUpdateView(RetrieveUpdateAPIView):
+    queryset = FridayThesisImamResult.objects.all()
+    serializer_class = FridayThesisImamResultUpdateSerializer
     parser_classes = (FormParser, MultiPartParser,)
     permission_classes = (IsImam,)
 
