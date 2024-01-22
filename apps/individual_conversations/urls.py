@@ -9,9 +9,9 @@ urlpatterns = [
     path('list/', views.IndividualConversationListView.as_view(), name='list'),
     path('detail/<int:pk>',
          views.IndividualConversationDetailView.as_view(), name='detail'),
-    path('update<int:pk>',
+    path('update/<int:pk>',
          views.IndividualConversationUpdateView.as_view(), name='update'),
-    path('delete<int:pk>',
+    path('delete/<int:pk>',
          views.IndividualConversationDeleteView.as_view(), name='delete'),
 
     # image apis
