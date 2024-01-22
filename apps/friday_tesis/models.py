@@ -14,6 +14,7 @@ class States(models.TextChoices):
     UNSEEN = "unseen"
     ACCEPTED = "accepted"
     DONE = "done"
+    EXPIRED = "expired"
 
 
 class ThesisType(models.TextChoices):

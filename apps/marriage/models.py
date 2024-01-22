@@ -11,9 +11,7 @@ from apps.common.validators import validate_file_size, validate_image_size
 class Marriage(BaseModel):
     imam = models.ForeignKey(User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='marriage')
     date = models.DateField(verbose_name=_("date"), )
-    marriage_image = models.FileField(verbose_name=_("marriage_image"), upload_to='image/marriage_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
-    marriage_document = models.FileField(verbose_name=_("marriage_document"), upload_to='files/marriage_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
-    fhdyo_document = models.FileField(verbose_name=_("fhdyo_document"), upload_to='files/fhdyo_docs', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
+    marriage_image = models.FileField(verbose_name=_("marriage_image"), upload_to='images/marriage_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     fhdyo_image = models.FileField(verbose_name=_("fhdyo_image"), upload_to='images/fhdyo_images', validators=[FileExtensionValidator(allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}")
     mahr = models.FloatField(verbose_name=_("mahr"), default=0)
     comment = models.TextField(verbose_name=_("comment"), blank=True, null=True)
