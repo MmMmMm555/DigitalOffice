@@ -1,5 +1,6 @@
 from rest_framework import generics, filters, permissions, serializers
 from django_filters.rest_framework import DjangoFilterBackend
+from django.http import HttpResponse
 
 from apps.users.api_endpoints.List.serializers import (
     UsersListSerializer, UsersDetailSerializer, UsersUpdateSerializer, SelfProfileUpdateSerializer)
@@ -7,6 +8,7 @@ from apps.users.models import User, Role
 from apps.common.permissions import IsSuperAdmin
 from rest_framework.parsers import FormParser, MultiPartParser
 from apps.employee.models import Employee
+from apps.users.admin import UserResource
 
 
 class UsersListView(generics.ListAPIView):
@@ -43,3 +45,22 @@ class SelfProfileUpdateView(generics.UpdateAPIView):
             serializer.save()
         else:
             raise serializers.ValidationError({'detail': "you are not allowed"})
+
+
+class UsersExcelData(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UsersListSerializer
+    permission_classes = (IsSuperAdmin,)
+    filterset_fields = ('id', 'role', 'region', 'district', 'profil__mosque',)
+
+    def get(self, request):
+        query = self.queryset
+        for i in self.filterset_fields:
+            filters = request.GET.get(i)
+            filter=i
+            if filters:
+                query = query.filter(**{filter: filters})
+        data = UserResource().export(queryset=query)
+        response = HttpResponse(data.xlsx, content_type='xlsx')
+        response['Content-Disposition'] = "attachment; filename=users_data.xlsx"
+        return response
