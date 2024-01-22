@@ -35,7 +35,6 @@ class DirectionTypes(models.TextChoices):
     MISSION = 'mission'
 
 
-
 class DirectionFiles(BaseModel):
     file = models.FileField(verbose_name=_("file"), upload_to='files/direction', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}")
@@ -49,30 +48,36 @@ class Directions(BaseModel):
     creator = models.ForeignKey(User, verbose_name=_("creator"), on_delete=models.SET_NULL,
                                 null=True, blank=False, related_name='directions_creator',)
     title = models.CharField(verbose_name=_("title"), max_length=1000)
-    direction_type = models.CharField(verbose_name=_("direction_type"), 
-        max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
-    file = models.ManyToManyField(DirectionFiles, verbose_name=_("file"), blank=True)
+    direction_type = models.CharField(verbose_name=_("direction_type"),
+                                      max_length=11, choices=DirectionTypes.choices, default=DirectionTypes.ORDER)
+    file = models.ManyToManyField(
+        DirectionFiles, verbose_name=_("file"), blank=True)
     comments = models.TextField(verbose_name=_("comments"), blank=True)
-    types = models.CharField(verbose_name=_("types"), 
-        max_length=12, choices=Types.choices, default=Types.INFORMATION)
+    types = models.CharField(verbose_name=_("types"),
+                             max_length=12, choices=Types.choices, default=Types.INFORMATION)
 
-    from_role = models.CharField(verbose_name=_("from_role"), 
-        max_length=18, choices=Role.choices[:3], default=Role.SUPER_ADMIN)
-    to_role = ArrayField(models.CharField(verbose_name=_("to_role"), 
-        max_length=18, choices=ToRole.choices, default=ToRole.IMAM, blank=True, null=True), default=list, blank=True)
+    from_role = models.CharField(verbose_name=_("from_role"),
+                                 max_length=18, choices=Role.choices[:3], default=Role.SUPER_ADMIN)
+    to_role = ArrayField(models.CharField(verbose_name=_("to_role"),
+                                          max_length=18, choices=ToRole.choices, default=ToRole.IMAM, blank=True, null=True), default=list, blank=True)
 
-    to_region = models.ManyToManyField(Regions, verbose_name=_("to_region"), related_name='direction', blank=True)
+    to_region = models.ManyToManyField(Regions, verbose_name=_(
+        "to_region"), related_name='direction', blank=True)
     to_district = models.ManyToManyField(
         Districts, verbose_name=_("to_district"), related_name='direction', blank=True)
     to_employee = models.ManyToManyField(
         Mosque, verbose_name=_("to_employee"), related_name='direction', blank=True)
 
-    required_to_region = models.ManyToManyField(Regions, verbose_name=_("required_to_region"), blank=True)
-    required_to_district = models.ManyToManyField(Districts, verbose_name=_("required_to_district"), blank=True)
-    required_to_employee = models.ManyToManyField(Mosque, verbose_name=_("required_to_employee"), blank=True)
+    required_to_region = models.ManyToManyField(
+        Regions, verbose_name=_("required_to_region"), blank=True)
+    required_to_district = models.ManyToManyField(
+        Districts, verbose_name=_("required_to_district"), blank=True)
+    required_to_employee = models.ManyToManyField(
+        Mosque, verbose_name=_("required_to_employee"), blank=True)
 
     from_date = models.DateField(verbose_name=_("from_date"), blank=False)
-    to_date = models.DateField(verbose_name=_("to_date"), blank=True, null=True,)
+    to_date = models.DateField(verbose_name=_(
+        "to_date"), blank=True, null=True,)
 
     voice = models.BooleanField(verbose_name=_("voice"), default=False)
     image = models.BooleanField(verbose_name=_("image"), default=False)
@@ -94,9 +99,10 @@ class DirectionsEmployeeRead(BaseModel):
         Directions, verbose_name=_("direction"), on_delete=models.CASCADE, related_name='directionemployeeread')
     employee = models.ForeignKey(
         User, verbose_name=_("employee"), on_delete=models.CASCADE, related_name='directionemployeeread')
-    requirement = models.BooleanField(verbose_name=_("requirement"), default=False)
-    state = models.CharField(verbose_name=_("state"), 
-        max_length=10, choices=States.choices, default=States.UNSEEN)
+    requirement = models.BooleanField(
+        verbose_name=_("requirement"), default=False)
+    state = models.CharField(verbose_name=_("state"),
+                             max_length=10, choices=States.choices, default=States.UNSEEN)
 
     def __str__(self) -> str:
         return self.employee.username
@@ -143,9 +149,12 @@ class DirectionsEmployeeResult(BaseModel):
     voice = models.FileField(verbose_name=_("voice"), upload_to='voices/direction_result', validators=[FileExtensionValidator(
         allowed_extensions=['mp3',]), validate_file_size], help_text=f"allowed voices: ['mp3',]", blank=True)
     comment = models.TextField(verbose_name=_("comment"), blank=True)
-    images = models.ManyToManyField(ResultImages, verbose_name=_("images"), blank=True)
-    videos = models.ManyToManyField(ResultVideos, verbose_name=_("videos"), blank=True)
-    files = models.ManyToManyField(ResultFiles, verbose_name=_("files"), blank=True)
+    images = models.ManyToManyField(
+        ResultImages, verbose_name=_("images"), blank=True)
+    videos = models.ManyToManyField(
+        ResultVideos, verbose_name=_("videos"), blank=True)
+    files = models.ManyToManyField(
+        ResultFiles, verbose_name=_("files"), blank=True)
 
     def __str__(self) -> str:
         return self.employee.username
