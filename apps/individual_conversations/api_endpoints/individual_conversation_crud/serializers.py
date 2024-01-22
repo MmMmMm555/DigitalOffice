@@ -7,7 +7,7 @@ from apps.individual_conversations.models import IndividualConversation
 class IndividualConversationSerializer(ModelSerializer):
     class Meta:
         model = IndividualConversation
-        fields = ('id', 'imam', 'images', 'type', 'title', 'comment', 'date',)
+        fields = ('id', 'imam', 'images', 'types', 'title', 'comment', 'date',)
 
 
 class IndividualConversationDetailSerializer(ModelSerializer):
@@ -15,7 +15,7 @@ class IndividualConversationDetailSerializer(ModelSerializer):
 
     class Meta:
         model = IndividualConversation
-        fields = ('id', 'imam', 'images', 'type', 'title',
+        fields = ('id', 'imam', 'images', 'types', 'title',
                   'comment', 'date', 'created_at', 'updated_at',)
         read_only_fields = ('created_at', 'updated_at',)
 
@@ -35,11 +35,11 @@ class IndividualConversationDetailSerializer(ModelSerializer):
 class IndividualConversationUpdateSerializer(ModelSerializer):
     class Meta:
         model = IndividualConversation
-        fields = ('imam', 'images', 'type', 'title', 'comment', 'date',)
+        fields = ('imam', 'images', 'types', 'title', 'comment', 'date',)
         extra_kwargs = {
             'imam': {'required': False},
             'images': {'required': False},
-            'type': {'required': False},
+            'types': {'required': False},
             'title': {'required': False},
             'comment': {'required': False},
             'date': {'required': False},
@@ -49,16 +49,16 @@ class IndividualConversationUpdateSerializer(ModelSerializer):
 class IndividualConversationListSerializer(ModelSerializer):
     class Meta:
         model = IndividualConversation
-        fields = ('id', 'imam', 'type', 'title', 'date',)
+        fields = ('id', 'imam', 'types', 'title', 'date',)
 
 
 class IndividualConversationUpdateSerializer(ModelSerializer):
     class Meta:
         model = IndividualConversation
-        fields = ('id', 'imam', 'images', 'type', 'title', 'comment', 'date',)
+        fields = ('id', 'imam', 'images', 'types', 'title', 'comment', 'date',)
         extra_kwargs = {
             'imam': {'required': False},
-            'type': {'required': False},
+            'types': {'required': False},
             'title': {'required': False},
             'comment': {'required': False},
             'images': {'required': False},

@@ -6,7 +6,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.common.permissions import IsImam, IsDeputy
 from apps.mavlud.models import Mavlud
-from .serializers import (MavludSerializer, MavludListSerializer, MavludUpdateSerializer, MavludDetailSerializer,)
+from .serializers import (MavludSerializer, MavludListSerializer,
+                          MavludUpdateSerializer, MavludDetailSerializer,)
 from apps.common.view_mixin import FilerQueryByRole
 
 
@@ -39,10 +40,10 @@ class MavludUpdateAPIView(UpdateAPIView):
     serializer_class = MavludUpdateSerializer
     permission_classes = (IsImam | IsDeputy,)
     parser_classes = (MultiPartParser, FormParser,)
-    
+
     def perform_update(self, serializer):
         instance = self.get_object()
-        if instance.imam == self.request.user:  
+        if instance.imam == self.request.user:
             serializer.save(imam=self.request.user)
         else:
             return Response({'message': 'You are not allowed to update'}, status=403)
@@ -52,7 +53,7 @@ class MavludDeleteAPIView(DestroyAPIView):
     queryset = Mavlud.objects.all()
     serializer_class = MavludSerializer
     permission_classes = (IsImam | IsDeputy,)
-    
+
     def perform_destroy(self, instance):
         if instance.imam == self.request.user:
             instance.delete()

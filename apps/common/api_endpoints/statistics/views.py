@@ -116,7 +116,7 @@ def StatisticMosqueTopApi(request):
 
 @api_view(['GET'])
 def StatisticMosqueTypeApi(request):
-    query = Mosque.objects.all().aggregate(all_count=Count('id'), jome=Count('id', filter=Q(mosque_type=MosqueTypeChoices.JOME)),
+    query = Mosque.objects.all().aggregate(all_count=Count('id'), jame=Count('id', filter=Q(mosque_type=MosqueTypeChoices.JAME)),
                                            neighborhood=Count('id', filter=Q(mosque_type=MosqueTypeChoices.NEIGHBORHOOD)))
     return Response(data=query)
 
