@@ -30,5 +30,6 @@ urlpatterns = [
     # universities api
     path('university', GraduationAPIView.as_view(), name='university_list'),
     
-    path('export-excel', views.EmployeeExcelData.as_view(), name='university_list'),
+    # excel
+    path('excel', views.EmployeeExcelData.as_view(), name='employee_excel'),
 ]

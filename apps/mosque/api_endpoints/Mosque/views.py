@@ -1,14 +1,16 @@
 from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
-from django.db.models import Count, Q, F
+from django.db.models import Count, Q
 from rest_framework.permissions import IsAuthenticated
-from apps.users.models import Role
+from django.http import HttpResponse
 
 from apps.mosque.api_endpoints.Mosque.serializers import (MosqueSerializer,
                                                           MosqueListSerializer,
                                                           MosqueSingleSerializer,
                                                           MosqueUpdateSerializer,)
 from apps.mosque.models import Mosque
+from apps.users.models import Role
+from apps.mosque.admin import MosqueResource
 from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
 
 
@@ -93,3 +95,24 @@ class MosqueDeleteView(generics.DestroyAPIView):
     serializer_class = MosqueSerializer
     permission_classes = (IsSuperAdmin,)
     lookup_field = 'pk'
+
+
+class MosqueExcelData(generics.ListAPIView):
+    queryset = Mosque.objects.all().annotate(employee_count=Count(
+        'employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
+    serializer_class = MosqueListSerializer
+    permission_classes = (IsSuperAdmin,)
+    filterset_fields = ('id', 'mosque_heating_type', 'region',
+                        'district', 'mosque_type', 'mosque_status',)
+
+    def get(self, request):
+        query = self.queryset
+        for i in self.filterset_fields:
+            filters = request.GET.get(i)
+            filter = i
+            if filters:
+                query = query.filter(**{filter: filters})
+        data = MosqueResource().export(queryset=query)
+        response = HttpResponse(data.xlsx, content_type='xlsx')
+        response['Content-Disposition'] = "attachment; filename=mosque_data.xlsx"
+        return response

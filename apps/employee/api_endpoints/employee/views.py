@@ -89,7 +89,7 @@ class EmployeeExcelData(generics.ListAPIView):
         query = self.queryset
         for i in self.filterset_fields:
             filters = request.GET.get(i)
-            filter=i
+            filter = i
             if filters:
                 query = query.filter(**{filter: filters})
         if graduated_year:
@@ -107,26 +107,5 @@ class EmployeeExcelData(generics.ListAPIView):
                                  start_year, finish_year])
         data = EmployeeResource().export(queryset=query)
         response = HttpResponse(data.xlsx, content_type='xlsx')
-        response['Content-Disposition'] = "attachment; filename=data.xlsx"
+        response['Content-Disposition'] = "attachment; filename=employee_data.xlsx"
         return response
-
-    # def get_queryset(self):
-    #     graduated_year = self.request.GET.get('graduated_year')
-    #     start_age = self.request.GET.get('start_age')
-    #     profile = self.request.GET.get('has_account')
-    #     finish_age = self.request.GET.get('finish_age')
-    #     query = self.queryset
-    #     if graduated_year:
-    #         query = query.filter(graduated_year__year=graduated_year)
-    #     if profile:
-    #         if profile == 'false':
-    #             query = query.filter(profile__isnull=True)
-    #         elif profile == 'true':
-    #             query = query.filter(profile__isnull=False)
-    #     if start_age and finish_age and start_age < finish_age:
-    #         current_year = date.today().year
-    #         start_year = current_year-int(finish_age)
-    #         finish_year = current_year-int(start_age)
-    #         query = query.filter(birth_date__year__range=[
-    #                              start_year, finish_year])
-    #     return query
