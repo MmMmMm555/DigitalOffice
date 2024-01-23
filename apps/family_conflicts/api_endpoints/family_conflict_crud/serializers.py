@@ -1,48 +1,40 @@
 from rest_framework.serializers import ModelSerializer
 
 from apps.family_conflicts.models import FamilyConflict
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class FamilyConflictSerializer(ModelSerializer):
     class Meta:
         model = FamilyConflict
-        fields = ('id', 'imam', 'comment', 'causes', 'types', 'results', 'date',)
-    
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None),}
-        return representation
+        fields = ('id', 'imam', 'comment', 'causes',
+                  'types', 'results', 'date',)
+
+
+class FamilyConflictDetailSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = FamilyConflict
+        fields = ('id', 'imam', 'comment', 'causes', 'types',
+                  'results', 'date', 'created_at', 'updated_at',)
+        read_only_fields = fields
 
 
 class FamilyConflictListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = FamilyConflict
-        fields = ('id', 'imam', 'causes', 'types', 'results', 'date', 'created_at', 'updated_at',)
-        read_only_fields = ('created_at', 'updated_at',)
+        fields = ('id', 'imam', 'types', 'date',)
+        read_only_fields = fields
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None),}
-        return representation
 
 class FamilyConflictUpdateSerializer(ModelSerializer):
     class Meta:
         model = FamilyConflict
-        fields = ('id', 'imam', 'comment', 'causes', 'types', 'results', 'date',)
+        fields = ('id', 'imam', 'comment', 'causes',
+                  'types', 'results', 'date',)
         extra_kwargs = {
             'imam': {'required': False},
             'causes': {'required': False},

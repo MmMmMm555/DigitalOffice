@@ -5,7 +5,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.common.permissions import IsImam, IsDeputy, IsOwner
 from apps.family_conflicts.models import FamilyConflict
-from .serializers import FamilyConflictSerializer, FamilyConflictListSerializer, FamilyConflictUpdateSerializer
+from .serializers import (FamilyConflictSerializer, FamilyConflictListSerializer,
+                          FamilyConflictUpdateSerializer, FamilyConflictDetailSerializer)
 from apps.common.view_mixin import FilerQueryByRole
 
 
@@ -20,7 +21,7 @@ class FamilyConflictCreateAPIView(CreateAPIView):
 
 
 class FamilyConflictListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = FamilyConflict.objects.all()
+    queryset = FamilyConflict.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = FamilyConflictListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'created_at',
@@ -28,8 +29,8 @@ class FamilyConflictListAPIView(FilerQueryByRole, ListAPIView):
 
 
 class FamilyConflictDetailAPIView(RetrieveAPIView):
-    queryset = FamilyConflict.objects.all()
-    serializer_class = FamilyConflictSerializer
+    queryset = FamilyConflict.objects.all().select_related('imam', 'imam__profil',)
+    serializer_class = FamilyConflictDetailSerializer
     permission_classes = (IsAuthenticated,)
 
 
