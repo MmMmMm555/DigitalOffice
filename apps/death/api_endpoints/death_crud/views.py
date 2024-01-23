@@ -21,7 +21,7 @@ class DeathCreateAPIView(CreateAPIView):
 
 
 class DeathListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Death.objects.all()
+    queryset = Death.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = DeathListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'created_at',)
@@ -38,7 +38,7 @@ class DeathUpdateAPIView(UpdateAPIView):
 
 
 class DeathDetailAPIView(RetrieveAPIView):
-    queryset = Death.objects.all()
+    queryset = Death.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = DeathDetailSerializer
     permission_classes = (IsAuthenticated,)
 

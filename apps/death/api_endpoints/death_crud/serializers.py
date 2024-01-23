@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.death.models import Death
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class DeathSerializer(ModelSerializer):
@@ -26,26 +27,19 @@ class DeathUpdateSerializer(ModelSerializer):
 
 
 class DeathDetailSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Death
         fields = ('id', 'imam', 'date', 'image', 'file',
                   'comment', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None),}
-        return representation
-        
+        read_only_fields = fields
 
 
 class DeathListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Death
-        fields = ('id', 'imam', 'date', 'comment',)
+        fields = ('id', 'imam', 'date',)
+        read_only_fields = fields

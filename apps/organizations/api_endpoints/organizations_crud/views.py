@@ -25,7 +25,7 @@ class OrganizationListAPIView(FilerQueryByRole, ListAPIView):
     serializer_class = OrganizationListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
-    filterset_fields = ('id', 'imam', 'date', 'participant_type',
+    filterset_fields = ('id', 'imam', 'date', 'type', 'participant_type',
                         'institution_type', 'participant_type',)
 
 

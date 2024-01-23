@@ -17,7 +17,7 @@ class CommunityEventsDetailSerializer(ModelSerializer):
 
     class Meta:
         model = CommunityEvents
-        fields = ('id', 'imam', 'types', 'comment', 'images', 'date',)
+        fields = ('id', 'imam', 'types', 'comment', 'images', 'date', 'created_at', 'updated_at',)
 
 
 class CommunityEventsListSerializer(ModelSerializer):
