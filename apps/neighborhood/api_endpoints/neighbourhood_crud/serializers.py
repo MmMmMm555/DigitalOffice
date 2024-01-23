@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
 from apps.neighborhood.models import Neighborhood
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class NeighborhoodSerializer(ModelSerializer):
@@ -10,41 +11,23 @@ class NeighborhoodSerializer(ModelSerializer):
 
 
 class NeighborhoodDetailSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+    
     class Meta:
         model = Neighborhood
         fields = ('id', 'imam', 'comment', 'participants',
                   'types', 'date', 'created_at', 'updated_at',)
+        read_only_fields = fields
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        print(imam)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None), }
-        return representation
 
 
 class NeighborhoodListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+    
     class Meta:
         model = Neighborhood
         fields = ('id', 'imam', 'participants', 'types', 'date',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None), }
-        return representation
+        read_only_fields = fields
 
 
 class NeighborhoodUpdateSerializer(ModelSerializer):
