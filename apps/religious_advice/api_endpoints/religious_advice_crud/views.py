@@ -21,7 +21,7 @@ class ReligiousAdviceCreateAPIView(CreateAPIView):
 
 
 class ReligiousAdviceListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = ReligiousAdvice.objects.all()
+    queryset = ReligiousAdvice.objects.only('id', 'imam', 'type','date',).select_related('imam', 'imam__profil',)
     serializer_class = ReligiousAdviceListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
@@ -29,7 +29,7 @@ class ReligiousAdviceListAPIView(FilerQueryByRole, ListAPIView):
 
 
 class ReligiousAdviceDetailAPIView(RetrieveAPIView):
-    queryset = ReligiousAdvice.objects.all()
+    queryset = ReligiousAdvice.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = ReligiousAdviceDetailSerializer
     permission_classes = (IsAuthenticated,)
 

@@ -22,7 +22,7 @@ class Choices(models.TextChoices):
     JIHAD = 'jihad'
     TAKFIR = 'takfir'
     VASIYLA = 'vasiyla'
-    OTHER = 'other0'
+    OTHER = 'other'
 
 
 class ReligiousAdvice(BaseModel):
