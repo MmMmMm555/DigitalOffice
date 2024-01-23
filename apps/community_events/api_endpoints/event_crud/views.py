@@ -1,5 +1,5 @@
 from rest_framework.generics import (CreateAPIView, ListAPIView,
-                        UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
+                                     UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
 from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -21,14 +21,14 @@ class CommunityEventsCreateAPIView(CreateAPIView):
 
 
 class CommunityEventListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = CommunityEvents.objects.all()
+    queryset = CommunityEvents.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = CommunityEventsListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'types', 'date', 'created_at',)
 
 
 class CommunityEventsDetailAPIView(RetrieveAPIView):
-    queryset = CommunityEvents.objects.all()
+    queryset = CommunityEvents.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = CommunityEventsDetailSerializer
     permission_classes = (IsAuthenticated,)
 

@@ -18,12 +18,13 @@ class CharityCreateSerializer(ModelSerializer):
 
 
 class CharityListSerializer(ModelSerializer):
-    imam = UserRelatedSerializer(many=False, read_only=False)
+    imam = UserRelatedSerializer(many=False, read_only=True)
 
     class Meta:
         model = Charity
         fields = ('id', 'imam', 'types', 'date',)
         read_only_fields = fields
+
 
 class CharityUpdateSerializer(ModelSerializer):
     class Meta:

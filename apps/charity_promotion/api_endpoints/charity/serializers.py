@@ -13,7 +13,7 @@ class CharityPromotionSerializer(ModelSerializer):
 
 
 class CharityPromotionListSerializer(ModelSerializer):
-    imam = UserRelatedSerializer(many=False, read_only=False)
+    imam = UserRelatedSerializer(many=False, read_only=True)
     class Meta:
         model = CharityPromotion
         fields = ('id', 'imam', 'types', 'date',)

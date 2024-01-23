@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.community_events.models import CommunityEvents
+from apps.common.related_serializers import UserRelatedSerializer
 from apps.community_events.api_endpoints.images_api.serializers import ImageSerializer
 
 
@@ -12,34 +13,19 @@ class CommunityEventsSerializer(ModelSerializer):
 
 class CommunityEventsDetailSerializer(ModelSerializer):
     images = ImageSerializer(many=True)
+    imam = UserRelatedSerializer(many=False, read_only=True)
 
     class Meta:
         model = CommunityEvents
         fields = ('id', 'imam', 'types', 'comment', 'images', 'date',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation
 
 
 class CommunityEventsListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = CommunityEvents
-        fields = ('id', 'imam', 'types', 'comment', 'images', 'date',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation
+        fields = ('id', 'imam', 'types', 'date',)
 
 
 class CommunityEventsUpdateSerializer(ModelSerializer):
