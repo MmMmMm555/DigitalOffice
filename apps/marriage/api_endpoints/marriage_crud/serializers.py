@@ -1,53 +1,40 @@
 from rest_framework.serializers import ModelSerializer
 
 from apps.marriage.models import Marriage
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class MarriageSerializer(ModelSerializer):
     class Meta:
         model = Marriage
-        fields = ('id', 'imam', 'comment', 'marriage_image', 'fhdyo_image', 'mahr', 'date',)
+        fields = ('id', 'imam', 'comment', 'marriage_image',
+                  'fhdyo_image', 'mahr', 'date',)
 
 
 class MarriageDetailSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Marriage
-        fields = ('id', 'imam', 'comment', 'marriage_image', 'fhdyo_image', 'mahr', 'date', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None),}
-        return representation
+        fields = ('id', 'imam', 'comment', 'marriage_image',
+                  'fhdyo_image', 'mahr', 'date', 'created_at', 'updated_at',)
+        read_only_fields = fields
 
 
 class MarriageListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Marriage
         fields = ('id', 'imam', 'mahr', 'date',)
+        read_only_fields = fields
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None),}
-        return representation
 
 class MarriageUpdateSerializer(ModelSerializer):
     class Meta:
         model = Marriage
-        fields = ('id', 'imam', 'comment', 'marriage_image', 'fhdyo_image', 'mahr', 'date',)
+        fields = ('id', 'imam', 'comment', 'marriage_image',
+                  'fhdyo_image', 'mahr', 'date',)
         extra_kwargs = {
             'imam': {'required': False},
             'marriage_image': {'required': False},

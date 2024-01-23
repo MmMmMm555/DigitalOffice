@@ -21,14 +21,14 @@ class MarriageCreateAPIView(CreateAPIView):
 
 
 class MarriageListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Marriage.objects.all()
+    queryset = Marriage.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = MarriageListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'mahr',)
 
 
 class MarriageDetailAPIView(RetrieveAPIView):
-    queryset = Marriage.objects.all()
+    queryset = Marriage.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = MarriageDetailSerializer
     permission_classes = (IsAuthenticated,)
 
