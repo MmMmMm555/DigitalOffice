@@ -34,7 +34,7 @@ class CharityUpdateView(UpdateAPIView):
 
 
 class CharityListView(FilerQueryByRole, ListAPIView):
-    queryset = Charity.objects.all().select_related('imam', 'imam__profil',)
+    queryset = Charity.objects.only('id', 'imam', 'types', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = CharityListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'types',

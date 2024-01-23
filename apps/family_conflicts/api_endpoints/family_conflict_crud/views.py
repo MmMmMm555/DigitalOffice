@@ -21,7 +21,7 @@ class FamilyConflictCreateAPIView(CreateAPIView):
 
 
 class FamilyConflictListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = FamilyConflict.objects.all().select_related('imam', 'imam__profil',)
+    queryset = FamilyConflict.objects.only('id', 'imam', 'types', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = FamilyConflictListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'created_at',

@@ -21,7 +21,7 @@ class CeremonyCreateAPIView(CreateAPIView):
 
 
 class CeremonyListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Ceremony.objects.all().select_related('imam', 'imam__profil',)
+    queryset = Ceremony.objects.only('id', 'imam', 'title', 'types', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = CeremonyListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)

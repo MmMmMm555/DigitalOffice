@@ -21,7 +21,7 @@ class CharityPromotionCreateView(CreateAPIView):
 
 
 class CharityPromotionListView(FilerQueryByRole, ListAPIView):
-    queryset = CharityPromotion.objects.all().select_related('imam', 'imam__profil',)
+    queryset = CharityPromotion.objects.only('id', 'imam', 'types', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = CharityPromotionListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'types', 'participant',

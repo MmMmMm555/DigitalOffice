@@ -21,7 +21,7 @@ class NeighborhoodCreateAPIView(CreateAPIView):
 
 
 class NeighborhoodListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Neighborhood.objects.all().select_related('imam', 'imam__profil',)
+    queryset = Neighborhood.objects.only('id', 'imam', 'participants', 'types', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = NeighborhoodListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)

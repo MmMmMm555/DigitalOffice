@@ -21,16 +21,16 @@ class OrganizationCreateAPIView(CreateAPIView):
 
 
 class OrganizationListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.only(
+        'id', 'imam', 'type', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = OrganizationListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
-    filterset_fields = ('id', 'imam', 'date', 'type', 'participant_type',
-                        'institution_type', 'participant_type',)
+    filterset_fields = ('id', 'imam', 'date', 'type',)
 
 
 class OrganizationDetailAPIView(RetrieveAPIView):
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = OrganizationDetailSerializer
     permission_classes = (IsAuthenticated,)
 

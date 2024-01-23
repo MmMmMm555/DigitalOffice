@@ -21,7 +21,7 @@ class MavludCreateAPIView(CreateAPIView):
 
 
 class MavludListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Mavlud.objects.all().select_related('imam', 'imam__profil',)
+    queryset = Mavlud.objects.only('id', 'imam', 'title', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = MavludListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)

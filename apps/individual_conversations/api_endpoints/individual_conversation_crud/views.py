@@ -21,7 +21,7 @@ class IndividualConversationCreateView(CreateAPIView):
 
 
 class IndividualConversationListView(FilerQueryByRole, ListAPIView):
-    queryset = IndividualConversation.objects.all().select_related('imam', 'imam__profil',)
+    queryset = IndividualConversation.objects.only('id', 'imam', 'types', 'title', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = IndividualConversationListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'date', 'types', 'created_at',)
