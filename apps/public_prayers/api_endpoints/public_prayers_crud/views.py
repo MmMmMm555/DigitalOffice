@@ -22,7 +22,7 @@ class PublicPrayersCreateAPIView(CreateAPIView):
 
 
 class PublicPrayersListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = PublicPrayers.objects.all()
+    queryset = PublicPrayers.objects.only('id', 'imam', 'prayer', 'created_at',).select_related('imam', 'imam__profil',)
     serializer_class = PublicPrayersListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
@@ -30,7 +30,7 @@ class PublicPrayersListAPIView(FilerQueryByRole, ListAPIView):
 
 
 class PublicPrayersDetailAPIView(RetrieveAPIView):
-    queryset = PublicPrayers.objects.all()
+    queryset = PublicPrayers.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = PublicPrayersDetailSerializer
     permission_classes = (IsAuthenticated,)
 
