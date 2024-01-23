@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
 from apps.mavlud.models import Mavlud
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class MavludSerializer(ModelSerializer):
@@ -10,41 +11,22 @@ class MavludSerializer(ModelSerializer):
 
 
 class MavludDetailSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Mavlud
         fields = ('id', 'imam', 'comment', 'title',
                   'date', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        print(imam)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None), }
-        return representation
+        read_only_fields = fields
 
 
 class MavludListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Mavlud
         fields = ('id', 'imam', 'title', 'date',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None), }
-        return representation
+        read_only_fields = fields
 
 
 class MavludUpdateSerializer(ModelSerializer):
