@@ -1,12 +1,12 @@
 from rest_framework.generics import (
     CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
-from apps.common.permissions import IsImam, IsDeputy
+from apps.common.permissions import IsImam, IsDeputy, IsOwner
 from apps.marriage.models import Marriage
-from .serializers import (MarriageSerializer, MarriageListSerializer, MarriageUpdateSerializer, MarriageDetailSerializer,)
+from .serializers import (MarriageSerializer, MarriageListSerializer,
+                          MarriageUpdateSerializer, MarriageDetailSerializer,)
 from apps.common.view_mixin import FilerQueryByRole
 
 
@@ -36,24 +36,14 @@ class MarriageDetailAPIView(RetrieveAPIView):
 class MarriageUpdateAPIView(UpdateAPIView):
     queryset = Marriage.objects.all()
     serializer_class = MarriageUpdateSerializer
-    permission_classes = (IsImam | IsDeputy,)
+    permission_classes = (IsImam | IsDeputy, IsOwner,)
     parser_classes = (MultiPartParser, FormParser,)
-    
+
     def perform_update(self, serializer):
-        instance = self.get_object()
-        if instance.imam == self.request.user:  
-            serializer.save(imam=self.request.user)
-        else:
-            return Response({'message': 'You are not allowed to update'}, status=403)
+        serializer.save(imam=self.request.user)
 
 
 class MarriageDeleteAPIView(DestroyAPIView):
     queryset = Marriage.objects.all()
     serializer_class = MarriageSerializer
-    permission_classes = (IsImam | IsDeputy,)
-    
-    def perform_destroy(self, instance):
-        if instance.imam == self.request.user:
-            instance.delete()
-        else:
-            return Response({'message': 'You are not allowed to delete'}, status=403)
+    permission_classes = (IsImam | IsDeputy, IsOwner,)

@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
 from apps.ceremony.models import Ceremony
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class CeremonySerializer(ModelSerializer):
@@ -10,40 +11,18 @@ class CeremonySerializer(ModelSerializer):
 
 
 class CeremonyDetailSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
     class Meta:
         model = Ceremony
         fields = ('id', 'imam', 'title', 'comment', 'types', 'date', 'created_at', 'updated_at',)
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None), }
-        return representation
-
 
 class CeremonyListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
     class Meta:
         model = Ceremony
         fields = ('id', 'imam', 'title', 'types', 'date',)
-
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        imam = getattr(instance, 'imam', None)
-        if imam:
-            representation['imam'] = {
-                'id': getattr(imam, 'id', None),
-                'name': f"{getattr(imam.profil, 'first_name', '')} {getattr(imam.profil, 'last_name', '')}"
-            }
-        else:
-            representation['imam'] = {'id': getattr(imam, 'id', None), }
-        return representation
+        read_only_fields = fields
 
 
 class CeremonyUpdateSerializer(ModelSerializer):

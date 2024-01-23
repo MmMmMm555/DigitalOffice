@@ -7,16 +7,16 @@ from apps.users import models
 class EmployeeRelatedSerializer(ModelSerializer):
     class Meta:
         model = models.Employee
-        fields = ('id', 'name', 'last_name',)
+        fields = ('id', 'first_name', 'last_name',)
         read_only_fields = fields
 
 
 class UserRelatedSerializer(ModelSerializer):
-    name = CharField(source='profil.name')
+    first_name = CharField(source='profil.first_name')
     last_name = CharField(source='profil.last_name')
+
     class Meta:
         model = models.User
-        fields = ('id', 'username', 'role', 'profil', 'name', 'last_name',)
+        fields = ('id', 'username', 'role', 'profil',
+                  'first_name', 'last_name',)
         read_only_fields = fields
-
-

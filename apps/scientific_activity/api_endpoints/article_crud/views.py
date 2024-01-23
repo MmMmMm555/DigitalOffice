@@ -1,13 +1,12 @@
 from rest_framework.generics import (CreateAPIView, ListAPIView,
-                        UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
+                                     UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import (ArticleSerializer, ArticleListSerializer,
                           ArticleUpdateSerializer, ArticleDetailSerializer,)
 from apps.scientific_activity.models import Article
-from apps.common.permissions import IsImam, IsDeputy, IsSuperAdmin
-from rest_framework.response import Response
+from apps.common.permissions import IsImam, IsDeputy, IsOwner
 from apps.common.view_mixin import FilerQueryByRole
 
 
@@ -37,18 +36,14 @@ class ArticleDetailAPIView(RetrieveAPIView):
 class ArticleDeleteAPIView(DestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    permission_classes = (IsSuperAdmin | IsImam | IsDeputy,)
-
-    def delete(self, request, *args, **kwargs):
-        if request.user == self.get_object().imam:
-            instance = self.get_object()
-            instance.delete()
-            return Response(status=204)
-        return Response(status=403)
+    permission_classes = (IsImam | IsDeputy, IsOwner,)
 
 
 class ArticleUpdateAPIView(UpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleUpdateSerializer
-    permission_classes = (IsSuperAdmin | IsImam | IsDeputy,)
+    permission_classes = (IsImam | IsDeputy, IsOwner,)
     parser_classes = (FormParser, MultiPartParser,)
+
+    def perform_update(self, serializer):
+        serializer.save(imam=self.request.user)

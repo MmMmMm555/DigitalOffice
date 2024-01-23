@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.charity_promotion.models import CharityPromotion
+from apps.common.related_serializers import UserRelatedSerializer
 from apps.charity_promotion.api_endpoints.images_api.serializers import ImageSerializer
 
 
@@ -9,6 +10,13 @@ class CharityPromotionSerializer(ModelSerializer):
         model = CharityPromotion
         fields = ('id', 'imam', 'types', 'participant',
               'help_type', 'from_who', 'comment', 'images', 'date',)
+
+
+class CharityPromotionListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=False)
+    class Meta:
+        model = CharityPromotion
+        fields = ('id', 'imam', 'types', 'date',)
 
 
 class CharityPromotionUpdateSerializer(ModelSerializer):
@@ -32,16 +40,8 @@ class CharityPromotionUpdateSerializer(ModelSerializer):
 
 class CharityPromotionDetailSerializer(ModelSerializer):
     images = ImageSerializer(many=True)
+    imam = UserRelatedSerializer(many=False, read_only=True)
     class Meta:
         model = CharityPromotion
         fields = ('id', 'imam', 'types', 'participant', 'help_type',
                   'from_who', 'comment', 'images', 'date', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation

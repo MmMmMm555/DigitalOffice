@@ -2,6 +2,11 @@ from rest_framework.permissions import BasePermission
 from apps.users.models import Role
 
 
+class IsOwner(BasePermission):
+    def has_permission(self, request, view):
+        return view.get_object().imam == request.user
+
+
 class IsSuperAdmin(BasePermission):
     def has_permission(self, request, view):
         return request.user.role == Role.SUPER_ADMIN

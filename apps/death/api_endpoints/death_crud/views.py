@@ -1,13 +1,12 @@
 from rest_framework.generics import (
     CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView,)
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from .serializers import (DeathSerializer, DeathDetailSerializer,
                           DeathListSerializer, DeathUpdateSerializer,)
 from apps.death.models import Death
-from apps.common.permissions import IsImam, IsDeputy
+from apps.common.permissions import IsImam, IsDeputy, IsOwner
 from apps.common.view_mixin import FilerQueryByRole
 
 
@@ -31,7 +30,7 @@ class DeathListAPIView(FilerQueryByRole, ListAPIView):
 class DeathUpdateAPIView(UpdateAPIView):
     queryset = Death.objects.all()
     serializer_class = DeathUpdateSerializer
-    permission_classes = (IsImam | IsDeputy,)
+    permission_classes = (IsImam | IsDeputy, IsOwner,)
     parser_classes = (MultiPartParser, FormParser,)
 
     def perform_update(self, serializer):
@@ -47,11 +46,4 @@ class DeathDetailAPIView(RetrieveAPIView):
 class DeathDeleteAPIView(DestroyAPIView):
     queryset = Death.objects.all()
     serializer_class = DeathDetailSerializer
-    permission_classes = (IsImam | IsDeputy,)
-
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if request.user == instance.imam:
-            instance.delete()
-            return Response(status=204)
-        return Response('you dont have permission')
+    permission_classes = (IsImam | IsDeputy, IsOwner,)
