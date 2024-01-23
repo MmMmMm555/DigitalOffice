@@ -21,7 +21,8 @@ class WeddingCreateAPIView(CreateAPIView):
 
 
 class WeddingListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Wedding.objects.all()
+    queryset = Wedding.objects.only(
+        'id', 'imam', 'title', 'types', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = WeddingListSerializer
     permission_classes = (IsAuthenticated,)
     search_fields = ('title',)
@@ -29,7 +30,7 @@ class WeddingListAPIView(FilerQueryByRole, ListAPIView):
 
 
 class WeddingDetailAPIView(RetrieveAPIView):
-    queryset = Wedding.objects.all()
+    queryset = Wedding.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = WeddingDetailSerializer
     permission_classes = (IsAuthenticated,)
 

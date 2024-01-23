@@ -2,50 +2,41 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.scientific_activity.models import Article
 from apps.scientific_activity.api_endpoints.article_images_api.serializers import ArticleImageSerializer
+from apps.common.related_serializers import UserRelatedSerializer
 
 
 class ArticleSerializer(ModelSerializer):
     class Meta:
         model = Article
-        fields = ('id', 'imam', 'type', 'comment', 'images', 'url', 'publication', 'publication_type', 'article_types', 'date',)
+        fields = ('id', 'imam', 'type', 'comment', 'images', 'url',
+                  'publication', 'publication_type', 'article_types', 'date',)
 
 
 class ArticleDetailSerializer(ModelSerializer):
     images = ArticleImageSerializer(many=True)
+    imam = UserRelatedSerializer(many=False, read_only=True)
 
     class Meta:
         model = Article
-        fields = ('id', 'imam', 'type', 'comment', 'images', 'url', 'publication', 'publication_type', 'article_types', 'date', 'created_at', 'updated_at',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation
+        fields = ('id', 'imam', 'type', 'comment', 'images', 'url', 'publication',
+                  'publication_type', 'article_types', 'date', 'created_at', 'updated_at',)
+        read_only_fields = fields
 
 
 class ArticleListSerializer(ModelSerializer):
+    imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Article
-        fields = ('id', 'imam', 'type', 'publication_type', 'article_types', 'date',)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            representation['imam'] = {
-                'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}"}
-        except:
-            representation['imam'] = None
-        return representation
+        fields = ('id', 'imam', 'type', 'date',)
+        read_only_fields = fields
 
 
 class ArticleUpdateSerializer(ModelSerializer):
     class Meta:
         model = Article
-        fields = ('id', 'imam', 'type', 'comment', 'images', 'url', 'publication', 'publication_type', 'article_types', 'date',)
+        fields = ('id', 'imam', 'type', 'comment', 'images', 'url',
+                  'publication', 'publication_type', 'article_types', 'date',)
         extra_kwargs = {
             'imam': {'required': False},
             'comment': {'required': False},

@@ -25,7 +25,7 @@ class BookListAPIView(FilerQueryByRole, ListAPIView):
         'id', 'imam', 'name', 'direction', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = BookListSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('id', 'imam', 'direction', 'date', 'created_at',)
+    filterset_fields = ('id', 'imam', 'direction', 'date',)
 
 
 class BookDetailAPIView(RetrieveAPIView):

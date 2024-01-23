@@ -21,14 +21,14 @@ class ArticleCreateAPIView(CreateAPIView):
 
 
 class ArticleListAPIView(FilerQueryByRole, ListAPIView):
-    queryset = Article.objects.all()
+    queryset = Article.objects.only('id', 'imam', 'type', 'date',).select_related('imam', 'imam__profil',)
     serializer_class = ArticleListSerializer
     permission_classes = (IsAuthenticated,)
     filterset_fields = ('id', 'imam', 'type', 'date', 'created_at',)
 
 
 class ArticleDetailAPIView(RetrieveAPIView):
-    queryset = Article.objects.all()
+    queryset = Article.objects.all().select_related('imam', 'imam__profil',)
     serializer_class = ArticleDetailSerializer
     permission_classes = (IsAuthenticated,)
 
