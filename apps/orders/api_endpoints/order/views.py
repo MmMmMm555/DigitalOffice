@@ -1,4 +1,5 @@
 from rest_framework import generics, parsers, permissions
+from django.http import HttpResponse
 
 from apps.users.models import Role
 from apps.common.permissions import IsSuperAdmin, IsRegionAdmin, IsDistrictAdmin
@@ -9,6 +10,7 @@ from .serializers import (DirectionCreateSerializer,
                           DirectionSingleSerializer,
                           DirectionUpdateSerializer,)
 from apps.orders import models
+from apps.orders.admin import DirectionsResource
 from django.db.models import F
 
 
@@ -42,13 +44,38 @@ class DirectionsListView(generics.ListAPIView):
             query = query.filter(creator=self.request.user)
         if to_role:
             query = query.filter(to_role__contains=[to_role])
-        if start_date and finish_date:
-            query = query.filter(created_at__range=[start_date, finish_date])
-        elif start_date:
+        if start_date:
             query = query.filter(created_at__gte=start_date)
-        elif finish_date:
+        if finish_date:
             query = query.filter(created_at__lte=finish_date)
         return query
+
+    def get(self, request, *args, **kwargs):
+        excel = self.request.GET.get('excel')
+        if excel == 'true':
+            query = self.queryset
+            for i in self.filterset_fields:
+                filters = request.GET.get(i)
+                filter = i
+                if filters:
+                    query = query.filter(**{filter: filters})
+            to_role = self.request.GET.get('to_role')
+            start_date = self.request.GET.get('start_date')
+            finish_date = self.request.GET.get('finish_date')
+            if self.request.user.role != Role.SUPER_ADMIN:
+                query = query.filter(creator=self.request.user)
+            if to_role:
+                query = query.filter(to_role__contains=[to_role])
+            if start_date:
+                query = query.filter(created_at__gte=start_date)
+            if finish_date:
+                query = query.filter(created_at__lte=finish_date)
+            data = DirectionsResource().export(queryset=query)
+            response = HttpResponse(data.xlsx, content_type='xlsx')
+            response['Content-Disposition'] = "attachment; filename=thesis_data.xlsx"
+            return response
+        else:
+            return self.list(request, *args, **kwargs)
 
 
 class DirectionUpdateView(generics.RetrieveUpdateAPIView):
@@ -65,7 +92,7 @@ class DirectionSingleView(generics.RetrieveDestroyAPIView):
     serializer_class = DirectionSingleSerializer
     permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'pk'
-    
+
     def perform_destroy(self, instance):
         if self.request.user.role in [Role.SUPER_ADMIN, Role.REGION_ADMIN, Role.DISTRICT_ADMIN]:
             instance.delete()
