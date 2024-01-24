@@ -82,6 +82,22 @@ class MosqueListView(generics.ListAPIView):
             return query.filter(district=self.request.user.district)
         return query
 
+    def get(self, request, *args, **kwargs):
+        excel = request.GET.get('excel')
+        if excel == 'true':
+            query = self.queryset
+            for i in self.filterset_fields:
+                filters = request.GET.get(i)
+                filter = i
+                if filters:
+                    query = query.filter(**{filter: filters})
+            data = MosqueResource().export(queryset=query)
+            response = HttpResponse(data.xlsx, content_type='xlsx')
+            response['Content-Disposition'] = "attachment; filename=mosque_data.xlsx"
+            return response
+        else:
+            return self.list(request, *args, **kwargs)
+
 
 class MosqueRetrieveView(generics.RetrieveAPIView):
     queryset = Mosque.objects.all()
@@ -95,24 +111,3 @@ class MosqueDeleteView(generics.DestroyAPIView):
     serializer_class = MosqueSerializer
     permission_classes = (IsSuperAdmin,)
     lookup_field = 'pk'
-
-
-class MosqueExcelData(generics.ListAPIView):
-    queryset = Mosque.objects.all().annotate(employee_count=Count(
-        'employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
-    serializer_class = MosqueListSerializer
-    permission_classes = (IsSuperAdmin,)
-    filterset_fields = ('id', 'mosque_heating_type', 'region',
-                        'district', 'mosque_type', 'mosque_status',)
-
-    def get(self, request):
-        query = self.queryset
-        for i in self.filterset_fields:
-            filters = request.GET.get(i)
-            filter = i
-            if filters:
-                query = query.filter(**{filter: filters})
-        data = MosqueResource().export(queryset=query)
-        response = HttpResponse(data.xlsx, content_type='xlsx')
-        response['Content-Disposition'] = "attachment; filename=mosque_data.xlsx"
-        return response
