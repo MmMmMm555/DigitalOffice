@@ -6,6 +6,7 @@ from django.http import HttpResponse
 
 from apps.mosque.api_endpoints.Mosque.serializers import (MosqueSerializer,
                                                           MosqueListSerializer,
+                                                          MosqueChoiceListSerializer,
                                                           MosqueSingleSerializer,
                                                           MosqueUpdateSerializer,)
 from apps.mosque.models import Mosque
@@ -28,10 +29,22 @@ class MosqueUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsSuperAdmin,)
 
 
+class MosqueChoiceListView(generics.ListAPIView):
+    """Agar imomi yo'q masjidlar listi kerak bolsa "api/v1/mosque/list/?has_imam=false" qilib filter jo'natiladi"""
+    queryset = Mosque.objects.all().select_related('region', 'district',).annotate(
+        employee_count=Count('employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), 
+        has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
+    search_fields = ('name', 'address',)
+    serializer_class = MosqueChoiceListSerializer
+    permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
+    filterset_fields = ('region', 'district',)
+
+
 class MosqueListView(generics.ListAPIView):
     """Agar imomi yo'q masjidlar listi kerak bolsa "api/v1/mosque/list/?has_imam=false" qilib filter jo'natiladi"""
-    queryset = Mosque.objects.all().annotate(employee_count=Count(
-        'employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
+    queryset = Mosque.objects.all().select_related('region', 'district',).annotate(
+        employee_count=Count('employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), 
+        has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
     serializer_class = MosqueListSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('name', 'address',)
@@ -77,9 +90,9 @@ class MosqueListView(generics.ListAPIView):
         if has_imam == 'true':
             query = query.exclude(has_imam=0)
         if user_role == Role.REGION_ADMIN:
-            return query.filter(region=self.request.user.region)
+            query = query.filter(region=self.request.user.region)
         elif user_role == Role.DISTRICT_ADMIN:
-            return query.filter(district=self.request.user.district)
+            query = query.filter(district=self.request.user.district)
         return query
 
     def get(self, request, *args, **kwargs):
@@ -91,6 +104,16 @@ class MosqueListView(generics.ListAPIView):
                 filter = i
                 if filters:
                     query = query.filter(**{filter: filters})
+            has_imam = self.request.GET.get('has_imam', None)
+            user_role = self.request.user.role
+            if has_imam == 'false':
+                query = query.filter(has_imam=0)
+            if has_imam == 'true':
+                query = query.exclude(has_imam=0)
+            if user_role == Role.REGION_ADMIN:
+                query = query.filter(region=self.request.user.region)
+            elif user_role == Role.DISTRICT_ADMIN:
+                query = query.filter(district=self.request.user.district)
             data = MosqueResource().export(queryset=query)
             response = HttpResponse(data.xlsx, content_type='xlsx')
             response['Content-Disposition'] = "attachment; filename=mosque_data.xlsx"
@@ -100,7 +123,7 @@ class MosqueListView(generics.ListAPIView):
 
 
 class MosqueRetrieveView(generics.RetrieveAPIView):
-    queryset = Mosque.objects.all()
+    queryset = Mosque.objects.all().select_related('region', 'district',).prefetch_related('employee', 'employee__profile', 'fire_images',)
     serializer_class = MosqueSingleSerializer
     permission_classes = (IsAuthenticated,)
     lookup_field = 'pk'

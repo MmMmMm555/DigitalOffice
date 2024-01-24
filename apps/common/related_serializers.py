@@ -4,7 +4,28 @@ from apps.employee import models
 from apps.mosque.models import Mosque
 from apps.orders.models import Directions
 from apps.friday_tesis.models import FridayThesis
-from apps.users import models
+from apps.users.models import User
+
+
+class DepartmentRelatedSerializer(ModelSerializer):
+    class Meta:
+        model = models.Department
+        fields = ('id', 'name',)
+        read_only_fields = fields
+
+
+class Graduated_UniverRelatedSerializer(ModelSerializer):
+    class Meta:
+        model = models.Graduation
+        fields = ('id', 'name',)
+        read_only_fields = fields
+
+
+class PositionRelatedSerializer(ModelSerializer):
+    class Meta:
+        model = models.Position
+        fields = ('id', 'name', 'department',)
+        read_only_fields = fields
 
 
 class FridayThesisRelatedSerializer(ModelSerializer):
@@ -17,11 +38,15 @@ class FridayThesisRelatedSerializer(ModelSerializer):
 class DirectionsRelatedSerializer(ModelSerializer):
     class Meta:
         model = Directions
-        fields = ('id', 'title', 'direction_type', 'types', 'from_date', 'to_date', 'from_role',)
+        fields = ('id', 'title', 'direction_type', 'types',
+                  'from_date', 'to_date', 'from_role',)
         read_only_fields = fields
 
 
 class MosqueRelatedSerializer(ModelSerializer):
+    region = CharField(source='region.name')
+    district = CharField(source='district.name')
+
     class Meta:
         model = Mosque
         fields = ('id', 'name', 'address', 'region', 'district',)
@@ -29,9 +54,10 @@ class MosqueRelatedSerializer(ModelSerializer):
 
 
 class EmployeeRelatedSerializer(ModelSerializer):
+    user_role = CharField(source='profile.role') 
     class Meta:
         model = models.Employee
-        fields = ('id', 'first_name', 'last_name',)
+        fields = ('id', 'first_name', 'last_name', 'user_role',)
         read_only_fields = fields
 
 
@@ -40,7 +66,7 @@ class UserRelatedSerializer(ModelSerializer):
     last_name = CharField(source='profil.last_name')
 
     class Meta:
-        model = models.User
+        model = User
         fields = ('id', 'username', 'role', 'profil',
                   'first_name', 'last_name',)
         read_only_fields = fields

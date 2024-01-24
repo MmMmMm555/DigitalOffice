@@ -1,7 +1,10 @@
 from rest_framework.serializers import (
-    ModelSerializer, SerializerMethodField, IntegerField, StringRelatedField)
+    ModelSerializer, IntegerField,)
 
 from apps.mosque.models import Mosque, FireDefenseImages
+from apps.common.api_endpoints.districts.serializers import RegionsSerializer
+from apps.common.api_endpoints.regions.serializers import DistrictsSerializer
+from apps.common.related_serializers import EmployeeRelatedSerializer
 
 
 class FireDefenseImageSerializer(ModelSerializer):
@@ -62,9 +65,35 @@ class MosqueSerializer(ModelSerializer):
         ]
 
 
+class MosqueChoiceListSerializer(MosqueSerializer):
+    has_imam = IntegerField(read_only=True)
+    region = RegionsSerializer(many=False, read_only=True,)
+    district = DistrictsSerializer(many=False, read_only=True,)
+
+    class Meta:
+        model = Mosque
+        fields = (
+            'id',
+            'name',
+            'has_imam',
+            'address',
+            'region',
+            'district',)
+        read_only_fields = fields
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['has_imam'] = False
+        if instance.has_imam >= 1:
+            representation['has_imam'] = True
+        return representation
+
+
 class MosqueListSerializer(MosqueSerializer):
     employee_count = IntegerField(read_only=True)
     has_imam = IntegerField(read_only=True)
+    region = RegionsSerializer(many=False, read_only=True,)
+    district = DistrictsSerializer(many=False, read_only=True,)
 
     class Meta:
         model = Mosque
@@ -104,26 +133,24 @@ class MosqueListSerializer(MosqueSerializer):
             'shrine',
             'graveyard',
             'shop',)
+        read_only_fields = fields
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['has_imam'] = False
         if instance.has_imam >= 1:
             representation['has_imam'] = True
-        if instance.region:
-            representation['region'] = {'name': instance.region.name,
-                                        'id': instance.region.id, }
-        if instance.district:
-            representation['district'] = {'name': instance.district.name,
-                                          'id': instance.district.id, }
         return representation
 
 
 class MosqueSingleSerializer(ModelSerializer):
+    region = RegionsSerializer(many=False, read_only=True,)
+    district = DistrictsSerializer(many=False, read_only=True,)
+    employee = EmployeeRelatedSerializer(many=True, read_only=True,)
 
     class Meta:
         model = Mosque
-        fields = [
+        fields = (
             'id',
             'name',
             'address',
@@ -171,20 +198,13 @@ class MosqueSingleSerializer(ModelSerializer):
             'mosque_heating_fuel',
             'created_at',
             'updated_at',
-        ]
 
-    def get_employee(self, obj):
-        return obj.employee.all().values('id', 'first_name', 'last_name', 'profile__role',)
+            'employee',)
+        read_only_fields = fields
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-
         images = instance.fire_images.all()
-        representation['employee'] = instance.employee.all().values('id', 'first_name', 'last_name', 'profile__role',)
-        representation['region'] = {
-            'id': instance.region.id, 'name': instance.region.name}
-        representation['district'] = {
-            'id': instance.district.id, 'name': instance.district.name}
         representation['evacuation_road_image'] = FireDefenseImageSerializer(
             images.filter(type='1'), many=True, context=self.context).data
         representation['fire_safe_image'] = FireDefenseImageSerializer(
@@ -197,7 +217,6 @@ class MosqueSingleSerializer(ModelSerializer):
             images.filter(type='5'), many=True, context=self.context).data
         representation['emergency_exit_door_image'] = FireDefenseImageSerializer(
             images.filter(type='6'), many=True, context=self.context).data
-
         return representation
 
 

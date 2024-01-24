@@ -1,4 +1,4 @@
-from rest_framework import generics, parsers, permissions, filters, viewsets, views
+from rest_framework import generics, parsers, permissions, filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import date
 from django.http import HttpResponse
@@ -11,9 +11,9 @@ from apps.employee import models
 
 class EmployeeListView(generics.ListAPIView):
     """ hodimlarni yosh boyicha filter qilish uchun "start_age" va "finish_age" filterlariga qiymat yuboriladi, "start_age < finish_age" ! """
-    """  "graduated_year"  boyicha filter bor 'yyyy' formatda qiymat yuboriladi sample: "api/v1/employee/employee/list?graduated_year=1000" """
+    """ "graduated_year"  boyicha filter bor 'yyyy' formatda qiymat yuboriladi sample: "api/v1/employee/employee/list?graduated_year=1000" """
     """ xodimga akkaunt ulangan mi yo'qmi bilish uchun 'has_account' ga true false valuelarni jo'natasiz true da akkaunt ulanganlar false da ulanmagan xodimlar listini qaytaradi """
-    queryset = models.Employee.objects.all()
+    queryset = models.Employee.objects.all().select_related('mosque', 'mosque__region', 'mosque__district', 'graduated_univer', 'position',)
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = (IsSuperAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
@@ -91,7 +91,8 @@ class EmployeeUpdateView(generics.UpdateAPIView):
 
 
 class EmployeeDetailView(generics.RetrieveDestroyAPIView):
-    queryset = models.Employee.objects.all()
+    queryset = models.Employee.objects.all().select_related('mosque', 'mosque__region',
+                                                            'mosque__district', 'graduated_univer', 'position', 'position__department',)
     serializer_class = serializers.EmployeeDetailSerializer
     permission_classes = (IsSuperAdmin,)
 

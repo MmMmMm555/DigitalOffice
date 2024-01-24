@@ -1,23 +1,14 @@
-from rest_framework.serializers import ModelSerializer, CharField
+from rest_framework.serializers import ModelSerializer
 
 from apps.employee import models
-from apps.employee.api_endpoints.department.serializers import Position
+from apps.common.related_serializers import (
+    MosqueRelatedSerializer, PositionRelatedSerializer, Graduated_UniverRelatedSerializer)
 
-
-# class WorkActivitySerializer(ModelSerializer):
-#     class Meta:
-#         model = models.WorkActivity
-#         fields = ('id', 'employee', 'start_date', 'end_date', 'company', 'as_who',)
 
 class SocialMediaSerializer(ModelSerializer):
     class Meta:
         model = models.SocialMedia
         fields = ('id', 'employee', 'social_media', 'link',)
-
-# class ActivitySerializer(ModelSerializer):
-#     class Meta:
-#         model = models.Activity
-#         fields = ('id', 'employee', 'type', 'activity', 'image',)
 
 
 class EmployeeSerializer(ModelSerializer):
@@ -43,7 +34,6 @@ class EmployeeSerializer(ModelSerializer):
                   'achievement',
                   )
         extra_kwargs = {
-            # "image": {"required": True},
             "graduated_year": {"required": False},
         }
 
@@ -84,8 +74,10 @@ class EmployeeUpdateSerializer(ModelSerializer):
 
 
 class EmployeeListSerializer(ModelSerializer):
-    mosque_name = CharField(source='mosque.name', read_only=True)
-    mosque_address = CharField(source='mosque.address', read_only=True)
+    mosque = MosqueRelatedSerializer(many=False, read_only=True)
+    graduated_univer = Graduated_UniverRelatedSerializer(
+        many=False, read_only=True)
+    position = PositionRelatedSerializer(many=False, read_only=True)
 
     class Meta:
         model = models.Employee
@@ -99,14 +91,16 @@ class EmployeeListSerializer(ModelSerializer):
                   'graduated_univer',
                   'graduated_year',
                   'academic_degree',
-                  'mosque',
-                  'mosque_name',
-                  'mosque_address',
-                  )
+                  'mosque',)
+        read_only_fields = fields
 
 
 class EmployeeDetailSerializer(ModelSerializer):
     socialmedia = SocialMediaSerializer(many=True)
+    mosque = MosqueRelatedSerializer(many=False, read_only=True)
+    position = PositionRelatedSerializer(many=False, read_only=True)
+    graduated_univer = Graduated_UniverRelatedSerializer(
+        many=False, read_only=True)
 
     class Meta:
         model = models.Employee
@@ -128,26 +122,14 @@ class EmployeeDetailSerializer(ModelSerializer):
                   'academic_degree',
                   'mosque',
                   'achievement',
-                  #   'mosque_name',
-                  #   'mosque_address',
                   'socialmedia',
                   )
+        read_only_fields = fields
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['mosque'] = None
         representation['department'] = None
-        representation['position'] = None
-        representation['graduated_univer'] = None
-        if instance.mosque:
-            representation['mosque'] = {
-                'id': instance.mosque.id, 'name': instance.mosque.name, 'address': instance.mosque.address}
-        if instance.graduated_univer:
-            representation['graduated_univer'] = {
-                'id': instance.graduated_univer.id, 'name': instance.graduated_univer.name}
         if instance.position:
             representation['department'] = {
-                'id': instance.position.department.id, 'name': instance.position.department.name, 'position': Position.objects.filter(department=instance.position.department.id).values('id', 'name')}
-            representation['position'] = {
-                'id': instance.position.id, 'name': instance.position.name}
+                'id': instance.position.department.id, 'name': instance.position.department.name, 'position': instance.position.name, }
         return representation
