@@ -48,7 +48,7 @@ class FridayThesisListView(generics.ListAPIView):
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
         excel = self.request.GET.get('excel')
-        if excel:
+        if excel == 'true':
             query = self.queryset
             if start_date:
                 query = query.filter(created_at__gte=start_date)
