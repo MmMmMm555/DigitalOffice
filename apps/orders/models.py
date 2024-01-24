@@ -110,8 +110,8 @@ class DirectionsEmployeeRead(BaseModel):
     class Meta:
         ordering = ['-created_at',]
         unique_together = ('direction', 'employee',)
-        verbose_name = "Ko'rsatma oqilishi "
-        verbose_name_plural = "Ko'rsatma oqilishlari "
+        verbose_name = "Ko'rsatma bildirishnoma "
+        verbose_name_plural = "Ko'rsatma bildirishnomalari "
 
 
 class ResultImages(BaseModel):

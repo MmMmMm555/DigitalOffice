@@ -1,12 +1,12 @@
 from rest_framework import generics, parsers, filters, serializers
-
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from apps.users.models import Role
 
-from apps.common.permissions import IsSuperAdmin, IsImam
+from apps.common.permissions import IsSuperAdmin, IsImam, Role
 from .serializers import (FridayThesisSerializer, FridayThesisCreateSerializer,
                           FridayThesisUpdateSerializer, FridayThesisDetailSerializer)
 from apps.friday_tesis import models
+from apps.friday_tesis.admin import FridayThesisResource
 
 
 class FridayThesisCreateView(generics.CreateAPIView):
@@ -37,14 +37,34 @@ class FridayThesisListView(generics.ListAPIView):
     def get_queryset(self):
         start_date = self.request.GET.get('start_date')
         finish_date = self.request.GET.get('finish_date')
-        query = models.FridayThesis.objects.all()
-        if start_date and finish_date:
-            query = query.filter(created_at__gte=start_date, created_at__lte=finish_date)
-        elif start_date:
+        query = self.queryset
+        if start_date:
             query = query.filter(created_at__gte=start_date)
-        elif finish_date:
+        if finish_date:
             query = query.filter(created_at__lte=finish_date)
         return query
+
+    def get(self, request, *args, **kwargs):
+        start_date = self.request.GET.get('start_date')
+        finish_date = self.request.GET.get('finish_date')
+        excel = self.request.GET.get('excel')
+        if excel:
+            query = self.queryset
+            if start_date:
+                query = query.filter(created_at__gte=start_date)
+            if finish_date:
+                query = query.filter(created_at__lte=finish_date)
+            for i in self.filterset_fields:
+                filters = request.GET.get(i)
+                filter = i
+                if filters:
+                    query = query.filter(**{filter: filters})
+            data = FridayThesisResource().export(queryset=query)
+            response = HttpResponse(data.xlsx, content_type='xlsx')
+            response['Content-Disposition'] = "attachment; filename=thesis_data.xlsx"
+            return response
+        else:
+            return self.list(request, *args, **kwargs)
 
 
 class FridayThesisDetailView(generics.RetrieveDestroyAPIView):
@@ -56,4 +76,5 @@ class FridayThesisDetailView(generics.RetrieveDestroyAPIView):
         if self.request.user.role == Role.SUPER_ADMIN:
             instance.delete()
         else:
-            raise serializers.ValidationError({'detail': 'you are not allowed to delete'})
+            raise serializers.ValidationError(
+                {'detail': 'you are not allowed to delete'})
