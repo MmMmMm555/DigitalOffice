@@ -26,10 +26,10 @@ class FridayThesisUpdateView(generics.RetrieveUpdateAPIView):
 
 
 class FridayThesisListView(generics.ListAPIView):
-    queryset = models.FridayThesis.objects.all()
+    queryset = models.FridayThesis.objects.only('id', 'title', 'types', 'to_region',
+                                            'to_district', 'date', 'created_at',).prefetch_related('to_region', 'to_district',)
     serializer_class = FridayThesisSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('title',)
     filterset_fields = ('id', 'date', 'created_at',
                         'to_region', 'to_district', 'types',)
@@ -68,7 +68,7 @@ class FridayThesisListView(generics.ListAPIView):
 
 
 class FridayThesisDetailView(generics.RetrieveDestroyAPIView):
-    queryset = models.FridayThesis.objects.all()
+    queryset = models.FridayThesis.objects.all().prefetch_related('to_region', 'to_district', 'to_mosque',)
     serializer_class = FridayThesisDetailSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
 

@@ -3,6 +3,7 @@ from datetime import date, timedelta
 from django.db import transaction
 
 from apps.orders.models import States
+from apps.common.related_serializers import FridayThesisRelatedSerializer, UserRelatedSerializer
 from apps.friday_tesis.models import (FridayThesisImamResult,
                                       FridayThesisImamRead,
                                       FridayThesis,
@@ -22,16 +23,6 @@ class ResultVideosSerializer(ModelSerializer):
         fields = ('id', 'video',)
 
 
-class FridayThesisImamResultListSerializer(ModelSerializer):
-    images = ResultImagesSerializer(many=True, read_only=True)
-    videos = ResultVideosSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = FridayThesisImamResult
-        fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child',
-                  'man', 'old_man', 'old', 'images', 'videos',)
-
-
 class FridayThesisImamResultSerializer(ModelSerializer):
     class Meta:
         model = FridayThesisImamResult
@@ -45,8 +36,7 @@ class FridayThesisImamResultSerializer(ModelSerializer):
         }
 
     def validate(self, attrs):
-        tesis_date = FridayThesis.objects.get(id=attrs.get('tesis').id).date
-        if tesis_date+timedelta(days=1) < date.today():
+        if attrs.get('tesis').date+timedelta(days=1) < date.today():
             raise ValidationError("time expired")
         return attrs
 
@@ -66,32 +56,31 @@ class FridayThesisImamResultSerializer(ModelSerializer):
             result.videos.set(validated_data.get('videos', []))
             result.save()
             FridayThesisImamRead.objects.filter(
-                tesis=result.tesis, imam=self.context['request'].user.id).update(state=States.DONE)
+                tesis=result.tesis, imam=result.imam).update(state=States.DONE)
             return result
 
 
 class FridayThesisImamResultDetailSerializer(ModelSerializer):
     images = ResultImagesSerializer(many=True, read_only=True)
     videos = ResultVideosSerializer(many=True, read_only=True)
+    tesis = FridayThesisRelatedSerializer(many=False, read_only=True)
+    imam = UserRelatedSerializer(many=False, read_only=True)
 
     class Meta:
         model = FridayThesisImamResult
         fields = ('id', 'tesis', 'imam', 'comment', 'file', 'child',
-                  'man', 'old_man', 'old', 'images', 'videos', 'created_at',)
+                  'man', 'old_man', 'old', 'images', 'videos', 'created_at', 'updated_at',)
+        read_only_fields = fields
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        seen = FridayThesisImamRead.objects.filter(imam=instance.imam, tesis=instance.tesis).first()
+        seen = FridayThesisImamRead.objects.filter(
+            imam=instance.imam, tesis=instance.tesis).first()
         representation['state'] = seen.state if seen else States.UNSEEN
-        representation['tesis'] = {
-        'id': instance.tesis.id, 'title': instance.tesis.title, 'types': instance.tesis.types}
         try:
             representation['from'] = f"{instance.imam.profil.mosque.region}, {instance.imam.profil.mosque.district}, {instance.imam.profil.mosque.name}"
-            representation['imam'] = {
-            'id': instance.imam.id, 'name': f"{instance.imam.profil.first_name} {instance.imam.profil.last_name}", "role": instance.imam.role}
         except:
-            representation['from'] = 'Nomalum'
-            representation['imam'] = {'id': instance.imam.id}
+            representation['from'] = None
         return representation
 
 
@@ -108,11 +97,8 @@ class FridayThesisImamResultUpdateSerializer(ModelSerializer):
             'tesis': {'required': False},
             'imam': {'required': False},
         }
-        
+
     def validate(self, attrs):
-        if attrs.get('imam') != self.context.get('request').user:
-            raise ValidationError({'detail': "you can't update the result"})
-        tesis_date = FridayThesis.objects.get(id=attrs.get('tesis').id).date
-        if tesis_date+timedelta(days=1) < date.today():
+        if self.instance.tesis.date+timedelta(days=1) < date.today():
             raise ValidationError("time expired")
         return attrs

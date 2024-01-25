@@ -76,13 +76,27 @@ class FridayThesisImamRead(BaseModel):
 
 
 class ResultImages(BaseModel):
-    image = models.ImageField(verbose_name=_("image"), upload_to='images/tesisresult', validators=[FileExtensionValidator(
+    image = models.ImageField(verbose_name=_("image"), upload_to='images/thesis_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
+
+    def __str__(self):
+        return self.image.url
+
+    class Meta:
+        verbose_name = 'Natija rasmi '
+        verbose_name_plural = 'Natija rasmlari '
 
 
 class ResultVideos(BaseModel):
-    video = models.FileField(verbose_name=_("video"), upload_to='videos/tesisresult', validators=[FileExtensionValidator(
+    video = models.FileField(verbose_name=_("video"), upload_to='videos/thesis_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_video_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+
+    def __str__(self):
+        return self.video.url
+
+    class Meta:
+        verbose_name = 'Natija videosi '
+        verbose_name_plural = 'Natija videolari '
 
 
 class FridayThesisImamResult(BaseModel):
@@ -96,7 +110,7 @@ class FridayThesisImamResult(BaseModel):
     man = models.PositiveIntegerField(verbose_name=_("man"), default=0)
     old_man = models.PositiveIntegerField(verbose_name=_("old_man"), default=0)
     old = models.PositiveIntegerField(verbose_name=_("old"), default=0)
-    file = models.FileField(verbose_name=_("file"), upload_to='files/tesisresult', validators=[FileExtensionValidator(
+    file = models.FileField(verbose_name=_("file"), upload_to='files/thesis_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     images = models.ManyToManyField(
         ResultImages, verbose_name=_("images"), blank=True)

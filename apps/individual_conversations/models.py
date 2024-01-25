@@ -33,7 +33,7 @@ class IndividualConversation(BaseModel):
     types = models.CharField(verbose_name=_("types"), max_length=22, choices=Types.choices,
                             default=Types.NEED_SOCIAL_ASSISTANCE, blank=False)
     title = models.CharField(verbose_name=_("title"), max_length=300)
-    comment = models.TextField(verbose_name=_("comment"), )
+    comment = models.TextField(verbose_name=_("comment"), blank=True)
     date = models.DateField(verbose_name=_("date"), )
 
     def __str__(self):

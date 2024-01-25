@@ -44,8 +44,8 @@ class DirectionsRelatedSerializer(ModelSerializer):
 
 
 class MosqueRelatedSerializer(ModelSerializer):
-    region = CharField(source='region.name')
-    district = CharField(source='district.name')
+    region = CharField(source='region.name', default=None,)
+    district = CharField(source='district.name', default=None,)
 
     class Meta:
         model = Mosque
@@ -54,7 +54,7 @@ class MosqueRelatedSerializer(ModelSerializer):
 
 
 class EmployeeRelatedSerializer(ModelSerializer):
-    user_role = CharField(source='profile.role') 
+    user_role = CharField(source='profile.role', default=None) 
     class Meta:
         model = models.Employee
         fields = ('id', 'first_name', 'last_name', 'user_role',)
@@ -62,8 +62,8 @@ class EmployeeRelatedSerializer(ModelSerializer):
 
 
 class UserRelatedSerializer(ModelSerializer):
-    first_name = CharField(source='profil.first_name')
-    last_name = CharField(source='profil.last_name')
+    first_name = CharField(source='profil.first_name', default=None)
+    last_name = CharField(source='profil.last_name', default=None)
 
     class Meta:
         model = User
