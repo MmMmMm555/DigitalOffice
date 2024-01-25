@@ -32,6 +32,7 @@ class Neighborhood(BaseModel):
     date = models.DateField(verbose_name=_("date"), )
 
     class Meta:
+        ordering = ['-id',]
         verbose_name = 'Mahalla '
         verbose_name_plural = 'Mahallalar '
 
