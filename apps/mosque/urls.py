@@ -15,7 +15,7 @@ urlpatterns = [
     # mosque api
     path('create/', MosqueCreateView.as_view(), name='mosque_create'),
     path('list/', MosqueListView.as_view(), name='mosque_list'),
-    path('choice-list/', MosqueChoiceListView.as_view(), name='mosque_choice_list'),
+    path('select-list/', MosqueChoiceListView.as_view(), name='mosque_select_list'),
     path('update/<int:pk>', MosqueUpdateView.as_view(), name='mosque_update'),
     path('detail/<int:pk>', MosqueRetrieveView.as_view(), name='mosque_single'),
     path('delete/<int:pk>', MosqueDeleteView.as_view(), name='mosque_delete'),

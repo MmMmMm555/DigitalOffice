@@ -90,7 +90,7 @@ class MosqueChoiceListSerializer(MosqueSerializer):
 
 
 class MosqueListSerializer(MosqueSerializer):
-    employee_count = IntegerField(read_only=True)
+    # employee_count = IntegerField(read_only=True)
     has_imam = IntegerField(read_only=True)
     region = RegionsSerializer(many=False, read_only=True,)
     district = DistrictsSerializer(many=False, read_only=True,)
@@ -101,7 +101,7 @@ class MosqueListSerializer(MosqueSerializer):
             'id',
             'name',
             'address',
-            'employee_count',
+            # 'employee_count',
             'has_imam',
             'mosque_type',
             'mosque_status',
@@ -110,29 +110,30 @@ class MosqueListSerializer(MosqueSerializer):
             'region',
             'district',
             'built_at',
-            'registered_at',
+            # 'registered_at',
             'parking',
-            'basement',
+            # 'basement',
             'capacity',
-            'second_floor',
-            'third_floor',
-            'cultural_heritage',
-            'fire_safety',
-            'auto_fire_extinguisher',
-            'fire_closet',
-            'fire_signal',
-            'emergency_exit_door',
-            'evacuation_road',
-            'service_rooms_bool',
-            'imam_room',
-            'sub_imam_room',
-            'casher_room',
-            'guard_room',
-            'other_room',
-            'mosque_library',
-            'shrine',
-            'graveyard',
-            'shop',)
+            # 'second_floor',
+            # 'third_floor',
+            # 'cultural_heritage',
+            # 'fire_safety',
+            # 'auto_fire_extinguisher',
+            # 'fire_closet',
+            # 'fire_signal',
+            # 'emergency_exit_door',
+            # 'evacuation_road',
+            # 'service_rooms_bool',
+            # 'imam_room',
+            # 'sub_imam_room',
+            # 'casher_room',
+            # 'guard_room',
+            # 'other_room',
+            # 'mosque_library',
+            # 'shrine',
+            # 'graveyard',
+            # 'shop',
+            )
         read_only_fields = fields
 
     def to_representation(self, instance):

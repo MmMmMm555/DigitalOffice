@@ -42,14 +42,11 @@ class MosqueChoiceListView(generics.ListAPIView):
 
 class MosqueListView(generics.ListAPIView):
     """Agar imomi yo'q masjidlar listi kerak bolsa "api/v1/mosque/list/?has_imam=false" qilib filter jo'natiladi"""
-    queryset = Mosque.objects.all().select_related('region', 'district',).annotate(
-        employee_count=Count('employee', filter=Q(employee__profile__role__in=[Role.IMAM, Role.SUB_IMAM])), 
-        has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
+    queryset = Mosque.objects.all().select_related('region', 'district',).annotate(has_imam=Count('employee', filter=Q(employee__profile__role=Role.IMAM)))
     serializer_class = MosqueListSerializer
     permission_classes = (IsSuperAdmin | IsRegionAdmin | IsDistrictAdmin,)
     search_fields = ('name', 'address',)
     filterset_fields = (
-        'id',
         'mosque_type',
         'mosque_status',
         'mosque_heating_type',
@@ -57,29 +54,30 @@ class MosqueListView(generics.ListAPIView):
         'region',
         'district',
         'built_at',
-        'registered_at',
+        #'registered_at',
         'parking',
-        'basement',
-        'second_floor',
-        'third_floor',
+        #'basement',
+        #'second_floor',
+        #'third_floor',
         'capacity',
-        'cultural_heritage',
-        'fire_safety',
-        'auto_fire_extinguisher',
-        'fire_closet',
-        'fire_signal',
-        'emergency_exit_door',
-        'evacuation_road',
-        'service_rooms_bool',
-        'imam_room',
-        'sub_imam_room',
-        'casher_room',
-        'guard_room',
-        'other_room',
-        'mosque_library',
-        'shrine',
-        'graveyard',
-        'shop',)
+        #'cultural_heritage',
+        #'fire_safety',
+        #'auto_fire_extinguisher',
+        #'fire_closet',
+        #'fire_signal',
+        #'emergency_exit_door',
+        #'evacuation_road',
+        #'service_rooms_bool',
+        #'imam_room',
+        #'sub_imam_room',
+        #'casher_room',
+        #'guard_room',
+        #'other_room',
+        #'mosque_library',
+        #'shrine',
+        #'graveyard',
+        #'shop',
+        )
 
     def get_queryset(self):
         has_imam = self.request.GET.get('has_imam', None)

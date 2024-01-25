@@ -15,17 +15,17 @@ class FridayThesisImamReadView(generics.UpdateAPIView):
 
 
 class FridayThesisImamReadListView(generics.ListAPIView):
-    # queryset = models.FridayThesisImamRead.objects.all().annotate(
-    #     mosque=F('imam__profil__mosque__name'), region=F('imam__region__name'), district=F('imam__district__name'), imam_name=F('imam__profil__first_name'), imam_last_name=F('imam__profil__last_name'))
+    queryset = models.FridayThesisImamRead.objects.only('id', 'tesis', 'imam', 'state', 'requirement', 'created_at',).select_related(
+        'imam', 'imam__profil', 'imam__region', 'imam__district', 'imam__profil__mosque',)
     serializer_class = FridayThesisImamReadListSerializer
     permission_classes = (IsSuperAdmin | IsImam,)
-    search_fields = ('imam__profil__first_name', 'tesis__title',)
+    search_fields = ('imam__profil__first_name',
+                     'imam__profil__last_name', 'imam__profil__mosque__name',)
     filterset_fields = ('tesis', 'state',
-                        'tesis__types', 'requirement', 'imam', 'imam__region', 'imam__profil__mosque', 'imam__district',)
+                        'tesis__types', 'imam__region', 'imam__profil__mosque', 'imam__district',)
 
     def get_queryset(self):
-        query = models.FridayThesisImamRead.objects.all().annotate(
-            mosque=F('imam__profil__mosque__name'), region=F('imam__region__name'), district=F('imam__district__name'), imam_name=F('imam__profil__first_name'), imam_last_name=F('imam__profil__last_name'))
-        if self.request.user.role == Role.SUPER_ADMIN:
-            return query
-        return query.filter(imam=self.request.user)
+        query = self.queryset
+        if self.request.user.role != Role.SUPER_ADMIN:
+            return query.filter(imam=self.request.user)
+        return query
