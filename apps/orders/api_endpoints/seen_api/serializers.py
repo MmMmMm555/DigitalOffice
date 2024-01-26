@@ -1,8 +1,8 @@
 from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField
-# , BaseSerializer, IntegerField, StringRelatedField
 
 from apps.orders import models
 from apps.orders.models import States
+from apps.friday_tesis.api_endpoints.seen_api.serializers import UserSerializer
 
 
 class DirectionsEmployeeReadSerializer(ModelSerializer):
@@ -23,16 +23,12 @@ class DirectionsEmployeeReadSerializer(ModelSerializer):
 
 
 class DirectionsEmployeeReadListSerializer(ModelSerializer):
-    mosque = StringRelatedField()
-    region = StringRelatedField()
-    district = StringRelatedField()
-    employee_name = StringRelatedField()
-    employee_last_name = StringRelatedField()
+    employee = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = models.DirectionsEmployeeRead
-        fields = ('id', 'direction', 'employee', 'mosque', 'region', 'district', 'employee_name', 'employee_last_name',
-                  'state', 'requirement', 'created_at', 'updated_at',)
+        fields = ('id', 'direction', 'employee', 'state',
+                  'requirement', 'created_at', 'updated_at',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -44,11 +40,4 @@ class DirectionsEmployeeReadListSerializer(ModelSerializer):
             except:
                 result = None
             representation['result_id'] = result
-        representation['direction'] = {
-            'id': instance.direction.id, 'title': instance.direction.title, 'direction_type': instance.direction.direction_type, 'types': instance.direction.types, 'from_date': instance.direction.from_date, 'to_date': instance.direction.to_date, 'from_role': instance.direction.from_role}
         return representation
-
-
-# class DirectionsUnseenCount(BaseSerializer):
-#     count = IntegerField()
-#     direction = StringRelatedField()
