@@ -163,7 +163,7 @@ class DirectionsEmployeeResult(BaseModel):
         ResultFiles, verbose_name=_("files"), blank=True)
 
     def __str__(self) -> str:
-        return self.employee.username
+        return f"{self.id}{self.employee.username}"
 
     class Meta:
         ordering = ['-created_at',]

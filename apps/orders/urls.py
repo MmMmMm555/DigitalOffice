@@ -8,7 +8,6 @@ from apps.orders.api_endpoints.order.views import (DirectionCreateView,
 from apps.orders.api_endpoints.seen_api.views import DirectionEmployeeReadListView, DirectionEmployeeReadView
 
 from apps.orders.api_endpoints.result_api.views import (DirectionsEmployeeResultView,
-                                                        DirectionsEmployeeResultListView,
                                                         DirectionsEmployeeResultDetailView,
                                                         DirectionsEmployeeResultUpdateView,
                                                         ResultVideoView,
@@ -37,7 +36,6 @@ urlpatterns = [
     # result apis
     path('result/create', DirectionsEmployeeResultView.as_view(),
          name='result_create'),
-    path('result/list', DirectionsEmployeeResultListView.as_view(), name='result_list'),
     path('result/detail/<int:pk>',
          DirectionsEmployeeResultDetailView.as_view(), name='result_detail'),
     path('result/update/<int:pk>',

@@ -14,6 +14,11 @@ class IsOwner(BasePermission):
         return view.get_object().imam == request.user
 
 
+class IsDirectionResultOwner(BasePermission):
+    def has_permission(self, request, view):
+        return view.get_object().employee == request.user
+
+
 class IsSuperAdmin(BasePermission):
     def has_permission(self, request, view):
         return request.user.role == Role.SUPER_ADMIN
