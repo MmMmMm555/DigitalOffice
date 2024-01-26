@@ -3,13 +3,6 @@ from rest_framework.serializers import ModelSerializer, ValidationError, CharFie
 from apps.friday_tesis import models
 from apps.orders.models import States, User
 
-# class EmployeeRelatedSerializer(ModelSerializer):
-#     mosque = CharField(source='mosque.name', default=None)
-#     class Meta:
-#         model = Employee
-#         fields = ('first_name', 'last_name', 'mosque',)
-#         read_only_fields = fields
-
 
 class UserSerializer(ModelSerializer):
     first_name = CharField(source='profil.first_name', default=None)

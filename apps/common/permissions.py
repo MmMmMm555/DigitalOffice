@@ -2,6 +2,13 @@ from rest_framework.permissions import BasePermission
 from apps.users.models import Role
 
 
+class IsCreatorOrAdmin(BasePermission):
+    def has_permission(self, request, view,):
+        if request.user.role == Role.SUPER_ADMIN:
+            return True
+        return view.get_object().creator == request.user
+
+
 class IsOwner(BasePermission):
     def has_permission(self, request, view):
         return view.get_object().imam == request.user

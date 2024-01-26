@@ -1,6 +1,7 @@
 import django_filters
 from django.utils import timezone
 from apps.public_prayers.models import PublicPrayers
+from apps.orders.models import Directions
 
 
 class CreatedAtDateFilter(django_filters.DateFilter):
@@ -19,3 +20,12 @@ class PublicPrayersFilterSet(django_filters.FilterSet):
     class Meta:
         model = PublicPrayers
         fields = ['id', 'imam', 'prayer', 'created_at']
+
+
+class DirectionFilterSet(django_filters.FilterSet):
+    created_at = CreatedAtDateFilter()
+
+    class Meta:
+        model = Directions
+        fields = ('id', 'created_at', 'to_region', 'to_district', 'required_to_region',
+                        'required_to_district', 'from_role', 'types', 'direction_type', 'from_date', 'to_date',)

@@ -12,9 +12,6 @@ from apps.friday_tesis.models import States
 from apps.mosque.models import Mosque
 
 
-# Create your models here.
-
-
 class ToRole(models.TextChoices):
     REGION_ADMIN = u'2'
     DISTRICT_ADMIN = u'3'
@@ -40,8 +37,8 @@ class DirectionFiles(BaseModel):
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files : {settings.ALLOWED_FILE_TYPES}")
 
     class Meta:
-        verbose_name = "Fayl "
-        verbose_name_plural = "Fayllar "
+        verbose_name = "Ko'rsatma fayli "
+        verbose_name_plural = "Ko'rsatma fayllari "
 
 
 class Directions(BaseModel):
@@ -118,6 +115,9 @@ class ResultImages(BaseModel):
     image = models.ImageField(verbose_name=_("image"), upload_to='images/direction_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)
 
+    def __str__(self):
+        return self.image.url
+
     class Meta:
         verbose_name = "Rasm "
         verbose_name_plural = "Rasmlar "
@@ -126,6 +126,9 @@ class ResultImages(BaseModel):
 class ResultVideos(BaseModel):
     video = models.FileField(verbose_name=_("video"), upload_to='videos/direction_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_VIDEO_TYPES), validate_video_size,], help_text=f"allowed videos: {settings.ALLOWED_VIDEO_TYPES}", blank=True)
+
+    def __str__(self):
+        return self.video.url
 
     class Meta:
         verbose_name = "Video "
@@ -136,6 +139,9 @@ class ResultFiles(BaseModel):
     file = models.FileField(verbose_name=_("file"), upload_to='files/direction_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
 
+    def __str__(self):
+        return self.file.url
+
     class Meta:
         verbose_name = "Fayl "
         verbose_name_plural = "Fayllar "
@@ -143,7 +149,7 @@ class ResultFiles(BaseModel):
 
 class DirectionsEmployeeResult(BaseModel):
     direction = models.ForeignKey(
-        Directions, verbose_name=_("direction"), on_delete=models.SET_NULL, related_name='direction_employee_result', null=True)
+        Directions, verbose_name=_("direction"), on_delete=models.CASCADE, related_name='direction_employee_result', null=True)
     employee = models.ForeignKey(
         User, verbose_name=_("employee"), on_delete=models.CASCADE, related_name='direction_employee_result')
     voice = models.FileField(verbose_name=_("voice"), upload_to='voices/direction_result', validators=[FileExtensionValidator(

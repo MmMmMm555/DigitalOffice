@@ -24,7 +24,7 @@ class DirectionEmployeeReadListView(generics.ListAPIView):
     permission_classes = (IsSuperAdmin | IsImam |
                           IsDistrictAdmin | IsDistrictAdmin | IsRegionAdmin,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('employee__profil__first_name', 'direction__title',)
+    search_fields = ('employee__profil__first_name', 'employee__profil__last_name', 'direction__title',)
     filterset_fields = ('direction', 'direction__direction_type',
                         'created_at', 'state', 'requirement', 'employee', 'employee__profil__mosque', 'employee__region', 'employee__district',)
 
