@@ -28,10 +28,10 @@ urlpatterns = [
 
     # statistics order api
     path('statistics/order/direction_type',
-         StatisticDirectionTypeApi, name='statistics_direction_type'),
-    path('statistics/order/region', StatisticRegionApi, name='statistics_region'),
-    path('statistics/order/state', StatisticStateApi, name='statistics_state'),
-    path('statistics/order/role', StatisticRoleApi, name='statistics_role'),
+         StatisticDirectionTypeApi.as_view(), name='statistics_direction_type'),
+    path('statistics/order/region', StatisticRegionApi.as_view(), name='statistics_region'),
+    path('statistics/order/state', StatisticStateApi.as_view(), name='statistics_state'),
+    path('statistics/order/role', StatisticRoleApi.as_view(), name='statistics_role'),
 
     # statistics thesis api
     path('statistics/thesis/state',

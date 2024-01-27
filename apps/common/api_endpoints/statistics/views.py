@@ -8,75 +8,97 @@ from apps.friday_tesis.models import FridayThesisImamRead, FridayThesisImamResul
 from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
 from apps.employee.models import Employee, Graduation, Education, AcademicDegree
 
+from rest_framework.views import APIView
+
 
 # for orders
-@api_view(['GET'])
-def StatisticDirectionTypeApi(request):
-    start_date = request.GET.get('start_date')
-    finish_date = request.GET.get('finish_date')
-    query = Directions.objects.all()
-    if start_date and finish_date:
-        query = query.filter(created_at__range=[start_date, finish_date])
-    all = query.count()
-    data = {'count_all': all}
-    for i in DirectionTypes:
-        directions = query.filter(direction_type=i).count()
-        to_add = {'count': directions, "protsent": float(
-            f"{(directions/all)*100:10.1f}")}
-        data[i.value] = to_add
-    return Response(data=data)
+
+class StatisticDirectionTypeApi(APIView):
+    def get(self, request, *args, **kwargs):
+        start_date = request.GET.get('start_date')
+        finish_date = request.GET.get('finish_date')
+        query = Directions.objects.all()
+
+        if start_date and finish_date:
+            query = query.filter(created_at__range=[start_date, finish_date])
+
+        all_count = query.count()
+        data = {'count_all': all_count}
+
+        for i in DirectionTypes:
+            directions = query.filter(direction_type=i).count()
+            percentage = float(f"{(directions / all_count) * 100:10.1f}")
+            to_add = {'count': directions, "percentage": percentage}
+            data[i.value] = to_add
+
+        return Response(data=data)
 
 
-@api_view(['GET'])
-def StatisticRegionApi(request):
-    start_date = request.GET.get('start_date')
-    finish_date = request.GET.get('finish_date')
-    query = Directions.objects.all()
-    if start_date and finish_date:
-        query = query.filter(created_at__range=[start_date, finish_date])
-    all = query.aggregate(all_count=Count('id'))['all_count']
-    data = {'count_all': all}
-    for i in Regions.objects.all().values('id', 'name'):
-        print(i)
-        directions = query.aggregate(count=Count(
-            'to_region', filter=Q(to_region__id=i['id'])))['count']
-        to_add = {'count': directions, "protsent": float(
-            f"{(directions/all)*100:10.1f}")}
-        data[i['name']] = to_add
-    return Response(data=data)
+class StatisticRegionApi(APIView):
+    def get(self, request, *args, **kwargs):
+        start_date = request.GET.get('start_date')
+        finish_date = request.GET.get('finish_date')
+        query = Directions.objects.all()
+
+        if start_date and finish_date:
+            query = query.filter(created_at__range=[start_date, finish_date])
+
+        all_count = query.aggregate(all_count=Count('id'))['all_count']
+        data = {'count_all': all_count}
+
+        for region in Regions.objects.all().values('id', 'name'):
+            directions = query.aggregate(
+                count=Count('to_region', filter=Q(to_region__id=region['id']))
+            )['count']
+
+            percentage = float(f"{(directions / all_count) * 100:10.1f}")
+            to_add = {'count': directions, "percentage": percentage}
+            data[region['name']] = to_add
+
+        return Response(data=data)
 
 
-@api_view(['GET'])
-def StatisticRoleApi(request):
-    start_date = request.GET.get('start_date')
-    finish_date = request.GET.get('finish_date')
-    query = Directions.objects.all()
-    if start_date and finish_date:
-        query = query.filter(created_at__range=[start_date, finish_date])
-    all = query.count()
-    data = {'count_all': all}
-    for i in ToRole:
-        directions = query.filter(to_role__contains=[i]).count()
-        to_add = {'count': directions, }
-        data[i.value] = to_add
-    return Response(data=data)
+class StatisticRoleApi(APIView):
+    def get(self, request, *args, **kwargs):
+        start_date = request.GET.get('start_date')
+        finish_date = request.GET.get('finish_date')
+        query = Directions.objects.all()
+
+        if start_date and finish_date:
+            query = query.filter(created_at__range=[start_date, finish_date])
+
+        all_count = query.count()
+        data = {'count_all': all_count}
+
+        for role in ToRole:
+            directions = query.filter(to_role__contains=[role]).count()
+            to_add = {'count': directions}
+            data[role.value] = to_add
+
+        return Response(data=data)
 
 
-@api_view(['GET'])
-def StatisticStateApi(request):
-    start_date = request.GET.get('start_date')
-    finish_date = request.GET.get('finish_date')
-    query = DirectionsEmployeeRead.objects.all()
-    if start_date and finish_date:
-        query = query.filter(created_at__range=[start_date, finish_date])
-    all = query.count()
-    data = {'count_all': all}
-    for i in States:
-        directions = query.filter(state=i).count()
-        to_add = {'count': directions, "protsent": float(
-            f"{(directions/all)*100:10.1f}")}
-        data[i.value] = to_add
-    return Response(data=data)
+class StatisticStateApi(APIView):
+    def get(self, request, *args, **kwargs):
+        start_date = request.GET.get('start_date')
+        finish_date = request.GET.get('finish_date')
+        query = DirectionsEmployeeRead.objects.all()
+
+        if start_date and finish_date:
+            query = query.filter(created_at__range=[start_date, finish_date])
+
+        all_count = query.count()
+        data = {'count_all': all_count}
+
+        state_counts = query.values('state').annotate(count=Count('state'))
+        for state_count in state_counts:
+            state = state_count['state']
+            directions = state_count['count']
+            percentage = float(f"{(directions / all_count) * 100:10.1f}")
+            to_add = {'count': directions, 'percentage': percentage}
+            data[state] = to_add
+
+        return Response(data=data)
 
 
 # for thesis
