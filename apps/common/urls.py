@@ -29,31 +29,33 @@ urlpatterns = [
     # statistics order api
     path('statistics/order/direction_type',
          StatisticDirectionTypeApi.as_view(), name='statistics_direction_type'),
-    path('statistics/order/region', StatisticRegionApi.as_view(), name='statistics_region'),
-    path('statistics/order/state', StatisticStateApi.as_view(), name='statistics_state'),
+    path('statistics/order/region',
+         StatisticRegionApi.as_view(), name='statistics_region'),
+    path('statistics/order/state',
+         StatisticStateApi.as_view(), name='statistics_state'),
     path('statistics/order/role', StatisticRoleApi.as_view(), name='statistics_role'),
 
     # statistics thesis api
     path('statistics/thesis/state',
-         StatisticThesisStateApi, name='statistics_thesis_state'),
-    path('statistics/thesis/age', StatisticThesisAgeApi,
+         StatisticThesisStateApi.as_view(), name='statistics_thesis_state'),
+    path('statistics/thesis/age', StatisticThesisAgeApi.as_view(),
          name='statistics_thesis_role'),
 
     # statistics thesis api
     path('statistics/mosque/top',
-         StatisticMosqueTopApi, name='statistics_mosque_top'),
+         StatisticMosqueTopApi.as_view(), name='statistics_mosque_top'),
     path('statistics/mosque/type',
-         StatisticMosqueTypeApi, name='statistics_mosque_type'),
+         StatisticMosqueTypeApi.as_view(), name='statistics_mosque_type'),
     path('statistics/mosque/status',
-         StatisticMosqueStatusApi, name='statistics_mosque_status'),
+         StatisticMosqueStatusApi.as_view(), name='statistics_mosque_status'),
     path('statistics/mosque/region',
-         StatisticMosqueRegionApi, name='statistics_mosque_region'),
+         StatisticMosqueRegionApi.as_view(), name='statistics_mosque_region'),
 
     # statistics employee api
     path('statistics/employee/university',
-         StatisticEmployeeUniversityApi, name='statistics_employee_university'),
+         StatisticEmployeeUniversityApi.as_view(), name='statistics_employee_university'),
     path('statistics/employee/education',
-         StatisticEmployeeEducationApi, name='statistics_employee_education'),
+         StatisticEmployeeEducationApi.as_view(), name='statistics_employee_education'),
     path('statistics/employee/academic',
-         StatisticEmployeeAcademicDegreeApi, name='statistics_employee_academic'),
+         StatisticEmployeeAcademicDegreeApi.as_view(), name='statistics_employee_academic'),
 ]

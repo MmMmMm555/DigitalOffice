@@ -40,6 +40,8 @@ class FireDefense(models.TextChoices):
     AUTO_FIRE_EXTINGUISHER = 'auto_fire_extinguisher'
     EMERGENCY_EXIT_DOOR = 'emergency_exit_door'
 
+# class ExtraRoom(BaseModel):
+#     title = models.CharField(verbose_name=_("Extra Room Title"), max)
 
 class FireDefenseImages(BaseModel):
     type = models.CharField(verbose_name=_("type"),

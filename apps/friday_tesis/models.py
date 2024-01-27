@@ -116,7 +116,7 @@ class FridayThesisImamResult(BaseModel):
         ResultImages, verbose_name=_("images"), blank=True)
     videos = models.ManyToManyField(
         ResultVideos, verbose_name=_("videos"), blank=True)
-
+    # status = BoolFields
     def __str__(self) -> str:
         return self.imam.username
 
