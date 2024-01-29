@@ -10,10 +10,11 @@ class Mavlud(BaseModel):
         "imam"), on_delete=models.CASCADE)
     title = models.CharField(verbose_name=_(
         "title"), max_length=300, blank=False)
-    comment = models.TextField(verbose_name=_("comment"), )
+    comment = models.TextField(verbose_name=_("comment"), blank=True)
     date = models.DateField(verbose_name=_("date"), )
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Mavlud'
         verbose_name_plural = 'Mavludlar'
 

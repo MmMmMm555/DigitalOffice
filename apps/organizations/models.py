@@ -52,5 +52,6 @@ class Organization(BaseModel):
         return f"{self.imam.username} {self.type}"
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Tashkilot '
         verbose_name_plural = 'Tashkilotlar '

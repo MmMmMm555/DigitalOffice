@@ -40,5 +40,6 @@ class IndividualConversation(BaseModel):
         return self.title
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Saxsiy suhbat '
         verbose_name_plural = 'Saxsiy suhbatlar '

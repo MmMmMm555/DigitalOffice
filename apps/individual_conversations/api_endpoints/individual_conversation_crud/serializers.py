@@ -39,7 +39,6 @@ class IndividualConversationUpdateSerializer(ModelSerializer):
             'imam': {'required': False},
             'types': {'required': False},
             'title': {'required': False},
-            'comment': {'required': False},
             'images': {'required': False},
             'date': {'required': False},
         }

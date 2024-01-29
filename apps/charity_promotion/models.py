@@ -53,5 +53,6 @@ class CharityPromotion(BaseModel):
         return self.imam
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Hayriya aksiyasi '
         verbose_name_plural = 'Hayriya aksiyalari '

@@ -32,12 +32,13 @@ class ReligiousAdvice(BaseModel):
         "type"), max_length=12, choices=Types.choices, default=Types.OTHER, blank=False)
     choices = models.CharField(verbose_name=_(
         "choices"), max_length=12, choices=Choices.choices, blank=False)
-    comment = models.TextField(verbose_name=_("comment"), )
+    comment = models.TextField(verbose_name=_("comment"), blank=True)
     date = models.DateField(verbose_name=_("date"), )
 
     def __str__(self):
         return self.imam.username
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Diniy maslahat '
         verbose_name_plural = 'Diniy maslahatlar '

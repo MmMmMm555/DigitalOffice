@@ -57,6 +57,7 @@ class Article(BaseModel):
         return self.imam.username
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Maqola '
         verbose_name_plural = 'Maqolalar '
 
@@ -83,12 +84,13 @@ class Book(BaseModel):
     direction = models.CharField(verbose_name=_("direction"), 
         max_length=22, choices=Direction.choices, default=Direction.RELIGIOUS, blank=False)
     publication = models.CharField(verbose_name=_("publication"), max_length=200, blank=True, null=True)
-    comment = models.TextField(verbose_name=_("comment"), )
+    comment = models.TextField(verbose_name=_("comment"), blank=True)
     date = models.DateField(verbose_name=_("date"), )
 
     def __str__(self):
         return self.imam.username
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Kitob '
         verbose_name_plural = 'Kitoblar '

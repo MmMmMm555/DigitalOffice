@@ -29,13 +29,14 @@ class Images(models.Model):
 class CommunityEvents(BaseModel):
     imam = models.ForeignKey(User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='imam_community_events')
     types = models.CharField(verbose_name=_("types"), max_length=22, choices=Types.choices, default=Types.HOLIDAY, blank=False)
-    comment = models.TextField(verbose_name=_("comment"), )
+    comment = models.TextField(verbose_name=_("comment"), blank=True,)
     images = models.ManyToManyField(Images, verbose_name=_("images"), blank=True)
     date = models.DateField(verbose_name=_("date"), )
     
     def __str__(self):
         return self.imam
 
-    class Meta: 
+    class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Jamoat tadbiri '
         verbose_name_plural = 'Jamoat tadbirlari '

@@ -49,12 +49,13 @@ class Charity(BaseModel):
     from_who = models.CharField(verbose_name=_("from_who"), max_length=22, choices=From.choices, blank=False)
     summa = models.FloatField(verbose_name=_("summa"), blank=False, default=0)
     images = models.ManyToManyField(Images, verbose_name=_("images"), blank=True)
-    comment = models.TextField(verbose_name=_("comment"), )
+    comment = models.TextField(verbose_name=_("comment"), blank=True)
     date = models.DateField(verbose_name=_("date"), )
 
     def __str__(self):
         return self.imam
 
-    class Meta: 
+    class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Hayriya '
         verbose_name_plural = 'Hayriyalar '

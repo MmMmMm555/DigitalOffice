@@ -23,6 +23,7 @@ class Wedding(BaseModel):
     date = models.DateField(verbose_name=_("date"), )
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = "To'y "
         verbose_name_plural = "To'ylar "
 

@@ -16,6 +16,7 @@ class Death(BaseModel):
     comment = models.TextField(verbose_name=_("comment"), blank=True, null=True)
     
     class Meta:
+        ordering = ['-created_at']
         verbose_name = "O'lim "
         verbose_name_plural = "O'limlar "
     

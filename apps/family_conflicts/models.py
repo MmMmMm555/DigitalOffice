@@ -32,6 +32,7 @@ class FamilyConflict(BaseModel):
     date = models.DateField(verbose_name=_("date"), )
     
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Oilaviy muammo '
         verbose_name_plural = 'Oilaviy muammolar '
 

@@ -17,6 +17,7 @@ class Ceremony(BaseModel):
     date = models.DateField(verbose_name=_("date"), )
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = "Marosim "
         verbose_name_plural = "Marosimlar "
 
