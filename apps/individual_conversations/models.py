@@ -30,8 +30,7 @@ class IndividualConversation(BaseModel):
     imam = models.ForeignKey(
         User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='imam_individual_conversation')
     images = models.ManyToManyField(IndividualConversationImages, verbose_name=_("images"), blank=False,)
-    types = models.CharField(verbose_name=_("types"), max_length=22, choices=Types.choices,
-                            default=Types.NEED_SOCIAL_ASSISTANCE, blank=False)
+    types = models.CharField(verbose_name=_("types"), max_length=22, choices=Types.choices, blank=False)
     title = models.CharField(verbose_name=_("title"), max_length=300)
     comment = models.TextField(verbose_name=_("comment"), blank=True)
     date = models.DateField(verbose_name=_("date"), )

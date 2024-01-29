@@ -37,7 +37,7 @@ class Organization(BaseModel):
     imam = models.ForeignKey(User, verbose_name=_(
         "imam"), on_delete=models.CASCADE, related_name='organization')
     type = models.CharField(verbose_name=_(
-        "type"), max_length=23, choices=OrganizationType.choices)
+        "type"), max_length=23, choices=OrganizationType.choices, blank=False)
     institution_type = models.CharField(verbose_name=_(
         "institution_type"), max_length=10, choices=InstitutionType.choices, blank=True, null=True)
     participant_type = models.CharField(verbose_name=_(

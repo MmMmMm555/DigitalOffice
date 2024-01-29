@@ -41,4 +41,5 @@ class OrganizationUpdateSerializer(ModelSerializer):
             'participant_type': {'required': False},
             'description': {'required': False},
             'date': {'required': False},
+            'type': {'required': False},
         }
