@@ -34,7 +34,7 @@ class CommunityEvents(BaseModel):
     date = models.DateField(verbose_name=_("date"), )
     
     def __str__(self):
-        return self.imam
+        return self.imam.username
 
     class Meta:
         ordering = ['-created_at']

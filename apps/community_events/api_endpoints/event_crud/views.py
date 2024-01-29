@@ -1,6 +1,6 @@
 from rest_framework.generics import (CreateAPIView, ListAPIView,
                                      UpdateAPIView, RetrieveAPIView, DestroyAPIView,)
-from rest_framework.parsers import FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import (CommunityEventsSerializer, CommunityEventsListSerializer,
@@ -14,7 +14,7 @@ class CommunityEventsCreateAPIView(CreateAPIView):
     queryset = CommunityEvents.objects.all()
     serializer_class = CommunityEventsSerializer
     permission_classes = (IsImam | IsDeputy,)
-    parser_classes = (FormParser,)
+    parser_classes = (FormParser, MultiPartParser,)
 
     def perform_create(self, serializer):
         serializer.save(imam=self.request.user)
@@ -33,17 +33,17 @@ class CommunityEventsDetailAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class CommunityEventsDeleteAPIView(DestroyAPIView):
-    queryset = CommunityEvents.objects.all()
-    serializer_class = CommunityEventsSerializer
-    permission_classes = (IsImam | IsDeputy, IsOwner,)
-
-
 class CommunityEventsUpdateAPIView(UpdateAPIView):
     queryset = CommunityEvents.objects.all()
     serializer_class = CommunityEventsUpdateSerializer
     permission_classes = (IsImam | IsDeputy, IsOwner,)
     parser_classes = (FormParser,)
+
+
+class CommunityEventsDeleteAPIView(DestroyAPIView):
+    queryset = CommunityEvents.objects.all()
+    serializer_class = CommunityEventsSerializer
+    permission_classes = (IsImam | IsDeputy, IsOwner,)
 
     def perform_update(self, serializer):
         serializer.save(imam=self.request.user)

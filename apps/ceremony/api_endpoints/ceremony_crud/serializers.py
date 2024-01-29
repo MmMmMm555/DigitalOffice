@@ -12,13 +12,16 @@ class CeremonySerializer(ModelSerializer):
 
 class CeremonyDetailSerializer(ModelSerializer):
     imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Ceremony
-        fields = ('id', 'imam', 'title', 'comment', 'types', 'date', 'created_at', 'updated_at',)
+        fields = ('id', 'imam', 'title', 'comment', 'types',
+                  'date', 'created_at', 'updated_at',)
 
 
 class CeremonyListSerializer(ModelSerializer):
     imam = UserRelatedSerializer(many=False, read_only=True)
+
     class Meta:
         model = Ceremony
         fields = ('id', 'imam', 'title', 'types', 'date',)
