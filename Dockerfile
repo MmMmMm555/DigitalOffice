@@ -13,8 +13,8 @@ WORKDIR /digitaloffice
 
 COPY . /digitaloffice/
 
-RUN pip install --upgrade pip && \
-    pip install -r requirements/production.txt 
+RUN pip install --upgrade pip
+RUN pip install -r requirements/production.txt
 
 # # copy project
 # COPY requirements/production.txt production.txt 

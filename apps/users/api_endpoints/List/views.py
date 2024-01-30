@@ -15,10 +15,8 @@ class UsersListView(generics.ListAPIView):
     queryset = User.objects.all().exclude(role=Role.SUPER_ADMIN)
     serializer_class = UsersListSerializer
     permission_classes = (IsSuperAdmin,)
-    filter_backends = (DjangoFilterBackend,
-                       filters.SearchFilter, filters.OrderingFilter,)
-    filterset_fields = ('id', 'role', 'region', 'district', 'profil__mosque',)
-    search_fields = ('email', 'profil__first_name',
+    filterset_fields = ('region', 'district', 'profil__mosque',)
+    search_fields = ('email', 'profil__first_name', 'profil__last_name',
                      'profil__middle_name', 'username',)
 
     def get(self, request, *args, **kwargs):

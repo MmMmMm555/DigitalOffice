@@ -18,13 +18,13 @@ services:
       - ./static:/home/app/web/static
       - ./media:/home/app/web/media
     env_file: .env
-    command: gunicorn core.wsgi:application --bind 0.0.0.0:${PORT}
+    command: bash -c "python3 manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:8000"
     ports:
-      - ${PORT}:${PORT}
+      - 8000:8000
     restart: always
 
   db:
-    image: postgres:13.4-buster
+    image: postgres:13
     container_name: ${PROJECT_NAME}_db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -48,6 +48,7 @@ services:
      build:
       context: .
       dockerfile: Dockerfile
+     
      container_name: ${PROJECT_NAME}_worker
      command: celery -A core worker -l INFO
      restart: always

@@ -19,3 +19,4 @@ django-celery_results
 django-recaptcha
 django-debug-toolbar
 django-import-export
+# gunicorn==21.2.0
