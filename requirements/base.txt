@@ -15,6 +15,7 @@ djangorestframework-simplejwt==5.2.2
 django-location-field
 beautifulsoup4
 django-celery-beat==2.4.0
+django-celery_results
 django-recaptcha
 django-debug-toolbar
 django-import-export

@@ -29,5 +29,3 @@ def create_thesis_notifications(thesis):
     if mosque_list:
         seen.filter(imam__in=imams.filter(
             profil__mosque__in=mosque_list)).update(requirement=True)
-
-    # return "tesis"

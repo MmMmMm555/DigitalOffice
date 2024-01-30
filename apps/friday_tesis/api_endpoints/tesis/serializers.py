@@ -81,7 +81,8 @@ class FridayThesisCreateSerializer(ModelSerializer):
     def create(self, validated_data):
         thesis = super().create(validated_data)
         # with transaction.atomic():
-        create_thesis_notifications.delay(thesis=thesis.id)
+        task = create_thesis_notifications.delay(thesis=thesis.id)
+        print(task.status)
         # imams = User.objects.filter(role=Role.IMAM)
         # notifications_to_create = [models.FridayThesisImamRead(
         #     tesis=thesis,
