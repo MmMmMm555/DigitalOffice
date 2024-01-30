@@ -91,6 +91,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     'debug_toolbar',
     'import_export',
+    'django_celery_results',
 ]
 
 REST_FRAMEWORK = {
@@ -136,14 +137,14 @@ ALLOWED_VIDEO_TYPES = ['mp4', 'mpeg', 'mpeg-4', 'm4v',]
 # 5MB - 5242880
 # 10MB - 10485760
 # 20MB - 20971520
-# 50MB - 5242880
+# 50MB - 52428800
 # 100MB 104857600
 # 250MB - 214958080
 # 500MB - 429916160
 
 MAX_FILE_UPLOAD_SIZE = {"10 MB": 10485760}
 
-MAX_VIDEO_UPLOAD_SIZE = {"50 MB": 5242880}
+MAX_VIDEO_UPLOAD_SIZE = {"50 MB": 52428800}
 
 MAX_IMAGE_UPLOAD_SIZE = {"10 MB": 10485760}
 
@@ -295,9 +296,11 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 60 * 60 * 3
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
+# CAPTCHA
 RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY")
 RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY")
 
+# SEND EMAIL
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_USE_TLS = True
@@ -309,14 +312,12 @@ LOCATION_FIELD = {
     "search.provider": "nominatim",
 }
 
-
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000 * 10000
 
-# import export files
-
+# IMPORT EXPORT FILES
 EXPORT_FORMATS = [XLSX, CSV, JSON]
 
-# cors
+# CORS
 CORS_ALLOWED_ORIGINS = [
     'http://45.12.236.79',
     'https://api.raqamli-idora.uz',
