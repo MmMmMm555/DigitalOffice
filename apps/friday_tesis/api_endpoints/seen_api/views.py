@@ -1,21 +1,20 @@
 from rest_framework import generics, parsers
-from django.db.models import F
 
 from .serializers import FridayThesisImamReadSerializer, FridayThesisImamReadListSerializer
 from apps.friday_tesis import models
-from apps.common.permissions import IsSuperAdmin, IsImam
+from apps.common.permissions import IsSuperAdmin, IsImam, IsOwner
 from apps.users.models import Role
 
 
 class FridayThesisImamReadView(generics.UpdateAPIView):
-    queryset = models.FridayThesisImamRead.objects.all()
+    queryset = models.FridayThesisImamResult.objects.all()
     serializer_class = FridayThesisImamReadSerializer
-    permission_classes = (IsImam,)
+    permission_classes = (IsImam, IsOwner,)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
 
 
 class FridayThesisImamReadListView(generics.ListAPIView):
-    queryset = models.FridayThesisImamRead.objects.only('id', 'tesis', 'imam', 'state', 'requirement', 'created_at',).select_related(
+    queryset = models.FridayThesisImamResult.objects.only('id', 'tesis', 'imam', 'state', 'requirement', 'created_at',).select_related(
         'imam', 'imam__profil', 'imam__region', 'imam__district', 'imam__profil__mosque',)
     serializer_class = FridayThesisImamReadListSerializer
     permission_classes = (IsSuperAdmin | IsImam,)

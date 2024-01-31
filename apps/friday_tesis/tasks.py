@@ -13,13 +13,13 @@ def create_thesis_notifications(thesis):
     with transaction.atomic():
         thesis = models.FridayThesis.objects.get(id=thesis)
         imams = User.objects.filter(role=Role.IMAM)
-        notifications_to_create = [models.FridayThesisImamRead(
+        notifications_to_create = [models.FridayThesisImamResult(
             tesis=thesis,
             imam=i,
         ) for i in imams]
-        models.FridayThesisImamRead.objects.bulk_create(
+        models.FridayThesisImamResult.objects.bulk_create(
             notifications_to_create)
-        seen = models.FridayThesisImamRead.objects.filter(tesis=thesis)
+        seen = models.FridayThesisImamResult.objects.filter(tesis=thesis)
 
         mosque_list = thesis.to_mosque.all()
         district_list = thesis.to_district.all()
@@ -42,7 +42,7 @@ def check_delayed_results():
     today = date.today() - timedelta(days=1)
     try:
         thesis = get_object_or_404(models.FridayThesis, date=today)
-        notifications = models.FridayThesisImamRead.objects.filter(
+        notifications = models.FridayThesisImamResult.objects.filter(
             tesis=thesis, state=models.States.UNSEEN)
         notifications.update(state=models.States.DELAYED)
         return True

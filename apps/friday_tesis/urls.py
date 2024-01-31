@@ -5,7 +5,8 @@ from apps.friday_tesis.api_endpoints.tesis.views import (FridayThesisCreateView,
                                                          FridayThesisDetailView)
 from apps.friday_tesis.api_endpoints.seen_api.views import (FridayThesisImamReadView,
                                                             FridayThesisImamReadListView)
-from apps.friday_tesis.api_endpoints.results_api.views import (FridayThesisImamResultView,
+from apps.friday_tesis.api_endpoints.results_api.views import (
+     # FridayThesisImamResultView,
                                                                FridayThesisResultDetailView,
                                                                FridayThesisResultUpdateView,
                                                                ResultVideoView,
@@ -21,13 +22,13 @@ urlpatterns = [
     path('list/', FridayThesisListView.as_view(), name='tesis_list'),
 
     # seen apis
-    path('seen/update/<int:pk>', FridayThesisImamReadView.as_view(),
+    path('notification/update/<int:pk>', FridayThesisImamReadView.as_view(),
          name='tesis_seen_update'),
-    path('seen/list', FridayThesisImamReadListView.as_view(),
+    path('notification/list', FridayThesisImamReadListView.as_view(),
          name='tesis_seen_list'),
 
     # result apis
-    path('result/create', FridayThesisImamResultView.as_view(), name='result_create'),
+#     path('result/create', FridayThesisImamResultView.as_view(), name='result_create'),
     path('result/detail/<int:pk>',
          FridayThesisResultDetailView.as_view(), name='result_detail'),
     path('result/update/<int:pk>',

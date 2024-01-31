@@ -8,7 +8,7 @@ from .schema import swagger_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/common/', include('apps.common.urls')),
+    # path('api/v1/common/', include('apps.common.urls')),
     path('api/v1/auth/', include('apps.users.urls')),
     path('api/v1/mosque/', include('apps.mosque.urls')),
     path('api/v1/employee/', include('apps.employee.urls')),
@@ -19,7 +19,8 @@ urlpatterns = [
     path('api/v1/marriage/', include('apps.marriage.urls')),
     path('api/v1/mavlud/', include('apps.mavlud.urls')),
     path('api/v1/neighborhood/', include('apps.neighborhood.urls')),
-    path('api/v1/individual_conversations/', include('apps.individual_conversations.urls')),
+    path('api/v1/individual_conversations/',
+         include('apps.individual_conversations.urls')),
     path('api/v1/religious_advice/', include('apps.religious_advice.urls')),
     path('api/v1/community_events/', include('apps.community_events.urls')),
     path('api/v1/scientific_activity/', include('apps.scientific_activity.urls')),

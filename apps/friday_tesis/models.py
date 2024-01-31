@@ -55,24 +55,24 @@ class FridayThesis(BaseModel):
         verbose_name_plural = 'Juma tezislari '
 
 
-class FridayThesisImamRead(BaseModel):
-    tesis = models.ForeignKey(
-        FridayThesis, verbose_name=_("tesis"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
-    imam = models.ForeignKey(
-        User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
-    requirement = models.BooleanField(
-        verbose_name=_("requirement"), default=False)
-    state = models.CharField(verbose_name=_("state"),
-                             max_length=10, choices=States.choices, default=States.UNSEEN)
+# class FridayThesisImamRead(BaseModel):
+#     tesis = models.ForeignKey(
+#         FridayThesis, verbose_name=_("tesis"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
+#     imam = models.ForeignKey(
+#         User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
+#     requirement = models.BooleanField(
+#         verbose_name=_("requirement"), default=False)
+#     state = models.CharField(verbose_name=_("state"),
+#                              max_length=10, choices=States.choices, default=States.UNSEEN)
 
-    def __str__(self) -> str:
-        return f"{self.id}-{self.imam.username} seen:{self.state}  required:{self.requirement}"
+#     def __str__(self) -> str:
+#         return f"{self.id}-{self.imam.username} seen:{self.state}  required:{self.requirement}"
 
-    class Meta:
-        ordering = ['-created_at',]
-        unique_together = ('tesis', 'imam',)
-        verbose_name = 'Juma tezisi bildirishnoma '
-        verbose_name_plural = 'Juma tezislari bildirishnoma '
+#     class Meta:
+#         ordering = ['-created_at',]
+#         unique_together = ('tesis', 'imam',)
+#         verbose_name = 'Juma tezisi bildirishnoma '
+#         verbose_name_plural = 'Juma tezislari bildirishnoma '
 
 
 class ResultImages(BaseModel):
@@ -104,19 +104,23 @@ class FridayThesisImamResult(BaseModel):
         FridayThesis, verbose_name=_("tesis"), on_delete=models.CASCADE, related_name='fridaytesisimamresult')
     imam = models.ForeignKey(
         User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='fridaytesisimamresult')
+    requirement = models.BooleanField(
+        verbose_name=_("requirement"), default=False)
+    state = models.CharField(verbose_name=_("state"),
+                             max_length=10, choices=States.choices, default=States.UNSEEN)
     comment = models.TextField(verbose_name=_(
         "comment"), blank=True, null=True)
-    child = models.PositiveIntegerField(verbose_name=_("child"), default=0)
-    man = models.PositiveIntegerField(verbose_name=_("man"), default=0)
-    old_man = models.PositiveIntegerField(verbose_name=_("old_man"), default=0)
-    old = models.PositiveIntegerField(verbose_name=_("old"), default=0)
+    child = models.PositiveIntegerField(verbose_name=_("child"), default=0, blank=True)
+    man = models.PositiveIntegerField(verbose_name=_("man"), default=0, blank=True)
+    old_man = models.PositiveIntegerField(verbose_name=_("old_man"), default=0, blank=True)
+    old = models.PositiveIntegerField(verbose_name=_("old"), default=0, blank=True)
     file = models.FileField(verbose_name=_("file"), upload_to='files/thesis_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,],  help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     images = models.ManyToManyField(
         ResultImages, verbose_name=_("images"), blank=True)
     videos = models.ManyToManyField(
         ResultVideos, verbose_name=_("videos"), blank=True)
-    # status = BoolFields
+
     def __str__(self) -> str:
         return self.imam.username
 

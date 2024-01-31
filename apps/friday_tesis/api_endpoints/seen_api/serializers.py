@@ -20,36 +20,33 @@ class UserSerializer(ModelSerializer):
 
 class FridayThesisImamReadSerializer(ModelSerializer):
     class Meta:
-        model = models.FridayThesisImamRead
+        model = models.FridayThesisImamResult
         fields = ('id',)
 
     def save(self):
         thesis = self.instance
-        imam = self.context.get('request').user
-        if thesis.imam == imam:
-            if thesis:
-                thesis.state = States.ACCEPTED
-                thesis.save()
-                return thesis
-            raise ValidationError('query not found')
-        raise ValidationError('you are not allowed to this action')
+        if thesis:
+            thesis.state = States.ACCEPTED
+            thesis.save()
+            return thesis
+        raise ValidationError('query not found')
 
 
 class FridayThesisImamReadListSerializer(ModelSerializer):
     imam = UserSerializer(many=False, read_only=True,)
 
     class Meta:
-        model = models.FridayThesisImamRead
+        model = models.FridayThesisImamResult
         fields = ('id', 'tesis', 'imam', 'state', 'requirement', 'created_at',)
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['result_id'] = None
-        if instance.state == States.DONE:
-            try:
-                result = models.FridayThesisImamResult.objects.filter(
-                    imam=instance.imam, tesis=instance.tesis).last().id
-            except:
-                result = None
-            representation['result_id'] = result
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['result_id'] = None
+    #     if instance.state == States.DONE:
+    #         try:
+    #             result = models.FridayThesisImamResult.objects.filter(
+    #                 imam=instance.imam, tesis=instance.tesis).last().id
+    #         except:
+    #             result = None
+    #         representation['result_id'] = result
+    #     return representation
