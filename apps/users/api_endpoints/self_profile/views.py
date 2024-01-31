@@ -6,7 +6,8 @@ from apps.users.models import User
 
 
 class UserSelfView(ListAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.all().select_related(
+        'profil', 'region', 'district',)
     serializer_class = UserSelfSerializer
     pagination_class = None
     filter_backends = []

@@ -88,10 +88,10 @@ THIRD_PARTY_APPS = [
     "location_field.apps.DefaultConfig",
     # "captcha",
     "django_celery_beat",
+    'django_celery_results',
     "django_filters",
     'debug_toolbar',
     'import_export',
-    'django_celery_results',
 ]
 
 REST_FRAMEWORK = {
@@ -289,8 +289,8 @@ CACHES = {
 }
 
 # CELERY CONFIGURATION
-CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://localhost:6379")
-CELERY_RESULT_BACKEND = env.str("CELERY_BROKER_URL", "redis://localhost:6379")
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://127.0.0.1:6379")
+CELERY_RESULT_BACKEND = env.str("CELERY_BROKER_URL", "redis://127.0.0.1:6379")
 CELERY_TIMEZONE = "Asia/Tashkent"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 60 * 60 * 3

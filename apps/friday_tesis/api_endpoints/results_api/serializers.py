@@ -36,7 +36,7 @@ class FridayThesisImamResultSerializer(ModelSerializer):
         }
 
     def validate(self, attrs):
-        if attrs.get('tesis').date+timedelta(days=1) < date.today():
+        if attrs.get('tesis').date + timedelta(days=1) < date.today():
             raise ValidationError("time expired")
         return attrs
 

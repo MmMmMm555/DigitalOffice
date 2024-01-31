@@ -14,7 +14,7 @@ class States(models.TextChoices):
     UNSEEN = "unseen"
     ACCEPTED = "accepted"
     DONE = "done"
-    EXPIRED = "expired"
+    DELAYED = "delayed"
 
 
 class ThesisType(models.TextChoices):
@@ -34,7 +34,7 @@ class FridayThesis(BaseModel):
         allowed_extensions=settings.ALLOWED_FILE_TYPES), validate_file_size,], help_text=f"allowed files: {settings.ALLOWED_FILE_TYPES}", blank=True)
     attachment_comment = models.TextField(verbose_name=_(
         "attachment_comment"), blank=True, null=True)
-    date = models.DateField(verbose_name=_("date"), )
+    date = models.DateField(verbose_name=_("date"), unique=True,)
     to_region = models.ManyToManyField(
         Regions, verbose_name=_("to_region"), blank=True)
     to_district = models.ManyToManyField(

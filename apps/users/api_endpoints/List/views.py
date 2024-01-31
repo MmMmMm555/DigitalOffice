@@ -12,10 +12,11 @@ from apps.users.admin import UserResource
 
 
 class UsersListView(generics.ListAPIView):
-    queryset = User.objects.all().exclude(role=Role.SUPER_ADMIN)
+    queryset = User.objects.all().exclude(role=Role.SUPER_ADMIN).select_related(
+        'profil', 'region', 'district', 'profil__mosque',)
     serializer_class = UsersListSerializer
     permission_classes = (IsSuperAdmin,)
-    filterset_fields = ('region', 'district', 'profil__mosque',)
+    filterset_fields = ('region', 'district', 'profil__mosque', 'role',)
     search_fields = ('email', 'profil__first_name', 'profil__last_name',
                      'profil__middle_name', 'username',)
 
@@ -37,7 +38,8 @@ class UsersListView(generics.ListAPIView):
 
 
 class UsersDetailView(generics.RetrieveDestroyAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.all().select_related(
+        'profil', 'region', 'district',)
     serializer_class = UsersDetailSerializer
     permission_classes = (IsSuperAdmin,)
 

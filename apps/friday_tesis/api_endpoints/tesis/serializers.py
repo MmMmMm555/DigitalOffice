@@ -9,7 +9,7 @@ from apps.users.models import User
 from apps.common.related_serializers import MosqueRelatedSerializer
 from apps.common.api_endpoints.districts.serializers import RegionsSerializer
 from apps.common.api_endpoints.regions.serializers import DistrictsSerializer
-
+from apps.friday_tesis.tasks import create_thesis_notifications
 
 class FridayThesisSerializer(ModelSerializer):
     to_region = RegionsSerializer(many=True, read_only=True)
@@ -80,28 +80,29 @@ class FridayThesisCreateSerializer(ModelSerializer):
     def create(self, validated_data):
         with transaction.atomic():
             thesis = super().create(validated_data)
-            imams = User.objects.filter(role=Role.IMAM)
-            notifications_to_create = [models.FridayThesisImamRead(
-                tesis=thesis,
-                imam=i,
-            ) for i in imams]
-            models.FridayThesisImamRead.objects.bulk_create(
-                notifications_to_create)
-            seen = models.FridayThesisImamRead.objects.filter(tesis=thesis)
+            create_thesis_notifications.delay(thesis.id)
+            # imams = User.objects.filter(role=Role.IMAM)
+            # notifications_to_create = [models.FridayThesisImamRead(
+            #     tesis=thesis,
+            #     imam=i,
+            # ) for i in imams]
+            # models.FridayThesisImamRead.objects.bulk_create(
+            #     notifications_to_create)
+            # seen = models.FridayThesisImamRead.objects.filter(tesis=thesis)
 
-            mosque_list = thesis.to_mosque.all()
-            district_list = thesis.to_district.all()
-            region_list = thesis.to_region.all()
+            # mosque_list = thesis.to_mosque.all()
+            # district_list = thesis.to_district.all()
+            # region_list = thesis.to_region.all()
 
-            if region_list:
-                seen.filter(imam__in=imams.filter(
-                    region__in=region_list)).update(requirement=True)
-            if district_list:
-                seen.filter(imam__in=imams.filter(
-                    district__in=district_list)).update(requirement=True)
-            if mosque_list:
-                seen.filter(imam__in=imams.filter(
-                    profil__mosque__in=mosque_list)).update(requirement=True)
+            # if region_list:
+            #     seen.filter(imam__in=imams.filter(
+            #         region__in=region_list)).update(requirement=True)
+            # if district_list:
+            #     seen.filter(imam__in=imams.filter(
+            #         district__in=district_list)).update(requirement=True)
+            # if mosque_list:
+            #     seen.filter(imam__in=imams.filter(
+            #         profil__mosque__in=mosque_list)).update(requirement=True)
 
             return thesis
 

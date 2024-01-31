@@ -28,7 +28,7 @@ class UsersDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'role',
                   'email', 'profil', 'region', 'district',)
-        # depth = 1
+        depth = 1
         read_only_fields = fields
 
 
