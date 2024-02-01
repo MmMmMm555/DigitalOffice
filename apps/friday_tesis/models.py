@@ -55,26 +55,6 @@ class FridayThesis(BaseModel):
         verbose_name_plural = 'Juma tezislari '
 
 
-# class FridayThesisImamRead(BaseModel):
-#     tesis = models.ForeignKey(
-#         FridayThesis, verbose_name=_("tesis"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
-#     imam = models.ForeignKey(
-#         User, verbose_name=_("imam"), on_delete=models.CASCADE, related_name='fridaythesisimamread')
-#     requirement = models.BooleanField(
-#         verbose_name=_("requirement"), default=False)
-#     state = models.CharField(verbose_name=_("state"),
-#                              max_length=10, choices=States.choices, default=States.UNSEEN)
-
-#     def __str__(self) -> str:
-#         return f"{self.id}-{self.imam.username} seen:{self.state}  required:{self.requirement}"
-
-#     class Meta:
-#         ordering = ['-created_at',]
-#         unique_together = ('tesis', 'imam',)
-#         verbose_name = 'Juma tezisi bildirishnoma '
-#         verbose_name_plural = 'Juma tezislari bildirishnoma '
-
-
 class ResultImages(BaseModel):
     image = models.ImageField(verbose_name=_("image"), upload_to='images/thesis_result', validators=[FileExtensionValidator(
         allowed_extensions=settings.ALLOWED_IMAGE_TYPES), validate_image_size], help_text=f"allowed images: {settings.ALLOWED_IMAGE_TYPES}", blank=True)

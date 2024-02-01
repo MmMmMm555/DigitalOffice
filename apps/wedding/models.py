@@ -6,9 +6,9 @@ from apps.users.models import User
 
 
 class WeddingTypes(models.TextChoices):
-    MARRIAGE = 'marriage'
-    AQEEQAH_SUNANT = 'aqeeqah_sunant'
-    HAMD = 'hamd'
+    MARRIAGE = 'marriage', _("marriage")
+    AQEEQAH_SUNANT = 'aqeeqah_sunant', _("aqeeqah_sunant")
+    HAMD = 'hamd', _("hamd")
 
 
 class Wedding(BaseModel):

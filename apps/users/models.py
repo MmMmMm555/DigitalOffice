@@ -8,11 +8,11 @@ from apps.common.regions import Regions, Districts
 
 
 class Role(models.TextChoices):
-    SUPER_ADMIN = '1'
-    REGION_ADMIN = '2'
-    DISTRICT_ADMIN = '3'
-    IMAM = '4'
-    SUB_IMAM = '5'
+    SUPER_ADMIN = '1', _("super_admin")
+    REGION_ADMIN = '2', _("region_admin")
+    DISTRICT_ADMIN = '3', _("district_admin")
+    IMAM = '4', _("imam")
+    SUB_IMAM = '5', _("sub_imam")
 
 
 class User(AbstractUser):

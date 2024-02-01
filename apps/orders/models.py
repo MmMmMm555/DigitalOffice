@@ -13,10 +13,10 @@ from apps.mosque.models import Mosque
 
 
 class ToRole(models.TextChoices):
-    REGION_ADMIN = u'2'
-    DISTRICT_ADMIN = u'3'
-    IMAM = u'4'
-    , SUB_IMAM = u'5'
+    REGION_ADMIN = u'2', _("region_admin")
+    DISTRICT_ADMIN = u'3', _("district_admin")
+    IMAM = u'4', _("imam")
+    SUB_IMAM = u'5', _("sub_imam")
 
 
 class Types(models.TextChoices):
@@ -89,26 +89,6 @@ class Directions(BaseModel):
         ordering = ['-created_at',]
         verbose_name = "Ko'rsatma "
         verbose_name_plural = "Ko'rsatmalar "
-
-
-# class DirectionsEmployeeRead(BaseModel):
-#     direction = models.ForeignKey(
-#         Directions, verbose_name=_("direction"), on_delete=models.CASCADE, related_name='directionemployeeread')
-#     employee = models.ForeignKey(
-#         User, verbose_name=_("employee"), on_delete=models.CASCADE, related_name='directionemployeeread')
-#     requirement = models.BooleanField(
-#         verbose_name=_("requirement"), default=False)
-#     state = models.CharField(verbose_name=_("state"),
-#                              max_length=10, choices=States.choices, default=States.UNSEEN)
-
-#     def __str__(self) -> str:
-#         return self.employee.username
-
-#     class Meta:
-#         ordering = ['-created_at',]
-#         unique_together = ('direction', 'employee',)
-#         verbose_name = "Ko'rsatma bildirishnoma "
-#         verbose_name_plural = "Ko'rsatma bildirishnomalari "
 
 
 class ResultImages(BaseModel):

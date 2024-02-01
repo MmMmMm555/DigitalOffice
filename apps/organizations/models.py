@@ -6,31 +6,31 @@ from apps.users.models import User
 
 
 class OrganizationType(models.TextChoices):
-    EDUCATIONAL_INSTITUTION = 'educational_institution'
-    PRISON = 'prison'
-    MILITARY_UNIT = 'military_unit'
-    OTHER = 'other'
+    EDUCATIONAL_INSTITUTION = 'educational_institution', _("educational_institution")
+    PRISON = 'prison', _("prison")
+    MILITARY_UNIT = 'military_unit', _("military_unit")
+    OTHER = 'other', _("other")
 
 
 class InstitutionType(models.TextChoices):
-    HIGH = 'high'
-    MIDDLE = 'middle'
-    GENERAL = 'general'
+    HIGH = 'high', _("high")
+    MIDDLE = 'middle', _("middle")
+    GENERAL = 'general', _("general")
 
 
 class PrisonerType(models.TextChoices):
-    LAW_159 = 'law_159'
-    LAW_244 = 'law_244'
-    YOUNG = 'young'
-    MINOR = 'minor'     # kichik
-    OTHER = 'other'
+    LAW_159 = 'law_159', _("law_159")
+    LAW_244 = 'law_244', _("law_244")
+    YOUNG = 'young', _("young")
+    MINOR = 'minor', _("minor")     # kichik
+    OTHER = 'other', _("other")
 
 
 class ParticipantType(models.TextChoices):
-    EMPLOYEE = 'employee'
-    STUDENT = 'student'
-    SCHOOL_STUDENT = 'school_student'
-    OTHER = 'other'
+    EMPLOYEE = 'employee', _("employee")
+    STUDENT = 'student', _("student")
+    SCHOOL_STUDENT = 'school_student', _("school_student")
+    OTHER = 'other', _("other")
 
 
 class Organization(BaseModel):

@@ -6,23 +6,23 @@ from apps.users.models import User
 
 
 class Types(models.TextChoices):
-    FIQH = 'fiqh'
-    CREED = 'creed'
-    OTHER = 'other'
+    FIQH = 'fiqh', _("fiqh")
+    CREED = 'creed', _("creed")
+    OTHER = 'other', _("other")
 
 
 class Choices(models.TextChoices):
-    PRAYERS = 'prayers'
-    SPLEEN = 'spleen'
-    COMMERCE = 'commerce'
-    DEBT = 'debt'
-    HERITAGE = 'heritage'
+    PRAYERS = 'prayers', _("prayers")
+    SPLEEN = 'spleen', _("spleen")
+    COMMERCE = 'commerce', _("commerce")
+    DEBT = 'debt', _("debt")
+    HERITAGE = 'heritage', _("heritage")
 
-    FAITH = 'faith'
-    JIHAD = 'jihad'
-    TAKFIR = 'takfir'
-    VASIYLA = 'vasiyla'
-    OTHER = 'other'
+    FAITH = 'faith', _("faith")
+    JIHAD = 'jihad', _("jihad")
+    TAKFIR = 'takfir', _("takfir")
+    VASIYLA = 'vasiyla', _("vasiyla")
+    OTHER = 'other', _("other")
 
 
 class ReligiousAdvice(BaseModel):

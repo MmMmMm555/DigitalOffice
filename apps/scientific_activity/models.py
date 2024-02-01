@@ -9,21 +9,21 @@ from apps.users.models import User
 
 
 class Types(models.TextChoices):
-    ELECTRON = 'electron'
-    PRINT = 'print'
+    ELECTRON = 'electron', _("electron")
+    PRINT = 'print', _("print")
 
 
 class PublicationType(models.TextChoices):
-    NEWSPAPER = 'newspaper'
-    JOURNAL = 'journal'
+    NEWSPAPER = 'newspaper', _("newspaper")
+    JOURNAL = 'journal', _("journal")
 
 
 class ArticleType(models.TextChoices):
-    ISLAM_NURI = 'islam_nuri'
-    HIDAYAT = 'hidayat'
-    IMAM_BUKXARIY = 'imam_bukxariy'
-    MUMINS = 'mumins'
-    OTHER = 'other'
+    ISLAM_NURI = 'islam_nuri', _("islam_nuri")
+    HIDAYAT = 'hidayat', _("hidayat")
+    IMAM_BUKXARIY = 'imam_bukxariy', _("imam_bukxariy")
+    MUMINS = 'mumins', _("mumins")
+    OTHER = 'other', _("other")
 
 
 class Images(models.Model):
@@ -63,8 +63,8 @@ class Article(BaseModel):
 
 
 class Direction(models.TextChoices):
-    RELIGIOUS = 'religious'
-    EDUCATIONAL = 'educational'
+    RELIGIOUS = 'religious', _("religious")
+    EDUCATIONAL = 'educational', _("educational")
 
 
 class BookImages(models.Model):
