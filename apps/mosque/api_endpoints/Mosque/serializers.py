@@ -1,7 +1,7 @@
 from rest_framework.serializers import (
-    ModelSerializer, IntegerField,)
+    ModelSerializer, IntegerField, CharField,)
 
-from apps.mosque.models import Mosque, FireDefenseImages
+from apps.mosque.models import Mosque, FireDefenseImages, ServiceRoom
 from apps.common.api_endpoints.districts.serializers import RegionsSerializer
 from apps.common.api_endpoints.regions.serializers import DistrictsSerializer
 from apps.common.related_serializers import EmployeeRelatedSerializer
@@ -11,6 +11,12 @@ class FireDefenseImageSerializer(ModelSerializer):
     class Meta:
         model = FireDefenseImages
         fields = ('id', 'image', 'type',)
+
+
+class ServiceRoomSerializer(ModelSerializer):
+    class Meta:
+        model = ServiceRoom
+        fields = ('id', 'name',)
 
 
 class MosqueSerializer(ModelSerializer):
@@ -46,12 +52,13 @@ class MosqueSerializer(ModelSerializer):
             'fire_images',
 
             'service_rooms_bool',
-            'imam_room',
-            'sub_imam_room',
-            'casher_room',
-            'guard_room',
-            'other_room',
-            'other_room_amount',
+            'service_rooms',
+            # 'imam_room',
+            # 'sub_imam_room',
+            # 'casher_room',
+            # 'guard_room',
+            # 'other_room',
+            # 'other_room_amount',
 
             'mosque_library',
             'shrine',
@@ -133,7 +140,7 @@ class MosqueListSerializer(MosqueSerializer):
             # 'shrine',
             # 'graveyard',
             # 'shop',
-            )
+        )
         read_only_fields = fields
 
     def to_representation(self, instance):
@@ -148,6 +155,7 @@ class MosqueSingleSerializer(ModelSerializer):
     region = RegionsSerializer(many=False, read_only=True,)
     district = DistrictsSerializer(many=False, read_only=True,)
     employee = EmployeeRelatedSerializer(many=True, read_only=True,)
+    service_rooms = ServiceRoomSerializer(many=True, read_only=True,)
 
     class Meta:
         model = Mosque
@@ -181,12 +189,7 @@ class MosqueSingleSerializer(ModelSerializer):
             'fire_images',
 
             'service_rooms_bool',
-            'imam_room',
-            'sub_imam_room',
-            'casher_room',
-            'guard_room',
-            'other_room',
-            'other_room_amount',
+            'service_rooms',
 
             'mosque_library',
             'shrine',
