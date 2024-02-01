@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer, CharField
 
 from apps.friday_tesis.models import FridayThesisImamResult
-from apps.orders.models import DirectionsEmployeeRead
+from apps.orders.models import DirectionsEmployeeResult
 
 
 
@@ -18,5 +18,5 @@ class OrderNotification(ModelSerializer):
     from_role = CharField(source='direction.from_role')
     direction_type = CharField(source='direction.direction_type')
     class Meta:
-        model = DirectionsEmployeeRead
+        model = DirectionsEmployeeResult
         fields = ('direction', 'title', 'direction_type', 'from_role', 'created_at',)

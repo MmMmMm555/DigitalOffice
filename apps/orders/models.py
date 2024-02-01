@@ -91,24 +91,24 @@ class Directions(BaseModel):
         verbose_name_plural = "Ko'rsatmalar "
 
 
-class DirectionsEmployeeRead(BaseModel):
-    direction = models.ForeignKey(
-        Directions, verbose_name=_("direction"), on_delete=models.CASCADE, related_name='directionemployeeread')
-    employee = models.ForeignKey(
-        User, verbose_name=_("employee"), on_delete=models.CASCADE, related_name='directionemployeeread')
-    requirement = models.BooleanField(
-        verbose_name=_("requirement"), default=False)
-    state = models.CharField(verbose_name=_("state"),
-                             max_length=10, choices=States.choices, default=States.UNSEEN)
+# class DirectionsEmployeeRead(BaseModel):
+#     direction = models.ForeignKey(
+#         Directions, verbose_name=_("direction"), on_delete=models.CASCADE, related_name='directionemployeeread')
+#     employee = models.ForeignKey(
+#         User, verbose_name=_("employee"), on_delete=models.CASCADE, related_name='directionemployeeread')
+#     requirement = models.BooleanField(
+#         verbose_name=_("requirement"), default=False)
+#     state = models.CharField(verbose_name=_("state"),
+#                              max_length=10, choices=States.choices, default=States.UNSEEN)
 
-    def __str__(self) -> str:
-        return self.employee.username
+#     def __str__(self) -> str:
+#         return self.employee.username
 
-    class Meta:
-        ordering = ['-created_at',]
-        unique_together = ('direction', 'employee',)
-        verbose_name = "Ko'rsatma bildirishnoma "
-        verbose_name_plural = "Ko'rsatma bildirishnomalari "
+#     class Meta:
+#         ordering = ['-created_at',]
+#         unique_together = ('direction', 'employee',)
+#         verbose_name = "Ko'rsatma bildirishnoma "
+#         verbose_name_plural = "Ko'rsatma bildirishnomalari "
 
 
 class ResultImages(BaseModel):
@@ -161,6 +161,10 @@ class DirectionsEmployeeResult(BaseModel):
         ResultVideos, verbose_name=_("videos"), blank=True)
     files = models.ManyToManyField(
         ResultFiles, verbose_name=_("files"), blank=True)
+    requirement = models.BooleanField(
+        verbose_name=_("requirement"), default=False)
+    state = models.CharField(verbose_name=_("state"),
+                             max_length=10, choices=States.choices, default=States.UNSEEN)
 
     def __str__(self) -> str:
         return f"{self.id}{self.employee.username}"

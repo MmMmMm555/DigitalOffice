@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import (DirectionResultVideosSerializer,
                           DirectionResultImagesSerializer,
                           DirectionResultFilesSerializer,
-                          DirectionsEmployeeResultSerializer,
                           DirectionsEmployeeResultDetailSerializer,
                           DirectionsEmployeeResultUpdateSerializer,)
 from apps.orders.models import (DirectionsEmployeeResult,
@@ -15,15 +14,15 @@ from apps.orders.models import (DirectionsEmployeeResult,
 from apps.common.permissions import IsImam, IsRegionAdmin, IsDistrictAdmin, IsDeputy, IsDirectionResultOwner
 
 
-class DirectionsEmployeeResultView(CreateAPIView):
-    queryset = DirectionsEmployeeResult.objects.all()
-    serializer_class = DirectionsEmployeeResultSerializer
-    permission_classes = (IsImam | IsRegionAdmin |
-                          IsDistrictAdmin | IsDeputy,)
-    parser_classes = (FormParser, MultiPartParser,)
+# class DirectionsEmployeeResultView(CreateAPIView):
+#     queryset = DirectionsEmployeeResult.objects.all()
+#     serializer_class = DirectionsEmployeeResultSerializer
+#     permission_classes = (IsImam | IsRegionAdmin |
+#                           IsDistrictAdmin | IsDeputy,)
+#     parser_classes = (FormParser, MultiPartParser,)
 
-    def perform_create(self, serializer):
-        serializer.save(employee=self.request.user)
+#     def perform_create(self, serializer):
+#         serializer.save(employee=self.request.user)
 
 
 class DirectionsEmployeeResultDetailView(RetrieveAPIView):
@@ -39,9 +38,6 @@ class DirectionsEmployeeResultUpdateView(RetrieveUpdateAPIView):
     parser_classes = (FormParser, MultiPartParser,)
     permission_classes = (
         (IsImam | IsRegionAdmin | IsDistrictAdmin | IsDeputy), IsDirectionResultOwner,)
-
-    def perform_update(self, serializer):
-        serializer.save(employee=self.request.user)
 
 
 class ResultImageView(CreateAPIView):

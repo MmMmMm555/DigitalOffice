@@ -21,9 +21,9 @@ def create_direction_notifications(direction_id):
         region_list = direction.to_region.all()
         # filtering m2m fields
         if not region_list:
-            models.DirectionsEmployeeRead.objects.bulk_create(
+            models.DirectionsEmployeeResult.objects.bulk_create(
                 [
-                    models.DirectionsEmployeeRead(
+                    models.DirectionsEmployeeResult(
                         direction=direction, employee=i)
                     for i in employee
                 ]
@@ -37,11 +37,11 @@ def create_direction_notifications(direction_id):
                 employee = employee.filter(
                     profil__mosque__id__in=employee_list)
             employee_to_create = [
-                models.DirectionsEmployeeRead(
+                models.DirectionsEmployeeResult(
                     direction=direction, employee=i)
                 for i in employee
             ]
-            models.DirectionsEmployeeRead.objects.bulk_create(
+            models.DirectionsEmployeeResult.objects.bulk_create(
                 employee_to_create)
 
         # getting m2m require field values
@@ -52,7 +52,7 @@ def create_direction_notifications(direction_id):
 
         # filtering m2m required fields
         if employee_list_required:
-            models.DirectionsEmployeeRead.objects.filter(
+            models.DirectionsEmployeeResult.objects.filter(
                 direction=direction,
                 employee__in=employee_required.filter(
                     profil__mosque__id__in=employee_list_required)
@@ -60,14 +60,14 @@ def create_direction_notifications(direction_id):
         elif district_list_required:
             employee_required = employee_required.filter(
                 region__in=region_list_required, district__in=district_list_required)
-            models.DirectionsEmployeeRead.objects.filter(
+            models.DirectionsEmployeeResult.objects.filter(
                 direction=direction,
                 employee__in=employee_required
             ).update(requirement=True)
         else:
             district_list_required = Districts.objects.filter(
                 region__in=region_list_required)
-            models.DirectionsEmployeeRead.objects.filter(
+            models.DirectionsEmployeeResult.objects.filter(
                 direction=direction,
                 employee__in=employee_required.filter(
                     district__in=district_list_required)
@@ -80,7 +80,7 @@ def check_delayed_direction_results():
     today = date.today()
     direction = models.Directions.objects.filter(to_date=today)
     if direction:
-        notifications = models.DirectionsEmployeeRead.objects.filter(
+        notifications = models.DirectionsEmployeeResult.objects.filter(
             direction__in=direction, state=models.States.UNSEEN)
         notifications.update(state=models.States.DELAYED)
         return True

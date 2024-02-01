@@ -13,7 +13,7 @@ urlpatterns = [
     path('api/v1/mosque/', include('apps.mosque.urls')),
     path('api/v1/employee/', include('apps.employee.urls')),
     path('api/v1/thesis/', include('apps.friday_tesis.urls')),
-    path('api/v1/orders/', include('apps.orders.urls')),
+    path('api/v1/direction/', include('apps.orders.urls')),
     path('api/v1/wedding/', include('apps.wedding.urls')),
     path('api/v1/death/', include('apps.death.urls')),
     path('api/v1/marriage/', include('apps.marriage.urls')),

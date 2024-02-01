@@ -7,8 +7,7 @@ from apps.orders.api_endpoints.order.views import (DirectionCreateView,
                                                    FileView,)
 from apps.orders.api_endpoints.seen_api.views import DirectionEmployeeReadListView, DirectionEmployeeReadView
 
-from apps.orders.api_endpoints.result_api.views import (DirectionsEmployeeResultView,
-                                                        DirectionsEmployeeResultDetailView,
+from apps.orders.api_endpoints.result_api.views import (DirectionsEmployeeResultDetailView,
                                                         DirectionsEmployeeResultUpdateView,
                                                         ResultVideoView,
                                                         ResultImageView,
@@ -27,15 +26,12 @@ urlpatterns = [
     path('file/list', FileListView.as_view(), name='file_list'),
 
     # seen apis
-    path('seen/update/<int:pk>', DirectionEmployeeReadView.as_view(),
+    path('notification/state/<int:pk>', DirectionEmployeeReadView.as_view(),
          name='order_seen_update'),
-    path('seen/list', DirectionEmployeeReadListView.as_view(),
+    path('notification/list/', DirectionEmployeeReadListView.as_view(),
          name='order_seen_list'),
-    # path('seen/count', UnseenCount, name='order_unseen_count'),
 
     # result apis
-    path('result/create', DirectionsEmployeeResultView.as_view(),
-         name='result_create'),
     path('result/detail/<int:pk>',
          DirectionsEmployeeResultDetailView.as_view(), name='result_detail'),
     path('result/update/<int:pk>',
@@ -50,6 +46,6 @@ urlpatterns = [
          name='result_image_list'),
     path('result/video/list', ResultVideoListView.as_view(),
          name='result_video_list'),
-    path('result/file/create', ResultFileView.as_view(), name='result_file_list'),
+    path('result/file/create', ResultFileView.as_view(), name='result_file_create'),
     path('result/file/list', ResultFileListView.as_view(), name='result_file_list'),
 ]

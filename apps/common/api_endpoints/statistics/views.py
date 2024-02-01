@@ -3,11 +3,11 @@ from django.db.models import Count, Sum, Q
 from rest_framework import status
 from rest_framework.views import APIView
 
-from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, Directions, ToRole
+from apps.orders.models import DirectionsEmployeeResult, States, DirectionTypes, Directions, ToRole
 from apps.common.regions import Regions
 from apps.friday_tesis.models import FridayThesisImamResult
 from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
-from apps.employee.models import Employee, Graduation, Education, AcademicDegree
+from apps.employee.models import Employee, Graduation
 
 
 # for orders
@@ -81,7 +81,7 @@ class StatisticStateApi(APIView):
     def get(self, request, *args, **kwargs):
         start_date = request.GET.get('start_date')
         finish_date = request.GET.get('finish_date')
-        query = DirectionsEmployeeRead.objects.all()
+        query = DirectionsEmployeeResult.objects.all()
 
         if start_date:
             query = query.filter(created_at__gte=start_date)

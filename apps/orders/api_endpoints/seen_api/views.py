@@ -1,20 +1,21 @@
 from rest_framework import generics, parsers, permissions
 
-from .serializers import DirectionsEmployeeReadSerializer, DirectionsEmployeeReadListSerializer
+from .serializers import DirectionsEmployeeReadListSerializer, DirectionsEmployeeReadSerializer
 from apps.orders import models
-from apps.common.permissions import IsImam, IsDistrictAdmin, IsRegionAdmin, IsDeputy
+from apps.common.permissions import IsImam, IsDistrictAdmin, IsRegionAdmin, IsDeputy, IsDirectionResultOwner
 from apps.users.models import Role
 
 
 class DirectionEmployeeReadView(generics.UpdateAPIView):
-    queryset = models.DirectionsEmployeeRead.objects.all()
+    queryset = models.DirectionsEmployeeResult.objects.all()
     serializer_class = DirectionsEmployeeReadSerializer
-    permission_classes = (IsImam | IsDistrictAdmin | IsRegionAdmin | IsDeputy,)
+    permission_classes = ((IsImam | IsDistrictAdmin |
+                          IsRegionAdmin | IsDeputy), IsDirectionResultOwner,)
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
 
 
 class DirectionEmployeeReadListView(generics.ListAPIView):
-    queryset = models.DirectionsEmployeeRead.objects.only(
+    queryset = models.DirectionsEmployeeResult.objects.only(
         'id', 'direction', 'employee', 'state', 'requirement', 'created_at', 'updated_at',).select_related(
             'employee', 'employee__profil', 'employee__region', 'employee__district', 'employee__profil__mosque',)
     serializer_class = DirectionsEmployeeReadListSerializer
