@@ -1,0 +1,66 @@
+version: "3.10"
+
+services:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+
+  app:
+    container_name: app
+    depends_on:
+      - db
+      - redis
+    build: .
+    volumes:
+      - .:/django
+      # - ./static:/home/app/web/static
+      # - ./media:/home/app/web/media
+    env_file: .env
+    command: bash -c "python3 manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+    restart: always
+
+  db:
+    image: postgres
+    container_name: postgres_db
+    volumes:
+      - ./data/db:/var/lib/postgresql/data/
+    env_file: .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PORT=${DB_PORT}
+    restart: always
+    ports:
+      - 5432:5432
+
+  celery_worker:
+    build:
+      context: .
+    container_name: celery_worker
+    command: celery -A core worker -l INFO
+    restart: always
+    volumes:
+      - .:/django
+    depends_on:
+      - redis
+      - web
+      - db
+
+  celery_beat:
+    build:
+      context: .
+    container_name: celery_beat
+    command: celery -A core beat -l INFO
+    restart: always
+    volumes:
+      - .:/django
+    depends_on:
+      - redis
+      - web
+      - db
+      - celery_worker
