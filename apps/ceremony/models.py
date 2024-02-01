@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CeremonyTypes(models.TextChoices):
-    FUNERAL = 'funeral'   # janaza
-    MOURNING = 'mourning' # aza
+    FUNERAL = 'funeral', _("funeral")   # janaza
+    MOURNING = 'mourning', _("mourning") # aza
 
 
 class Ceremony(BaseModel):

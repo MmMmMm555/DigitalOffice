@@ -5,7 +5,7 @@ from django.db import models
 
 from apps.common.models import BaseModel
 from apps.users.models import User
-from apps.common.validators import validate_file_size, validate_image_size
+from apps.common.validators import validate_image_size
 
 
 class Marriage(BaseModel):

@@ -6,21 +6,21 @@ from apps.users.models import User
 
 
 class Causes(models.TextChoices):
-    PROPERTY = 'property'
-    HERITAGE = 'heritage'
-    JEALOUSY = 'jealousy'
-    NOT_UNDERSTANDING = 'not_understanding'
-    OTHER = 'other'
+    PROPERTY = 'property', _("property")
+    HERITAGE = 'heritage', _("heritage")
+    JEALOUSY = 'jealousy', _("jealousy")
+    NOT_UNDERSTANDING = 'not_understanding', _("not_understanding")
+    OTHER = 'other', _("other")
 
 class Types(models.TextChoices):
-    BROTHERS = 'brothers'
-    COUPLE = 'couple'
-    PARENT_AND_CHILD = 'parent_and_child'
+    BROTHERS = 'brothers', _("brothers")
+    COUPLE = 'couple', _("couple")
+    PARENT_AND_CHILD = 'parent_and_child', _("parent_and_child")
 
 class Result(models.TextChoices):
-    POSITIVE = 'positive'
-    NEGATIVE = 'negative'
-    ABSTRACT = 'abstract'
+    POSITIVE = 'positive', _("positive")
+    NEGATIVE = 'negative', _("negative")
+    ABSTRACT = 'abstract', _("abstract")
 
 
 class FamilyConflict(BaseModel):

@@ -9,9 +9,9 @@ from apps.common.validators import validate_image_size
 
 
 class Types(models.TextChoices):
-    NEED_SOCIAL_ASSISTANCE = 'need_social_assistance'
-    PRONE_TO_CRIME = 'prone_to_crime'
-    OTHER = 'other'
+    NEED_SOCIAL_ASSISTANCE = 'need_social_assistance', _("need_social_assistance")
+    PRONE_TO_CRIME = 'prone_to_crime', _("prone_to_crime")
+    OTHER = 'other', _("other")
 
 
 class IndividualConversationImages(models.Model):

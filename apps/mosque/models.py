@@ -10,35 +10,35 @@ from apps.common.validators import validate_image_size
 
 
 class MosqueTypeChoices(models.TextChoices):
-    NEIGHBORHOOD = 'neighborhood'
-    JAME = 'jame'
+    NEIGHBORHOOD = 'neighborhood', _("neighborhood")
+    JAME = 'jame', _("jame")
 
 
 class MosqueHeatingTypeChoices(models.TextChoices):
-    CENTRAL = 'central'
-    LOCAL = 'local'
+    CENTRAL = 'central', _("central")
+    LOCAL = 'local', _("local")
 
 
 class MosqueHeatingFuelChoices(models.TextChoices):
-    GAS = 'gas'
-    LIQUID_FUEL = 'liquid_fuel'
-    SOLID_FUEL = 'solid_fuel'
-    NONE = 'none'
+    GAS = 'gas', _("gas")
+    LIQUID_FUEL = 'liquid_fuel', _("liquid_fuel")
+    SOLID_FUEL = 'solid_fuel', _("solid_fuel")
+    NONE = 'none', _("none")
 
 
 class MosqueStatusChoices(models.TextChoices):
-    GOOD = 'good'
-    REPAIR = 'repair'
-    RECONSTRUCTION = 'reconstruction'
+    GOOD = 'good', _("good")
+    REPAIR = 'repair', _("repair")
+    RECONSTRUCTION = 'reconstruction', _("reconstruction")
 
 
 class FireDefense(models.TextChoices):
-    EVACUATION_ROAD = 'evacuation_road'
-    FIRE_SAFE = 'fire_safe'
-    FIRE_CLOSET = 'fire_closet'
-    FIRE_SIGNAL = 'fire_signal'
-    AUTO_FIRE_EXTINGUISHER = 'auto_fire_extinguisher'
-    EMERGENCY_EXIT_DOOR = 'emergency_exit_door'
+    EVACUATION_ROAD = 'evacuation_road', _("evacuation_road")
+    FIRE_SAFE = 'fire_safe', _("fire_safe")
+    FIRE_CLOSET = 'fire_closet', _("fire_closet")
+    FIRE_SIGNAL = 'fire_signal', _("fire_signal")
+    AUTO_FIRE_EXTINGUISHER = 'auto_fire_extinguisher', _("auto_fire_extinguisher")
+    EMERGENCY_EXIT_DOOR = 'emergency_exit_door', _("emergency_exit_door")
 
 # class ExtraRoom(BaseModel):
 #     title = models.CharField(verbose_name=_("Extra Room Title"), max)

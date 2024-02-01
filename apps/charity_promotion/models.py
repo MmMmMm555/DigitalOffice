@@ -10,15 +10,15 @@ from apps.common.validators import validate_image_size
 
 
 class Types(models.TextChoices):
-    BUILDING = 'building'                   # bino
-    WATER_DISCHARGE = 'water_discharge'     # suv chiqarish
-    OTHER = 'other'                         # boshqa
+    BUILDING = 'building', _("building")                   # bino
+    WATER_DISCHARGE = 'water_discharge', _("water_discharge")     # suv chiqarish
+    OTHER = 'other', _("other")                         # boshqa
 
 
 class Participation(models.TextChoices):
-    INITIATIVE = 'initiative'               # tashabbuskor
-    PARTICIPANT = 'participant'             # ishtirokchi
-    OTHER = 'other'                         # boshqa
+    INITIATIVE = 'initiative', _("initiative")               # tashabbuskor
+    PARTICIPANT = 'participant', _("participant")             # ishtirokchi
+    OTHER = 'other', _("other")                         # boshqa
 
 
 class CharityPromotionImages(models.Model):

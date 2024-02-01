@@ -9,74 +9,74 @@ from apps.mosque.models import Mosque
 
 
 class Education(models.TextChoices):
-    MEDIUM_SPECIAL = 'medium_special'  # o'rta maxsus
-    HIGH = 'high'                      # oliy
-    NONE = 'none'                      # yo'q
+    MEDIUM_SPECIAL = 'medium_special', _("medium_special")  # o'rta maxsus
+    HIGH = 'high', _("high")                      # oliy
+    NONE = 'none', _("none")                      # yo'q
 
 
 class Achievement(models.TextChoices):
-    STATE_AWARDS = 'state_awards'
-    COMMEMORATIVE_BADGES = 'commemorative_badges'
-    SIGNS = 'signs'
-    GRATITUDE = 'gratitude'
-    COMPLIMENT = 'compliment'
-    HONORARY_TITLES = 'honorary_titles'
-    DIPLOMAS_OF_THE_WINNER_OF_THE_EXAM_COMPETITION = 'diplomas_of_the_winner_of_the_exam_competition'
-    DIPLOMAS_OF_COMPETITION_WINNERS = 'diplomas_of_competition_winners'
-    INTERNATIONAL_AWARDS = 'international_awards'
+    STATE_AWARDS = 'state_awards', _("state_awards")
+    COMMEMORATIVE_BADGES = 'commemorative_badges', _("commemorative_badges")
+    SIGNS = 'signs', _("signs")
+    GRATITUDE = 'gratitude', _("gratitude")
+    COMPLIMENT = 'compliment', _("compliment")
+    HONORARY_TITLES = 'honorary_titles', _("honorary_titles")
+    DIPLOMAS_OF_THE_WINNER_OF_THE_EXAM_COMPETITION = 'diplomas_of_the_winner_of_the_exam_competition', _("diplomas_of_the_winner_of_the_exam_competition")
+    DIPLOMAS_OF_COMPETITION_WINNERS = 'diplomas_of_competition_winners', _("diplomas_of_competition_winners")
+    INTERNATIONAL_AWARDS = 'international_awards', _("international_awards")
 
 
 class AcademicDegree(models.TextChoices):
-    BACHELOR = 'bachelor'
-    MASTER = 'master'
-    PhD = 'phd'
-    DsC = 'dsc'
-    NONE = 'none'
+    BACHELOR = 'bachelor', _("bachelor")
+    MASTER = 'master', _("master")
+    PhD = 'phd', _("phd")
+    DsC = 'dsc', _("dsc")
+    NONE = 'none', _("none")
 
 
 class Parties(models.TextChoices):  # partiyalar
-    UzXDP = "uzxdp"         # "/UzKDP/People's Democratic Party of Uzbekistan"
-    SDP = "sdp"             # "/ SDP / 'Adolat' social democratic party of Uzbekistan"
-    UzLiDep = "uzlidep"     # "/UzLiDep/Liberal Democratic Party of Uzbekistan"
-    UzMTDP = "uzmtdp"       # "UzMTDP / National Renaissance Democratic Party of Uzbekistan"
-    UzEP = "uzep"           # "Ecological Party of Uzbekistan"
-    NONE = 'none'           # yo'q
+    UzXDP = "uzxdp", _("uzxdp")         # "/UzKDP/People's Democratic Party of Uzbekistan"
+    SDP = "sdp", _("sdp")             # "/ SDP / 'Adolat' social democratic party of Uzbekistan"
+    UzLiDep = "uzlidep", _("uzlidep")     # "/UzLiDep/Liberal Democratic Party of Uzbekistan"
+    UzMTDP = "uzmtdp", _("uzmtdp")       # "UzMTDP / National Renaissance Democratic Party of Uzbekistan"
+    UzEP = "uzep", _("uzep")           # "Ecological Party of Uzbekistan"
+    NONE = 'none', _("none")           # yo'q
 
 
 class AcademicTitle(models.TextChoices):  # ilmiy unvon
-    ASSOCIATE_PROFESSOR = 'associate_professor'     # dotsent
-    PROFESSOR = 'professor'                         # professor
-    NONE = 'none'                                   # yo'q
+    ASSOCIATE_PROFESSOR = 'associate_professor', _("associate_professor")     # dotsent
+    PROFESSOR = 'professor', _("professor")                         # professor
+    NONE = 'none', _("none")                                   # yo'q
 
 
 class Nation(models.TextChoices):
-    UZBEK = 'uzbek'
-    RUSSIAN = 'russian'
-    KAZAKH = 'kazakh'
-    TAJIK = 'tajik'
-    TURKMEN = 'turkmen'
+    UZBEK = 'uzbek', _("uzbek")
+    RUSSIAN = 'russian', _("russian")
+    KAZAKH = 'kazakh', _("kazakh")
+    TAJIK = 'tajik', _("tajik")
+    TURKMEN = 'turkmen', _("turkmen")
 
 
 class Social(models.TextChoices):
-    TELEGRAM = 'telegram'
-    INSTAGRAM = 'instagram'
-    FACEBOOK = 'facebook'
-    TIK_TOK = 'tik_tok'
-    TWITTER = 'twitter'
-    YOUTUBE = 'youtube'
-    WHATSAPP = 'whatsapp'
+    TELEGRAM = 'telegram', _("telegram")
+    INSTAGRAM = 'instagram', _("instagram")
+    FACEBOOK = 'facebook', _("facebook")
+    TIK_TOK = 'tik_tok', _("tik_tok")
+    TWITTER = 'twitter', _("twitter")
+    YOUTUBE = 'youtube', _("youtube")
+    WHATSAPP = 'whatsapp', _("whatsapp")
 
 
 class Gender(models.TextChoices):
-    MALE = 'male'
-    FEMALE = 'female'
+    MALE = 'male', _("male")
+    FEMALE = 'female', _("female")
 
 
 class Types(models.TextChoices):
-    MANAGER = 'manager'
-    IMAM = 'imam'
-    SUB_IMAM = 'sub_imam'
-    OTHER = 'other'
+    MANAGER = 'manager', _("manager")
+    IMAM = 'imam', _("imam")
+    SUB_IMAM = 'sub_imam', _("sub_imam")
+    OTHER = 'other', _("other")
 
 
 class Graduation(models.Model):

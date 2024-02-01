@@ -9,10 +9,10 @@ from apps.users.models import User
 
 
 class Types(models.TextChoices):
-    HOLIDAY = 'holiday'                   # tug'ilgan kun
-    HASHAR = 'hashar'                     # hashar
-    OPENING_CEREMONY = 'opening_ceremony' # ochilish marosimi
-    OTHER = 'other'                       # boshqa
+    HOLIDAY = 'holiday', _("holiday")                   # tug'ilgan kun
+    HASHAR = 'hashar', _("hashar")                     # hashar
+    OPENING_CEREMONY = 'opening_ceremony', _("opening_ceremony") # ochilish marosimi
+    OTHER = 'other', _("other")                       # boshqa
 
 
 class Images(models.Model):
@@ -31,7 +31,7 @@ class CommunityEvents(BaseModel):
     types = models.CharField(verbose_name=_("types"), max_length=22, choices=Types.choices, default=Types.HOLIDAY, blank=False)
     comment = models.TextField(verbose_name=_("comment"), blank=True,)
     images = models.ManyToManyField(Images, verbose_name=_("images"), blank=True)
-    date = models.DateField(verbose_name=_("date"), )
+    date = models.DateField(verbose_name=_("date"),)
     
     def __str__(self):
         return self.imam.username

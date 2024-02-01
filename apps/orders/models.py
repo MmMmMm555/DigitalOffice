@@ -16,20 +16,20 @@ class ToRole(models.TextChoices):
     REGION_ADMIN = u'2'
     DISTRICT_ADMIN = u'3'
     IMAM = u'4'
-    SUB_IMAM = u'5'
+    , SUB_IMAM = u'5'
 
 
 class Types(models.TextChoices):
-    INFORMATION = 'information'
-    IMPLEMENT = 'implement'
+    INFORMATION = 'information', _("information")
+    IMPLEMENT = 'implement', _("implement")
 
 
 class DirectionTypes(models.TextChoices):
-    DECISION = 'decision'
-    ORDER = 'order'
-    PROGRAM = 'program'
-    MESSAGE = 'message'
-    MISSION = 'mission'
+    DECISION = 'decision', _("decision")
+    ORDER = 'order', _("order")
+    PROGRAM = 'program', _("program")
+    MESSAGE = 'message', _("message")
+    MISSION = 'mission', _("mission")
 
 
 class DirectionFiles(BaseModel):

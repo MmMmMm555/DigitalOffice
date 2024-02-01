@@ -9,26 +9,26 @@ from apps.common.validators import validate_image_size
 
 
 class Types(models.TextChoices):
-    INVALID = 'invalid'                    # nogiron
-    POOR = 'poor'                          # kambag'al
-    NONE_BREADWINNER = 'none_breadwinner'  # boquvchisiz
-    STUDENT = 'student'                    # talaba
-    OTHER = 'other'                        # boshqa
+    INVALID = 'invalid', _("invalid")                    # nogiron
+    POOR = 'poor', _("poor")                          # kambag'al
+    NONE_BREADWINNER = 'none_breadwinner', _("none_breadwinner")  # boquvchisiz
+    STUDENT = 'student', _("student")                    # talaba
+    OTHER = 'other', _("other")                        # boshqa
 
 class HelpTypes(models.TextChoices):
-    MONEY = 'money'               #  pul
-    FOOD = 'food'                 #  ovqat
-    CLOSES = 'closes'             #  kiyim
-    MEDICINE = 'medicine'         #  dori
-    OTHER = 'other'               #  boshqa
+    MONEY = 'money', _("money")               #  pul
+    FOOD = 'food', _("food")                 #  ovqat
+    CLOSES = 'closes', _("closes")             #  kiyim
+    MEDICINE = 'medicine', _("medicine")         #  dori
+    OTHER = 'other', _("other")               #  boshqa
 
 class From(models.TextChoices):
-    MOSQUE = 'mosque'             #  masjid
-    SPONSOR = 'sponsor'           #  sponsor
-    ZAKAT = 'zakat'               #  zakot
-    FIDYA = 'fidya'               #  fidya
-    FITR = 'fitr'                 #  fitr
-    OTHER = 'other'               #  bsohqa
+    MOSQUE = 'mosque', _("mosque")             #  masjid
+    SPONSOR = 'sponsor', _("sponsor")           #  sponsor
+    ZAKAT = 'zakat', _("zakat")               #  zakot
+    FIDYA = 'fidya', _("fidya")               #  fidya
+    FITR = 'fitr', _("fitr")                 #  fitr
+    OTHER = 'other', _("other")               #  bsohqa
 
 
 class Images(models.Model):

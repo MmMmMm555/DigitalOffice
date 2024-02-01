@@ -11,15 +11,15 @@ from apps.common.regions import Regions, Districts
 
 
 class States(models.TextChoices):
-    UNSEEN = "unseen"
-    ACCEPTED = "accepted"
-    DONE = "done"
-    DELAYED = "delayed"
+    UNSEEN = "unseen", _("unseen")
+    ACCEPTED = "accepted", _("accepted")
+    DONE = "done", _("done")
+    DELAYED = "delayed", _("delayed")
 
 
 class ThesisType(models.TextChoices):
-    FRIDAY = "friday"
-    HAYIT = "hayit"
+    FRIDAY = "friday", _("friday")
+    HAYIT = "hayit", _("hayit")
 
 
 class FridayThesis(BaseModel):
