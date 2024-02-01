@@ -1,10 +1,6 @@
-from rest_framework.decorators import api_view
-from django.db.models import F, Q, Count
-
 from apps.orders.models import DirectionsEmployeeRead
-from apps.friday_tesis.models import FridayThesisImamRead, States
+from apps.friday_tesis.models import FridayThesisImamResult, States
 from rest_framework.generics import ListAPIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import OrderNotification, ThesisNotification
 
@@ -22,7 +18,7 @@ from .serializers import OrderNotification, ThesisNotification
 
 class ThesisNotifications(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = FridayThesisImamRead.objects.all()
+    queryset = FridayThesisImamResult.objects.all()
     serializer_class = ThesisNotification
 
     def get_queryset(self):

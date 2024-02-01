@@ -22,7 +22,7 @@ urlpatterns = [
     path('list/', FridayThesisListView.as_view(), name='tesis_list'),
 
     # seen apis
-    path('notification/update/<int:pk>', FridayThesisImamReadView.as_view(),
+    path('state/<int:pk>', FridayThesisImamReadView.as_view(),
          name='tesis_seen_update'),
     path('notification/list', FridayThesisImamReadListView.as_view(),
          name='tesis_seen_list'),

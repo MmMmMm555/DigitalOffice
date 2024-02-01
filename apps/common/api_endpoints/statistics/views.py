@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from apps.orders.models import DirectionsEmployeeRead, States, DirectionTypes, Directions, ToRole
 from apps.common.regions import Regions
-from apps.friday_tesis.models import FridayThesisImamRead, FridayThesisImamResult
+from apps.friday_tesis.models import FridayThesisImamResult
 from apps.mosque.models import Mosque, MosqueTypeChoices, MosqueStatusChoices
 from apps.employee.models import Employee, Graduation, Education, AcademicDegree
 
@@ -109,7 +109,7 @@ class StatisticThesisStateApi(APIView):
         start_date = self.request.query_params.get('start_date')
         finish_date = self.request.query_params.get('finish_date')
 
-        query = FridayThesisImamRead.objects.all()
+        query = FridayThesisImamResult.objects.all()
         if start_date:
             query = query.filter(created_at__gte=start_date)
         if finish_date:
@@ -119,6 +119,7 @@ class StatisticThesisStateApi(APIView):
             unseen=Count('state', filter=Q(state=States.UNSEEN)),
             accepted=Count('state', filter=Q(state=States.ACCEPTED)),
             done=Count('state', filter=Q(state=States.DONE)),
+            delayed=Count('state', filter=Q(state=States.DELAYED)),
         )
 
         total_count = sum(all_stats.values())
