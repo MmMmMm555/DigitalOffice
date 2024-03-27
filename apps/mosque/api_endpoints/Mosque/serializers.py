@@ -1,5 +1,5 @@
 from rest_framework.serializers import (
-    ModelSerializer, IntegerField, CharField,)
+    ModelSerializer, IntegerField,)
 
 from apps.mosque.models import Mosque, FireDefenseImages, ServiceRoom
 from apps.common.api_endpoints.districts.serializers import RegionsSerializer
@@ -258,12 +258,12 @@ class MosqueUpdateSerializer(ModelSerializer):
             'fire_images',
 
             'service_rooms_bool',
-            'imam_room',
-            'sub_imam_room',
-            'casher_room',
-            'guard_room',
-            'other_room',
-            'other_room_amount',
+            # 'imam_room',
+            # 'sub_imam_room',
+            # 'casher_room',
+            # 'guard_room',
+            # 'other_room',
+            # 'other_room_amount',
 
             'mosque_library',
             'shrine',
